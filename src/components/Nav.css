@@ -1,0 +1,29 @@
+
+nav {
+    height: 100px;
+    width: 100%;
+    background-color: black;
+    position: fixed;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+}
+
+.pi-burger{
+    font-size: 2rem;
+    color: white;
+    margin-top: 10px;
+}
+
+.burger-btn {
+    /*padding: 5px;*/
+    margin-left: 2%;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    border: 1px solid silver;
+    border-radius: 10px;
+    cursor: pointer;
+}
