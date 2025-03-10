@@ -32,7 +32,7 @@ function get30DaysDataFromHistory (productInfo){
     let startQuantity = 0                           // Остатки на начало анализа
     let addSQ = 0                                   // Сколько пришло на склад если это поступление
     let crDate = new Date()
-
+    console.log(history.at(-1));
     if (history?.length >0) {
         startDateInBase = history[0].d
 
@@ -81,7 +81,7 @@ function get30DaysDataFromHistory (productInfo){
 
 
                             // Если минус больше 5 или остатки ДО .. то это поступление иначе возврат
-                            if ((absSQ >= q-2) || (absSQ>5)) {
+                            if ((absSQ >= q-2) || (absSQ>3)) {
                                 addSQ = absSQ
                                 sq = 0
                             }

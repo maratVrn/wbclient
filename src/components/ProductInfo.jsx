@@ -10,6 +10,7 @@ import ProductsSupplierInfo from "./product_components/products_supplier_Info";
 import {TabPanel, TabView} from "primereact/tabview";
 import ProductAllColors from "./product_components/product_all_colors";
 import Footer from "./product_components/footer";
+import PositionsInfo from "./product_components/positions_info";
 
 const ProductInfo =observer( (props ) => {
     const {productStore} = useContext(Context)
@@ -42,10 +43,7 @@ const ProductInfo =observer( (props ) => {
                         <ProductAllColors id={id}/>
                     </TabPanel>
                     <TabPanel header="Позиции в выдаче">
-                        <p className="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-
-                        </p>
+                        <PositionsInfo id={id}/>
                     </TabPanel>
                     <TabPanel header="Аналитика 2025">
                         <p className="m-0">

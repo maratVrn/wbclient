@@ -14,6 +14,7 @@ export default class ProductStore {
     startDateInBase = ''
     is_all_colors_Load = false          //  Чтобы не перегружать лишнюю инфу при переходе по табам
     is_supplier_info_Load = false
+    is_positions_info_Load = false
 
     supplierId = 0                      // ИД Продавцв
 
@@ -26,6 +27,7 @@ export default class ProductStore {
         const needId = parseInt(id)
         let is_all_colors_Load = false
         let is_supplier_info_Load = false
+        let is_positions_info_Load = (id === this.nowId);
 
         for (let i in this.productColorsInfo){
             if (needId === this.productColorsInfo[i].id){
@@ -42,16 +44,17 @@ export default class ProductStore {
             }
 
         }
-        this.setNewLoadStates(is_all_colors_Load, is_supplier_info_Load)
+        this.setNewLoadStates(is_all_colors_Load, is_supplier_info_Load, is_positions_info_Load)
     }
 
     setSupplierId(supplierId){
         this.supplierId  = supplierId
     }
 
-    setNewLoadStates(is_all_colors_Load = false, is_supplier_info_Load = false){
+    setNewLoadStates(is_all_colors_Load = false, is_supplier_info_Load = false, is_positions_info_Load = false){
         this.is_all_colors_Load = is_all_colors_Load
         this.is_supplier_info_Load = is_supplier_info_Load
+        this.is_positions_info_Load = is_positions_info_Load
     }
     setNowId (nowId){
         this.nowId = nowId
