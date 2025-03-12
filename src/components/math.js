@@ -1,4 +1,3 @@
-import {hydrate} from "react-dom";
 
 function formatCurrency(txt) {
     let res = ''
@@ -32,8 +31,9 @@ function get30DaysDataFromHistory (productInfo){
     let startQuantity = 0                           // Остатки на начало анализа
     let addSQ = 0                                   // Сколько пришло на склад если это поступление
     let crDate = new Date()
-    console.log(history.at(-1));
+
     if (history?.length >0) {
+        // console.log(history.at(-1));
         startDateInBase = history[0].d
 
         let arIdx = -1
@@ -68,7 +68,7 @@ function get30DaysDataFromHistory (productInfo){
 
                 if (Math.abs(arIdx) <=  history.length){
 
-                    let d_tmp = d = history.at(arIdx).d
+                    let d_tmp =  history.at(arIdx).d
                     sq = 0
                     // проверим есть ли дата внутри
                     if (crDate.toLocaleDateString() === d_tmp){

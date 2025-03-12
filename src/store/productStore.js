@@ -5,6 +5,7 @@ import {makeAutoObservable} from "mobx";
 export default class ProductStore {
     productList = []
     productInfo = []
+    positionsInfo = []
     priceHistory = []
     photoUrlArray = []
     productAbout = []
@@ -68,6 +69,9 @@ export default class ProductStore {
     set_is_supplier_info_Load(is_supplier_info_Load){
         this.is_supplier_info_Load = is_supplier_info_Load
     }
+    set_is_positions_info_Load(is_positions_info_Load){
+        this.is_positions_info_Load = is_positions_info_Load
+    }
 
 
 
@@ -76,6 +80,10 @@ export default class ProductStore {
     setProductList (productList){
         this.productList = productList
     }
+    setPositionsInfo(positionsInfo){
+        this.positionsInfo = positionsInfo
+    }
+
     setProductColorsInfo (productColorsInfo){
         this.productColorsInfo = productColorsInfo
     }
@@ -157,14 +165,6 @@ export default class ProductStore {
         return `https://basket-${basket}.wbbasket.ru/vol${shortId}/part${part}/${id}/images/c516x688/1.webp`
     }
 
-    // getBigPhotoUrl(id){
-    //     const shortId = Math.floor(id / 100000)
-    //     const part = Math.floor(id / 1000)
-    //     const basket = this.getBasketFromID(shortId)
-    //     return `https://basket-${basket}.wbbasket.ru/vol${shortId}/part${part}/${id}/images/c516x688/`
-    // }
-
-
     // Подгрузим фотографии
     async getProductListLitePhoto(productList) {
         for (let i in productList?.data) {
@@ -207,8 +207,6 @@ export default class ProductStore {
 
     async  getSupplierInfo(supplierId){
         try{
-            // const productSupplierInfo = await ApiService.APIGetSupplierInfo(supplierId)
-            // if (productSupplierInfo?.data) this.setSupplierInfo(productSupplierInfo?.data)
 
             if (!this.is_supplier_info_Load) {
                 const productSupplierInfo = await ApiService.APIGetSupplierInfo(supplierId)
@@ -216,10 +214,46 @@ export default class ProductStore {
                 this.set_is_supplier_info_Load(true)
             }
 
-        } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
+        } catch (e) {console.log(e) }
+    }
+
+    getSearchWords(){
+        let searchWords = []
+        if (this.productAbout.data.data.imt_name){
+            try {
+                let arr = this.productAbout.data.data.imt_name.split(/[\s,]+/)
+
+                let crWord = ''
+                for (let i in arr){
+
+                    crWord += arr[i]+' '
+                    if (arr[i].length >= 3) {
+                        searchWords.push(crWord)
+                        if (i < 4) searchWords.push(crWord + ' ' + this.productAbout.data.data.nm_colors_names)
+                    }
+                }
+            }   catch (e) { console.log(e);}
         }
+        return searchWords
+    }
+
+    async addPositionsInfo(id,newSearchText){
+        try{
+            if (this.is_positions_info_Load) {
+                const positionsInfo = await ApiService.APIGetPositionsInfo(id, [newSearchText])
+                if (positionsInfo?.data) this.setPositionsInfo([...positionsInfo?.data, ...this.positionsInfo])
+            }
+        } catch (e) { console.log(e) }
+    }
+    async  getPositionsInfo(id){
+        try{
+            if (!this.is_positions_info_Load) {
+                const searchWords = this.getSearchWords()
+                const positionsInfo = await ApiService.APIGetPositionsInfo(id, searchWords)
+                if (positionsInfo?.data) this.setPositionsInfo(positionsInfo?.data)
+                this.set_is_positions_info_Load(true)
+            }
+        } catch (e) { console.log(e) }
     }
 
 
@@ -265,7 +299,7 @@ export default class ProductStore {
                 this.setProductInfo(productInfo?.data)
                 if (productInfo?.data[1]) {
                     this.setProductInfo(productInfo?.data[1])
-                    if (productInfo?.data[1].priceHistory[0].d) this.startDateInBase = productInfo?.data[1].priceHistory[0].d
+                    if (productInfo?.data[1]?.priceHistory[0]?.d) this.startDateInBase = productInfo?.data[1].priceHistory[0].d
                 } else this.startDateInBase = 'нет в данных'
 
             }
@@ -277,26 +311,7 @@ export default class ProductStore {
     }
 
 
-    // Запускаем процедуру парсинга списка товраов для выбранного каталога
-    async  getProductList_fromWB(catalogID,page){
-        try{
-            const result = await ApiService.API_GET_ProductList_fromWB(catalogID,page)
-            if (result?.data) this.setProductList(result?.data)
-        } catch (e) {
-            this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
 
-    // Запускаем процедуру парсинга-Обновления списка товраов для выбранного каталога
-    async  updateProductList_fromWB(catalogID){
-        try{
-            const result = await ApiService.API_UPDATE_ProductList_fromWB(catalogID)
-            // if (result?.data) this.setProductList(result?.data)
-        } catch (e) {
-            this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
+
 
 }

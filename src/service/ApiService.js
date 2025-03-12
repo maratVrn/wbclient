@@ -33,8 +33,13 @@ export default class ApiService {
         return $api_client.get(`/getSupplierInfo/${parseInt(supplierId)}`)
     }
 
-    static async APIGetSupplierInfo(supplierId):Promise{
-        return $api_client.get(`/getSupplierInfo/${parseInt(supplierId)}`)
+    static async APIGetPositionsInfo(id, searchArray):Promise{
+        return $api_client.post(`/getPositionsInfo`,
+            {
+                 id:id,
+                 searchArray : searchArray
+            }
+        )
     }
 
     static async APIGetIDInfo(id):Promise{
