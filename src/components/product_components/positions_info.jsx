@@ -42,6 +42,20 @@ const PositionsInfo = () => {
                     >{product.searchWord}</span>
         </div>;
     };
+
+    const positionTemplate = (product) => {
+        return <div  >
+            {product.position >= 1000 ? '>'+product.position : product.position}
+
+        </div>;
+    };
+    const pageTemplate = (product) => {
+        return <div  >
+            {product.position >= 1000 ? '>'+product.pageResult : product.pageResult}
+
+        </div>;
+    };
+
     const load = () => {
         setLoading(true);
         const newSearchText = findText
@@ -82,8 +96,8 @@ const PositionsInfo = () => {
                                    className="dataTable">
                             <Column field="searchWord" body={NameBodyTemplate} header="Поисковая фраза"></Column>
 
-                            <Column field="position" sortable header="Позиция"></Column>
-                            <Column field="pageResult" sortable header="Страница"></Column>
+                            <Column field="position" body={positionTemplate} sortable header="Позиция"></Column>
+                            <Column field="pageResult" sortable body={pageTemplate} header="Страница"></Column>
                             <Column field="total" sortable header="Всего позиций"></Column>
 
 

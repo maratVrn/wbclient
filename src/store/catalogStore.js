@@ -222,7 +222,7 @@ export default class CatalogStore {
         try{
             const response = await ApiService.APIGetLiteWBCatalog()
             this.setAllWBCatalogLite(response.data)
-            this.setNodeTree_WBCatalogLite(response.data)
+            await this.setNodeTree_WBCatalogLite(response.data)
 
             if (response?.data?.length>0) {
                 this.isCatalogLoad = true
