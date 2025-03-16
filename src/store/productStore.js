@@ -12,6 +12,7 @@ export default class ProductStore {
     productColorsInfo = []
     supplierInfo = []
     nowId = 0
+    idInfo = {isInWB : false, isInBase : false}
     startDateInBase = ''
     is_all_colors_Load = false          //  Чтобы не перегружать лишнюю инфу при переходе по табам
     is_supplier_info_Load = false
@@ -59,7 +60,6 @@ export default class ProductStore {
     }
     setNowId (nowId){
         this.nowId = nowId
-
     }
 
     set_is_all_colors_Load(is_all_colors_Load){
@@ -229,7 +229,8 @@ export default class ProductStore {
                     crWord += arr[i]+' '
                     if (arr[i].length >= 3) {
                         searchWords.push(crWord)
-                        if (i < 4) searchWords.push(crWord + ' ' + this.productAbout.data.data.nm_colors_names)
+                        if (i < 4)
+                            if (this.productAbout.data.data.nm_colors_names) searchWords.push(crWord + ' ' + this.productAbout.data.data.nm_colors_names)
                     }
                 }
             }   catch (e) { console.log(e);}
@@ -256,7 +257,19 @@ export default class ProductStore {
         } catch (e) { console.log(e) }
     }
 
+    // Получаем информацию про ИД - 1. есть ли он на вб 2. Есть ли он в нашей базе
+    async  getProductStartInfo(productId){
+        try{
+            this.idInfo = {isInWB : false, isInBase : false}
+            const newIdInfo = await ApiService.APIGetProductStartInfo(productId)
+            if (newIdInfo?.data) {
+                this.idInfo = newIdInfo?.data
+            }
 
+        } catch (e) {
+                        console.log(e)
+        }
+    }
 
 
     async  getProductPhoto(productId){

@@ -8,7 +8,8 @@ import { Tooltip } from 'primereact/tooltip';
 
 
 const ProductAbout = (props) => {
-    const {id} = props;
+    const {id, isInWB} = props;
+
     const {productStore} = useContext(Context)
     const [colors, setColors] = useState([])
     const [data, setData] = useState([])
@@ -19,11 +20,15 @@ const ProductAbout = (props) => {
     const {catalogStore} = useContext(Context)
 
     useEffect(()=>{
+        // console.log('useEffect ProductAbout');
+        // console.log('isInWB ProductAbout '+isInWB);
+
         setColors([])
         setStartSate('')
         setData([])
         setInfo([])
         setQty([])
+        if (productStore.idInfo.isInWB)
         if (parseInt(id)>0) {
             productStore.getProductAbout(id).then(() => {
                 if (productStore.productAbout?.data) {
@@ -49,21 +54,13 @@ const ProductAbout = (props) => {
 
             })
         }
-    },[id])
+    },[id, isInWB])
 
-    function getIdInfo(id){
-        catalogStore.getIdInfo(id).then(() => {
-            const idInfo = catalogStore.idInfo
-            let  rt = 'Товар не найден'
-            if (idInfo[0] && idInfo[1]) {
-                navigate('/productInfo/' + id.toString())
-            } else navigate('/noProduct/')
+    function getIdInfo(id) {
+        navigate('/productInfo/' + id.toString())
 
 
-        }
-    )
-
-}
+    }
 
     const productTemplate = (product) => {
         return (
@@ -101,115 +98,125 @@ const ProductAbout = (props) => {
         }
     ];
     return (
+
         <div>
-            <div className="product_name">{data.imt_name}</div>
+            {isInWB ?
+                <div>
+                    <div className="product_name">{data.imt_name}</div>
 
-            <div className="card-price">
-                <div className="price-low " style={{marginLeft: '10px'}}>
-                    <span>{info.price > 0 ? info.price : 'Нет в наличии'}</span>
-                </div>
-                {(info.discount !== 0) ?
-                    <div className="price-max ">
-                        <span><del>{info.basicPrice} ₽</del></span>
+                    <div className="card-price">
+                        <div className="price-low " style={{marginLeft: '10px'}}>
+                            <span>{info.price > 0 ? info.price : 'Нет в наличии'}</span>
+                        </div>
+                        {(info.discount !== 0) ?
+                            <div className="price-max ">
+                                <span><del>{info.basicPrice} ₽</del></span>
+                            </div>
+                            : <div></div>
+                        }
+
+                        {(info.discount !== 0) ?
+                            <div style={{marginLeft: '10px'}}>
+                                <div className="product_discount_wb_text ">
+                                    <span> {info.discount} % Скидка на Wildberries</span>
+                                </div>
+                            </div>
+                            : <div></div>
+                        }
+
                     </div>
-                    : <div></div>
-                }
+                    <div>
+                        <div>
+                            <span className="product-brand"> Реальная скидка: {' 10 % '}</span>
 
-                {(info.discount !== 0) ?
-                    <div style={{marginLeft: '10px'}}>
-                        <div className="product_discount_wb_text ">
-                            <span> {info.discount} % Скидка на Wildberries</span>
+
+                            <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
+                            <i className="custom-target-icon pi pi-info-circle "
+                               data-pr-tooltip="Скидка на товар расчитанная исходя из медианной цены и данных по продажам что в итоге показывает реальную скидку "
+                               style={{
+                                   fontSize: '1.2rem',
+                                   cursor: 'pointer',
+                                   marginLeft: '10px',
+                                   color: 'tan',
+                                   marginTop: '10px'
+                               }}>
+
+                            </i>
                         </div>
                     </div>
-                    : <div></div>
-                }
-
-            </div>
-            <div>
-                <div>
-                    <span className="product-brand"> Реальная скидка: {' 10 % '}</span>
-
-
+                    <span className="product-brand"> Возраст товара: {startDate}</span>
                     <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
                     <i className="custom-target-icon pi pi-info-circle "
-                       data-pr-tooltip="Скидка на товар расчитанная исходя из медианной цены и данных по продажам что в итоге показывает реальную скидку "
-                       style={{
-                           fontSize: '1.2rem',
-                           cursor: 'pointer',
-                           marginLeft: '10px',
-                           color: 'tan',
-                           marginTop: '10px'
-                       }}>
+                       data-pr-tooltip="Дата с которой товар добавлен в нашу базу данных и доступен для анализа"
+                       style={{fontSize: '1.1rem', cursor: 'pointer', marginLeft: '10px', color: 'tan'}}>
 
                     </i>
+                    <div className="card-price">
+                        <span className="product-brand"> Бренд: {info.brand} </span>
+
+                    </div>
+                    <div className="card-price">
+                        <span className="product-brand"> Продавец: {info.supplier} </span>
+                    </div>
+
+
+                    <div className="card-price" style={{marginTop: '10px'}}>
+                        <span className="product-rate">  </span>
+                        <span className="product-rate2"> {info.reviewRating} </span>
+                        <span className="product-rate3"> {info.feedbacks} оценок </span>
+                    </div>
+                    <div className="product_color">цвет : {data.nm_colors_names}</div>
+                    {
+                        colors.length > 1 ?
+                            <div style={{height: '80px', paddingTop: '10px'}}>
+
+                                <Carousel
+
+                                    value={colors}
+                                    responsiveOptions={responsiveOptions}
+                                    numVisible={6}
+                                    showIndicators={false}
+                                    itemTemplate={productTemplate}/>
+                            </div>
+                            :
+                            <div></div>
+                    }
+
+                    {
+                        qty.length > 1 ?
+                            <div>
+                                <div className="product_size_text">Остатки по размерам</div>
+                                <div className="size_info">
+                                    {qty.map((size, idx) =>
+                                        <div className="size_about" key={idx}
+                                            // onClick={() => console.log(color.id)}
+                                        >
+                                            <div style={{paddingTop: '5px'}}> {size.name}</div>
+                                            <div className="product_size_count"> {size?.qty} шт.</div>
+                                        </div>)}
+                                </div>
+                            </div>
+                            :
+                            <div style={{marginTop: '20px'}}>
+                                <div className="product_size_text">Остатки сейчас: {qty} шт.</div>
+
+                            </div>
+                    }
+                    <div className="product-order">
+                        <a className="wb-go" style={{width: '70%', marginTop: '10px'}}
+                           href={` https://www.wildberries.ru/catalog/${id}/detail.aspx`} target="_blank"
+                           rel="noopener noreferrer"
+                        >
+                            Перейти на Wildberries
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <span className="product-brand"> Возраст товара: {startDate}</span>
-            <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
-            <i className="custom-target-icon pi pi-info-circle "
-               data-pr-tooltip="Дата с которой товар добавлен в нашу базу данных и доступен для анализа"
-               style={{fontSize: '1.1rem', cursor: 'pointer', marginLeft: '10px', color: 'tan'}}>
-
-            </i>
-            <div className="card-price">
-                <span className="product-brand"> Бренд: {info.brand} </span>
-
-            </div>
-            <div className="card-price">
-                <span className="product-brand"> Продавец: {info.supplier} </span>
-            </div>
-
-
-            <div className="card-price" style={{marginTop: '10px'}}>
-                <span className="product-rate">  </span>
-                <span className="product-rate2"> {info.reviewRating} </span>
-                <span className="product-rate3"> {info.feedbacks} оценок </span>
-            </div>
-            <div className="product_color">цвет : {data.nm_colors_names}</div>
-            {
-                colors.length > 1 ?
-                    <div style={{height: '80px', paddingTop: '10px'}}>
-
-                        <Carousel
-
-                            value={colors}
-                            responsiveOptions={responsiveOptions}
-                            numVisible={6}
-                            showIndicators={false}
-                            itemTemplate={productTemplate}/>
-                    </div>
-                    :
-                    <div></div>
+                :
+                <div>
+                    Товара нет на вб
+                </div>
             }
 
-            {
-                qty.length > 1 ?
-                    <div>
-                        <div className="product_size_text">Остатки по размерам</div>
-                        <div className="size_info">
-                            {qty.map((size, idx) =>
-                                <div className="size_about" key={idx}
-                                    // onClick={() => console.log(color.id)}
-                                >
-                                    <div style={{paddingTop: '5px'}}> {size.name}</div>
-                                    <div className="product_size_count"> {size?.qty} шт.</div>
-                                </div>)}
-                        </div>
-                    </div>
-                    :
-                    <div style={{marginTop: '20px'}}>
-                        <div className="product_size_text">Остатки сейчас: {qty} шт.</div>
-
-                    </div>
-            }
-            <div className="product-order">
-                <a className="wb-go" style={{width: '70%', marginTop: '10px'}}
-                   href={` https://www.wildberries.ru/catalog/${id}/detail.aspx`} target="_blank"
-                   rel="noopener noreferrer"
-                >
-                    Перейти на Wildberries
-                </a>
-            </div>
 
         </div>
     );

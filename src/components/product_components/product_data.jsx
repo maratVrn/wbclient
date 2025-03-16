@@ -9,7 +9,7 @@ import {get30DaysDataFromHistory, formatCurrency} from "../math";
 
 
 const ProductData = (props) => {
-    const {id} = props;
+    const {id, isInWB, isInBase} = props;
     const {productStore} = useContext(Context)
     const [chartData, setChartData] = useState({});
     const [chartData2, setChartData2] = useState({});
@@ -19,6 +19,8 @@ const ProductData = (props) => {
 
 
     useEffect(() => {
+        // console.log('useEffect ProductData');
+        if (isInBase)
         if (id) productStore.getProductInfo(id).then(() => {
             // console.log('Получили данные по id '+id);
 
@@ -126,47 +128,61 @@ const ProductData = (props) => {
 
 
 
-    }, [id]);
+    }, [id, isInBase]);
     return (
-        <div className="">
-            <div style={{textAlign: 'center'}}><span className="chart_main_text">Аналитика товара за 30 дней </span>
-            </div>
-            <div className="chart_info">
+        <div>
+            {isInBase ?
+                <div>
+                    <div style={{textAlign: 'center'}}><span
+                        className="chart_main_text">Аналитика товара за 30 дней </span>
+                    </div>
+                    <div className="chart_info">
                     <span
-                        className="chart_info_text">Продажи (с учетом возвратов) <span className="bold">{productInfo?.totalSaleQuantity} шт.</span>  на сумму <span className="bold">{formatCurrency(productInfo?.totalMoney)} </span>  </span>
-            </div>
-            <div className="item_data">
+                        className="chart_info_text">Продажи (с учетом возвратов) <span
+                        className="bold">{productInfo?.totalSaleQuantity} шт.</span>  на сумму <span
+                        className="bold">{formatCurrency(productInfo?.totalMoney)} </span>  </span>
+                    </div>
+                    <div className="item_data">
 
-                <div className="chart_item">
+                        <div className="chart_item">
 
-                    <Chart type="bar" className="all_div" data={chartData} options={chartOptions}/>
-                </div>
-            </div>
-            <div className="chart_info">
+                            <Chart type="bar" className="all_div" data={chartData} options={chartOptions}/>
+                        </div>
+                    </div>
+                    <div className="chart_info">
                     <span
-                        className="chart_info_text">Остатки на начало <span className="bold">{productInfo?.startQuantity} </span>сейчас <span className="bold">{productInfo?.totalQuantity} </span></span>
-                <span
-                    className="chart_info_text"> Поступления <span className="bold"> {productInfo?.addQuantity} </span> </span>
-            </div>
+                        className="chart_info_text">Остатки на начало <span
+                        className="bold">{productInfo?.startQuantity} </span>сейчас <span
+                        className="bold">{productInfo?.totalQuantity} </span></span>
+                        <span
+                            className="chart_info_text"> Поступления <span
+                            className="bold"> {productInfo?.addQuantity} </span> </span>
+                    </div>
 
-            <div className="item_data">
-                <div className="chart_item">
-                    <Chart className="all_div" type="bar" data={chartData2} options={chartOptions}/>
-                </div>
-            </div>
-            <div className="chart_info">
+                    <div className="item_data">
+                        <div className="chart_item">
+                            <Chart className="all_div" type="bar" data={chartData2} options={chartOptions}/>
+                        </div>
+                    </div>
+                    <div className="chart_info">
                 <span className="chart_info_text">Цена <span className="bold">{productInfo?.price + '  '} </span>
                     мин. <span className="bold"> {productInfo?.minPrice + ' '}</span>
                     макс. <span className="bold">{productInfo?.maxPrice} </span>
                     сред. <span className="bold"> {productInfo?.meanPrice} </span></span>
-            </div>
-            <div className="item_data">
+                    </div>
+                    <div className="item_data">
 
-                <div className="chart_item">
-                    <Chart className="all_div" type="line" data={chartData3} options={chartOptions}/>
+                        <div className="chart_item">
+                            <Chart className="all_div" type="line" data={chartData3} options={chartOptions}/>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                :
+                <div>товара нет в базе</div>
+            }
         </div>
+
+
     );
 };
 

@@ -80,9 +80,13 @@ export default class ApiService {
         return  result
     }
     static async APIGetProductPhoto(id):Promise{
-        // return  await this.ApiClientGet(`/getProductPhoto/${id}`)
         return $api_client.get(`/getProductPhoto/${parseInt(id)}`)
     }
+
+    static async APIGetProductStartInfo(id):Promise{
+        return $api_client.get(`/getProductStartInfo/${parseInt(id)}`)
+    }
+
     static async APIGetProductAbout(id):Promise{
 
         return $api_client.get(`/getProductAbout/${parseInt(id)}`)

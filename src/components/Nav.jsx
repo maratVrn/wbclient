@@ -36,9 +36,9 @@ const Nav = observer(() => {
             if (idInfo[0] && idInfo[1]) {
                 rt = 'id = ' + idInfo[0].id + '   subjectId = ' + idInfo[1].subjectId
                 + '   catalogId = ' + idInfo[0].catalogId + '    totalQuantity = ' + idInfo[1].totalQuantity
-                navigate('/productInfo/' + id.toString())
-            } else navigate('/noProduct/')
-
+                // navigate('/productInfo/' + id.toString())
+            } //else navigate('/noProduct/')
+            navigate('/productInfo/' + id.toString())
             setResultText(rt)
             }
         )

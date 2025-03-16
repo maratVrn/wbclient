@@ -52,6 +52,19 @@ const PositionsInfo = () => {
     const pageTemplate = (product) => {
         return <div  >
             {product.position >= 1000 ? '>'+product.pageResult : product.pageResult}
+        </div>;
+    };
+    const goToWB = (product) => {
+        let url = ''
+        try {url = `https://www.wildberries.ru/catalog/0/search.aspx?search=${product.searchWord}`} catch (e) {console.log(e);}
+        // &dest=12358291 подумать добавить...
+        return <div style={{width:'100%', alignContent:'center'}}>
+                <a className="wb-go" style={{width: '50px', marginLeft: '20px', fontSize:'14px', backgroundColor:'rgb(117,126,145)'}}
+                   href={url} target="_blank"
+                   rel="noopener noreferrer"
+                >
+                    <span className="pi pi-arrow-circle-right"></span>
+                </a>
 
         </div>;
     };
@@ -60,12 +73,12 @@ const PositionsInfo = () => {
         setLoading(true);
         const newSearchText = findText
 
-        productStore.addPositionsInfo(id,newSearchText).then(() => {
+        productStore.addPositionsInfo(id, newSearchText).then(() => {
 
             setItems(productStore.positionsInfo)
             setLoading(false);
             setFindText('')
-            setAddFindResult('Поисковый запрос "'+newSearchText+'" добавлен в таблицу')
+            setAddFindResult('Поисковый запрос "' + newSearchText + '" добавлен в таблицу')
         })
 
     };
@@ -99,6 +112,7 @@ const PositionsInfo = () => {
                             <Column field="position" body={positionTemplate} sortable header="Позиция"></Column>
                             <Column field="pageResult" sortable body={pageTemplate} header="Страница"></Column>
                             <Column field="total" sortable header="Всего позиций"></Column>
+                            <Column  body={goToWB} header="Смотреть на WB"></Column>
 
 
                         </DataTable>

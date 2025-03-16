@@ -137,7 +137,11 @@ function get30DaysDataFromHistory (productInfo){
         totalSaleQuantity = 0
         totalMoney = 0
     }
-    if (startQuantity === 0){ if (quantityArray.length>0) startQuantity = quantityArray.at(-1)  }
+    console.log(startQuantity);
+    if (startQuantity === 0){
+        if (history.length>0) startQuantity = history[0].q
+    }
+
     saleArray.push(0)
     const resultData = {
         startDateInBase : startDateInBase,
