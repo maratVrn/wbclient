@@ -56,16 +56,7 @@ const ProductAllColors = () => {
     },[id])
 
     function getIdInfo(id){
-        catalogStore.getIdInfo(id).then(() => {
-                const idInfo = catalogStore.idInfo
-
-                if (idInfo[0] && idInfo[1]) {
-                    navigate('/productInfo/' + id.toString())
-                } else navigate('/noProduct/')
-
-
-            }
-        )
+        navigate('/productInfo/' + id.toString())
 
     }
 

@@ -11,12 +11,19 @@ export default class ProductStore {
     productAbout = []
     productColorsInfo = []
     supplierInfo = []
+    competitorSeeAlsoInfo = []
+    competitorSeePhotoInfo = []
+    competitorSeeFindInfo = []
     nowId = 0
     idInfo = {isInWB : false, isInBase : false}
     startDateInBase = ''
     is_all_colors_Load = false          //  Чтобы не перегружать лишнюю инфу при переходе по табам
     is_supplier_info_Load = false
     is_positions_info_Load = false
+    is_competitorSeeAlsoInfo = false
+    is_competitorSeePhotoInfo = false
+    is_competitorSeeFindInfo = false
+
 
     supplierId = 0                      // ИД Продавцв
 
@@ -30,6 +37,15 @@ export default class ProductStore {
         let is_all_colors_Load = false
         let is_supplier_info_Load = false
         let is_positions_info_Load = (id === this.nowId);
+
+        if (id !== this.nowId){
+            console.log('set com load false');
+            this.is_competitorSeeAlsoInfo = false
+            this.is_competitorSeePhotoInfo = false
+            this.is_competitorSeeFindInfo = false
+
+        }
+
 
         for (let i in this.productColorsInfo){
             if (needId === this.productColorsInfo[i].id){
@@ -189,6 +205,67 @@ export default class ProductStore {
             console.log(e)
         }
     }
+
+    setProductInfoData(data){
+        let result =[]
+        for (let i in data){
+
+            const oneItem = {
+                id           : data[i].id,
+                brand        : data[i].idInfo.brand,
+                name         : data[i].idInfo.name,
+                position     : data[i].idInfo.pos,
+                photoUrl     : data[i].photoUrl,
+                supplier     : data[i].idInfo.supplier,
+                price        : data[i].productInfo?.price? data[i].productInfo?.price : 0,
+                priceHistory : data[i].productInfo?.priceHistory? data[i].productInfo?.priceHistory : 0,
+                qty          : data[i].productInfo?.totalQuantity? data[i].productInfo?.totalQuantity : 0,
+                saleCount    : data[i].productInfo?.saleCount? data[i].productInfo?.saleCount : 0,
+                saleMoney    : data[i].productInfo?.saleMoney? data[i].productInfo?.saleMoney : 0,
+            }
+
+            result.push(oneItem)
+        }
+
+        result.sort(function(a, b) {
+            return a.position - b.position;
+        });
+
+        return result
+    }
+
+    async  loadCompetitorSeeAlsoInfo(id){
+        try{
+
+            if (!this.is_competitorSeeAlsoInfo) {
+                this.competitorSeeAlsoInfo = []
+                const productInfo = await ApiService.APIGetCompetitorSeeAlsoInfo(id)
+                if (productInfo?.data) this.competitorSeeAlsoInfo = this.setProductInfoData(productInfo.data)
+                this.is_competitorSeeAlsoInfo = true
+            }
+
+        } catch (e) {
+            // this.setErrorMessage(e.response?.data?.message)
+            console.log(e)
+        }
+    }
+    async  loadCompetitorSeePhotoInfo(id){
+        try{
+            console.log('tut');
+            if (!this.is_competitorSeePhotoInfo) {
+                console.log('tut2');
+                this.competitorSeePhotoInfo = []
+                const productInfo = await ApiService.APIGetCompetitorSeePhotoInfo(id)
+                if (productInfo?.data) this.competitorSeePhotoInfo = this.setProductInfoData(productInfo.data)
+                this.is_competitorSeePhotoInfo = true
+            }
+
+        } catch (e) {
+            // this.setErrorMessage(e.response?.data?.message)
+            console.log(e)
+        }
+    }
+
     async  getProductColorsInfo(id){
         try{
 

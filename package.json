@@ -1,5 +1,5 @@
 {
-  "name": "untitled",
+  "name": "wb_client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -29,8 +29,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+
+
     ]
   },
   "browserslist": {
@@ -44,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
   }
 }

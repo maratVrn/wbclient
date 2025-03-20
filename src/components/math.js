@@ -13,9 +13,18 @@ function formatCurrency(txt) {
     return res+' р.'
 }
 
-function get30DaysDataFromHistory (productInfo){
+function getDataFromHistory (productInfo, daysCount = 30, all2005Year = false ){
+    let dayCount = daysCount
+    if (all2005Year){
+        // const now = Date.now()
+        const nowDay = new Date(Date.now())
+
+        const dateStart = new Date(2025, 0, 0)
+        dayCount  = Math.round((nowDay.getTime() - dateStart.getTime())/(1000 * 60 * 60 * 24));
+
+    }
+
     const history = productInfo.priceHistory        // История загр с БД
-    const dayCount = 30                             // Колл-во дней анализа
     let dateArray = []                              // Массив дат
     let quantityArray = []                          // Массив изм кол-ва
     let addQuantityArray = []                       // Массив поступлений
@@ -130,17 +139,19 @@ function get30DaysDataFromHistory (productInfo){
 
             if (isError) break
         }
+
+        if (totalSaleQuantity <= 0) {
+            totalSaleQuantity = 0
+            totalMoney = 0
+        }
+
+        if (startQuantity === 0){
+            if (history.length>0) startQuantity = history[0].q
+        }
+
     }
 
 
-    if (totalSaleQuantity <= 0) {
-        totalSaleQuantity = 0
-        totalMoney = 0
-    }
-    console.log(startQuantity);
-    if (startQuantity === 0){
-        if (history.length>0) startQuantity = history[0].q
-    }
 
     saleArray.push(0)
     const resultData = {
@@ -241,4 +252,4 @@ function get30DaysSaleInfoFromHistory (productInfo){
 
     return resultData
 }
-export {get30DaysDataFromHistory, get30DaysSaleInfoFromHistory, formatCurrency}
+export {getDataFromHistory, get30DaysSaleInfoFromHistory, formatCurrency}

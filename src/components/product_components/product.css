@@ -57,6 +57,17 @@
     padding-bottom: 8px;
 
 }
+.supplier_info{
+    vertical-align: center;
+    font-size: 14px;
+    font-weight: 460;
+    height: 45px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .table_info{
     vertical-align: center;

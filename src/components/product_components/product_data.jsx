@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
 import './product.css';
 import { Chart } from 'primereact/chart';
-import {get30DaysDataFromHistory, formatCurrency} from "../math";
+import {getDataFromHistory, formatCurrency} from "../math";
 
 
 
@@ -20,16 +20,16 @@ const ProductData = (props) => {
 
     useEffect(() => {
         // console.log('useEffect ProductData');
+
         if (isInBase)
         if (id) productStore.getProductInfo(id).then(() => {
-            // console.log('Получили данные по id '+id);
 
             if (productStore.productInfo) {
-                // console.log(productStore.productInfo.priceHistory);
-                const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = get30DaysDataFromHistory(productStore.productInfo)
+
+                const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30)
 
                 setProductInfo(resultData)
-                // console.log(resultData);
+
                 const options = {
                     maintainAspectRatio: false,
                     aspectRatio: 0.6,

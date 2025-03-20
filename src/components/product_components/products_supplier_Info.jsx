@@ -102,13 +102,14 @@ const ProductsSupplierInfo = () => {
                 let subjectId = 0
                 let subjectName = ''
                 try {
-                    subjectId = data.subjectId
-                    subjectName = data.subjectName
+
+                    subjectId = data.idInfo.subjectId
+                    subjectName = data.idInfo.subjectName
                 } catch (e){}
                 if (subjectId>0){
                     let isIn = false
                     for (let j in someCategories){
-                        if (someCategories[j].subjectId === subjectId) {
+                        if (parseInt(someCategories[j].subjectId) === parseInt(subjectId)) {
                             someCategories[j].count ++
                             someCategories[j].saleMoney += saleMoney
                             someCategories[j].saleCount += saleCount
@@ -118,19 +119,22 @@ const ProductsSupplierInfo = () => {
                             break
                         }
                     }
-                    if (!isIn) someCategories.push({subjectId:subjectId,subjectName:subjectName, count : 1, saleCount:saleCount, saleMoney:saleMoney, totalQuantity:totalQuantity, qtyMoney : qtyMoney})
+                    if (!isIn) someCategories.push({subjectId:parseInt(subjectId),subjectName:subjectName, count : 1, saleCount:saleCount, saleMoney:saleMoney, totalQuantity:totalQuantity, qtyMoney : qtyMoney})
 
                 }
 
 
             }
+
+
             for (let i in productStore.supplierInfo)
                 addDataInCat(productStore.supplierInfo[i])
+
             setSubjects(someCategories);
             if (someCategories.length>0 ) {
                 setSelectedCategory(someCategories[0])
 
-                console.log(someCategories[0]);
+                // console.log(someCategories[0]);
                 const info = {
                     productCount  : someCategories[0].count,
                     saleMoney   : someCategories[0].saleMoney,
@@ -154,18 +158,11 @@ const ProductsSupplierInfo = () => {
     },[id])
 
     function getIdInfo(id){
+
         if (parseInt(id) !== parseInt(productStore.nowId)) {
 
             productStore.setNewLoadStates(false, true)
-            catalogStore.getIdInfo(id).then(() => {
-                    const idInfo = catalogStore.idInfo
-
-                    if (idInfo[0] && idInfo[1]) {
-                        navigate('/productInfo/' + id.toString())
-                    } else navigate('/noProduct/')
-
-
-                })
+            navigate('/productInfo/' + id.toString())
         }
     }
 
@@ -208,11 +205,6 @@ const ProductsSupplierInfo = () => {
 
     return (
         <div className="flex align-items-center" style={{justifyContent: 'center', width:'100%'}}>
-            {/*<button onClick={() => {*/}
-            {/*    setIsInfoLoad(true)*/}
-            {/*    loadSupplierInfo()*/}
-            {/*}}>Сформировать отчет*/}
-            {/*</button>*/}
 
             {productStore.is_supplier_info_Load ?
                 <div style={{width: '100%'}}>
@@ -260,7 +252,7 @@ const ProductsSupplierInfo = () => {
 
                         </div>
                     }
-                    <span className="all_colors_info" style={{marginTop:'30px', marginBottom:'30px'}}>Продажи по выбранной катеогрии</span>
+                    <span className="all_colors_info" style={{marginTop:'30px', marginBottom:'30px'}}>Продажи по выбранной катеогрии за 30 дней</span>
 
                     <div>
                         <DataTable style={{fontSize: '14px'}} value={items} size={'small'} paginator rows={10}

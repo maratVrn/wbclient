@@ -29,6 +29,14 @@ export default class ApiService {
         return $api_client.get(`/getProductColorsInfo/${parseInt(id)}`)
     }
 
+    static async APIGetCompetitorSeeAlsoInfo(id):Promise{
+        return $api_client.get(`/getCompetitorSeeAlsoInfo/${parseInt(id)}`)
+    }
+    static async APIGetCompetitorSeePhotoInfo(id):Promise{
+        return $api_client.get(`/getCompetitorSeePhotoInfo/${parseInt(id)}`)
+    }
+
+
     static async APIGetSupplierInfo(supplierId):Promise{
         return $api_client.get(`/getSupplierInfo/${parseInt(supplierId)}`)
     }

@@ -5,12 +5,14 @@ import {observer} from "mobx-react-lite";
 import './product_components/product.css';
 import ProductPhoto from "./product_components/product_photo";
 import ProductData from "./product_components/product_data";
+import ProductYearData from "./product_components/productYear_data";
 import ProductAbout from "./product_components/product_about";
 import ProductsSupplierInfo from "./product_components/products_supplier_Info";
 import {TabPanel, TabView} from "primereact/tabview";
 import ProductAllColors from "./product_components/product_all_colors";
 import Footer from "./product_components/footer";
 import PositionsInfo from "./product_components/positions_info";
+import CompetitorInfo from "./product_components/competitor_info";
 
 const ProductInfo =observer( (props ) => {
     const {productStore} = useContext(Context)
@@ -61,10 +63,8 @@ const ProductInfo =observer( (props ) => {
                         <PositionsInfo id={id}/>
                     </TabPanel>
                     <TabPanel header="Аналитика 2025">
-                        <p className="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
 
-                        </p>
+                        <ProductYearData id={id} isInWB = {isInWB} isInBase = {isInBase}/>
                     </TabPanel>
                     <TabPanel header="Отчет по поставщику">
                         <ProductsSupplierInfo id={id} />
@@ -72,10 +72,7 @@ const ProductInfo =observer( (props ) => {
 
                     </TabPanel>
                     <TabPanel header="Аналитика конкурентов">
-                        <p className="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-
-                        </p>
+                       <CompetitorInfo id={id} />
                     </TabPanel>
                 </TabView>
             </div>
