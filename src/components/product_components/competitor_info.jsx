@@ -2,6 +2,7 @@ import React from 'react';
 import {TabPanel, TabView} from "primereact/tabview";
 import CompetitorSeeAlsoInfo from "./competitor_seeAlso_Info";
 import CompetitorSeePhotoInfo from "./competitor_seePhotoInfo";
+import CompetitorSeeFind from "./competitor_seeFind";
 
 const CompetitorInfo = (props) => {
     const {id} = props;
@@ -16,7 +17,7 @@ const CompetitorInfo = (props) => {
                 </TabPanel>
                 <TabPanel header="По поисковому запросу">
 
-                    {/*<ProductYearData id={id} isInWB = {isInWB} isInBase = {isInBase}/>*/}
+                    <CompetitorSeeFind id={id}/>
                 </TabPanel>
 
             </TabView>

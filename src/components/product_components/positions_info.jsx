@@ -132,9 +132,7 @@ const PositionsInfo = () => {
                                 <ProgressSpinner style={{width: '100px', height: '100px'}} strokeWidth="4"
                                                  fill="var(--surface-ground)" animationDuration=".9s"/>
                             </div>
-                            <div style={{paddingTop: '20px', fontSize: '20', fontWeight: '450'}}>
-                                <span>Загрузка отчета...</span>
-                            </div>
+
                         </div>
                         :
                         <div>

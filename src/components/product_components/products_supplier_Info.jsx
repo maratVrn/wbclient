@@ -17,19 +17,19 @@ const ProductsSupplierInfo = () => {
     const [items, setItems] = useState([])
     const [allInfo, setAllInfo] = useState({})
     const [isInfoLoad, setIsInfoLoad] = useState(false)
-    const {catalogStore} = useContext(Context)
     const navigate = useNavigate();
 
     const [subjects, setSubjects] = useState([])
     const [selectedCategory, setSelectedCategory] = useState({});
 
     function setDataBySubject(subjectId){
+
         setItems([])
         let someItems = []
 
         for (let i in productStore.supplierInfo) {
-            if ((productStore.supplierInfo[i].subjectId === subjectId) || (subjectId ===0)){
 
+            if ((productStore.supplierInfo[i].idInfo.subjectId === subjectId) || (subjectId ===0)){
                 let price = 0
                 let saleCount = 0
                 let saleMoney = 0
@@ -53,7 +53,7 @@ const ProductsSupplierInfo = () => {
 
                 const oneItem = {
                     id: productStore.supplierInfo[i].id,
-                    subjectName: productStore.supplierInfo[i].subjectName,
+                    subjectName: productStore.supplierInfo[i].idInfo.subjectName,
                     price: price,
                     saleCount: saleCount,
                     saleMoney: saleMoney,
@@ -284,9 +284,7 @@ const ProductsSupplierInfo = () => {
                                 <ProgressSpinner style={{width: '100px', height: '100px'}} strokeWidth="4"
                                              fill="var(--surface-ground)" animationDuration=".9s"/>
                             </div>
-                            <div  style={{paddingTop:'20px', fontSize:'20', fontWeight:'450'}}>
-                                <span >Загрузка отчета...</span>
-                            </div>
+
                         </div>
                         :
                         <div></div>

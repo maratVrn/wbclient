@@ -32,6 +32,15 @@ export default class ApiService {
     static async APIGetCompetitorSeeAlsoInfo(id):Promise{
         return $api_client.get(`/getCompetitorSeeAlsoInfo/${parseInt(id)}`)
     }
+    static async APIGetCompetitorSeeFindInfo(id, findText):Promise{
+        return $api_client.post(`/getCompetitorSeeFindInfo`,
+            {
+                id:id,
+                findText : findText
+            }
+        )
+    }
+
     static async APIGetCompetitorSeePhotoInfo(id):Promise{
         return $api_client.get(`/getCompetitorSeePhotoInfo/${parseInt(id)}`)
     }

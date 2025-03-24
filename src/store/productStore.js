@@ -233,6 +233,19 @@ export default class ProductStore {
 
         return result
     }
+    async  loadCompetitorSeeFindInfo(id, findText){
+        try{
+            console.log('tut');
+            this.competitorSeeFindInfo = []
+            const productInfo = await ApiService.APIGetCompetitorSeeFindInfo(id, findText)
+            // console.log(productInfo?.data);
+            if (productInfo?.data) this.competitorSeeFindInfo = this.setProductInfoData(productInfo.data)
+            this.is_competitorSeeFindInfo = true
+        } catch (e) {
+            // this.setErrorMessage(e.response?.data?.message)
+            console.log(e)
+        }
+    }
 
     async  loadCompetitorSeeAlsoInfo(id){
         try{

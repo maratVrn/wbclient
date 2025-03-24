@@ -21,8 +21,7 @@ const ProductInfo =observer( (props ) => {
 
     let { id } = useParams();
     useEffect(()=>{
-        // console.log('useEffect main');
-        // console.log('перешли на страницу товара и смотрим id '+id);
+
         productStore.setState(id)
         if (parseInt(id)>0) {
             productStore.getProductStartInfo(id).then(() => {
@@ -78,33 +77,7 @@ const ProductInfo =observer( (props ) => {
             </div>
                 : <div>товара нет в базе</div>
             }
-            {/*<div>*/}
-            {/*    <TabView className="a-tab">*/}
-            {/*        <TabPanel header="Отчет по всем цветам">*/}
-            {/*            <ProductAllColors id={id}/>*/}
-            {/*        </TabPanel>*/}
-            {/*        <TabPanel header="Позиции в выдаче">*/}
-            {/*            <PositionsInfo id={id}/>*/}
-            {/*        </TabPanel>*/}
-            {/*        <TabPanel header="Аналитика 2025">*/}
-            {/*            <p className="m-0">*/}
-            {/*                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium*/}
 
-            {/*            </p>*/}
-            {/*        </TabPanel>*/}
-            {/*        <TabPanel header="Отчет по поставщику">*/}
-            {/*            <ProductsSupplierInfo id={id} />*/}
-
-
-            {/*        </TabPanel>*/}
-            {/*        <TabPanel header="Аналитика конкурентов">*/}
-            {/*            <p className="m-0">*/}
-            {/*                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium*/}
-
-            {/*            </p>*/}
-            {/*        </TabPanel>*/}
-            {/*    </TabView>*/}
-            {/*</div>*/}
             <div style={{height: '100px'}}></div>
             <Footer/>
         </div>
