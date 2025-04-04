@@ -12,7 +12,6 @@ const ProductAllColors = () => {
     const {productStore} = useContext(Context)
     const [items, setItems] = useState([])
     const [allInfo, setAllInfo] = useState({})
-    const {catalogStore} = useContext(Context)
     const navigate = useNavigate();
     const [isInfoLoad, setIsInfoLoad] = useState(false)
 
@@ -30,11 +29,13 @@ const ProductAllColors = () => {
             let qtyMoney = 0
             for (let i in productStore.productColorsInfo){
                 colorCount++
+
                 try {
                     saleMoney += productStore.productColorsInfo[i].saleMoney
                     saleCount += productStore.productColorsInfo[i].saleCount
                     qty       += productStore.productColorsInfo[i].totalQuantity
-                    qtyMoney  += qty*productStore.productColorsInfo[i].price
+                    qtyMoney  += productStore.productColorsInfo[i].qtyMoney
+
                 } catch (er) { console.log(er);}   }
             const info = {
                 colorCount  : colorCount,
@@ -79,11 +80,19 @@ const ProductAllColors = () => {
             <span>{product.color}</span>
         </div>;
     };
+
     const MoneyBodyTemplate = (product) => {
         return <div>
             <span>{formatCurrency(product.saleMoney)}</span>
         </div>;
     };
+
+    const QtyMoneyBodyTemplate = (product) => {
+        return <div>
+            <span>{formatCurrency(product.qtyMoney)}</span>
+        </div>;
+    };
+
 
 
     return (
@@ -108,7 +117,9 @@ const ProductAllColors = () => {
                             <Column field="price" sortable header="Цена"></Column>
                             <Column field="saleCount" sortable header="Продано шт."></Column>
                             <Column field="saleMoney" body={MoneyBodyTemplate} sortable header="Продано руб."></Column>
-                            <Column field="totalQuantity" sortable header="Остатки"></Column>
+                            <Column field="totalQuantity" sortable header="Остатки шт"></Column>
+                            <Column field="qtyMoney" body={QtyMoneyBodyTemplate}  sortable header="Остатки руб."></Column>
+
 
                         </DataTable>
                     </div>

@@ -50,21 +50,6 @@ const Menu2 = ({data}) => {
         setIsHover(someHover)
     }
 
-    // function setSecondActiveItem(id){
-    //     // TODO: что то не работает тут поэтому харкод
-    //     console.log('tut '+id);
-    //     let someHover = []
-    //     for (let i in secondMenu){
-    //
-    //         if (secondMenu[i].id === id) { someHover.push(true)
-    //             console.log('tut2 '+ i);}
-    //         else someHover.push(false)
-    //     }
-    //     setIsHover(someHover)
-    //     console.log(isHover);
-    //     console.log(someHover);
-    // }
-
     function menuClick(id, isMenu3, name){
         if (isMenu3) {
             setMenu3Name(name)

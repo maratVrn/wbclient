@@ -18,6 +18,7 @@ const ProductInfo =observer( (props ) => {
     const {productStore} = useContext(Context)
     const [isInWB, setIsInWB] = useState(false)
     const [isInBase, setIsInBase] = useState(false)
+    const [isFbo, setIsFbo] = useState(false)
 
     let { id } = useParams();
     useEffect(()=>{
@@ -25,11 +26,10 @@ const ProductInfo =observer( (props ) => {
         productStore.setState(id)
         if (parseInt(id)>0) {
             productStore.getProductStartInfo(id).then(() => {
-                // console.log('useEffect main ответ '+productStore.idInfo.isInWB);
+
                 setIsInWB(productStore.idInfo.isInWB)
-                // console.log('isInWB '+productStore.idInfo.isInWB);
                 setIsInBase(productStore.idInfo.isInBase)
-                // console.log('isInBase '+productStore.idInfo.isInBase);
+                setIsFbo(productStore.idInfo.isFbo)
 
                 }
             )
@@ -48,7 +48,7 @@ const ProductInfo =observer( (props ) => {
                 </div>
 
                 <div className="main_item">
-                    <ProductData id={id} isInWB = {isInWB} isInBase = {isInBase}/>
+                    <ProductData id={id} isFbo = {isFbo} isInBase = {isInBase}/>
                 </div>
 
             </div>
@@ -63,7 +63,7 @@ const ProductInfo =observer( (props ) => {
                     </TabPanel>
                     <TabPanel header="Аналитика 2025">
 
-                        <ProductYearData id={id} isInWB = {isInWB} isInBase = {isInBase}/>
+                        <ProductYearData id={id} isFbo = {isFbo} isInBase = {isInBase}/>
                     </TabPanel>
                     <TabPanel header="Отчет по поставщику">
                         <ProductsSupplierInfo id={id} />

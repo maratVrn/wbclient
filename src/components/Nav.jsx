@@ -48,12 +48,14 @@ const Nav = observer(() => {
 
 
     function serverTest(){
-
         catalogStore.serverTestCommand()
     }
 
-    function loadServerTest(){
+    function clientTest(){
+        catalogStore.clientTestCommand()
+    }
 
+    function loadServerTest(){
         catalogStore.loadServerTest()
     }
 
@@ -88,9 +90,17 @@ const Nav = observer(() => {
 
                 </div>
 
-                <div  style={{paddingLeft: '40px', width:'400px'}}>
-                    <InputText   style={{ width:'350px'}} value={findText}
-                                 onKeyPress={handleKeyPress}
+                <div className="burger-btn " onClick={() => clientTest()}>
+                    <span className='pi  pi-burger '>CT</span>
+
+                </div>
+
+
+
+
+                <div style={{paddingLeft: '40px', width: '400px'}}>
+                    <InputText style={{width: '350px'}} value={findText}
+                               onKeyPress={handleKeyPress}
                                onChange={(e) => setFindText(e.target.value)}/>
                 </div>
 

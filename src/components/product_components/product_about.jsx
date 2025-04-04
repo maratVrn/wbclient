@@ -32,6 +32,7 @@ const ProductAbout = (props) => {
         if (parseInt(id)>0) {
             productStore.getProductAbout(id).then(() => {
                 if (productStore.productAbout?.data) {
+
                     setStartSate(productStore.startDateInBase)
                     setColors(productStore.productAbout.data.colors)
                     setData(productStore.productAbout.data.data)
@@ -39,6 +40,7 @@ const ProductAbout = (props) => {
 
                     // Расчитаем остатки
                     let allQty = []
+                    if (productStore.productAbout?.data?.info?.sizes)
                     for (let k in productStore.productAbout.data.info.sizes){
                         let oneSize = {name: productStore.productAbout.data.info.sizes[k].name , qty : 0}
                         for (let i in productStore.productAbout.data.info.sizes[k].stocks)
@@ -127,7 +129,7 @@ const ProductAbout = (props) => {
                     </div>
                     <div>
                         <div>
-                            <span className="product-brand"> Реальная скидка: {' 10 % '}</span>
+                            <span className="product-brand"> Реальная скидка: {productStore.realDiscount+ ' %'}</span>
 
 
                             <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>

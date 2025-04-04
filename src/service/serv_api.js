@@ -2,7 +2,7 @@ import axios from "axios"; // Библиотека для запросов на 
 
 // export const API_URL='http://localhost:5003/api'
 export const API_URL_SERV2='http://localhost:5002/api'
-const $api_serv2 = axios.create({
+const $api_serv_update = axios.create({
     withCredentials: true,
     baseURL: API_URL_SERV2
 
@@ -10,4 +10,4 @@ const $api_serv2 = axios.create({
 
 
 
-export default $api_serv2
+export default $api_serv_update

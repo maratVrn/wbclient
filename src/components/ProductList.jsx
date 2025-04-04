@@ -20,9 +20,9 @@ const ProductList = (props) => {
             }
         )
 
-    },[id])
+    }, [id])
 
-    function showProductInfo(id){
+    function showProductInfo(id) {
         navigate('/productInfo/' + id.toString())
     }
 
@@ -44,14 +44,15 @@ const ProductList = (props) => {
                                     : <div></div>
                                 }
 
-                                {(item.discount !== 0) ?
+                                {(item.wb_discoun !== 0) ?
                                     <div className="price-sale ">
-                                        <span>- {item.discount} %</span>
+                                        <span>- {item.wb_discount} %</span>
                                     </div>
                                     : <div></div>
                                 }
 
                             </div>
+                            <span className="product-brand"> Продаж за 30 дней: {item.saleCount+'  шт. '}</span>
                             <div className="card-price">
                                 <span className="product-brand">{item.brand} </span>
 

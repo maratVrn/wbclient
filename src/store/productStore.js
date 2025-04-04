@@ -15,7 +15,8 @@ export default class ProductStore {
     competitorSeePhotoInfo = []
     competitorSeeFindInfo = []
     nowId = 0
-    idInfo = {isInWB : false, isInBase : false}
+    realDiscount = 0
+    idInfo = {isInWB : false, isInBase : false, isFbo : false}
     startDateInBase = ''
     is_all_colors_Load = false          //  Чтобы не перегружать лишнюю инфу при переходе по табам
     is_supplier_info_Load = false
@@ -32,6 +33,10 @@ export default class ProductStore {
         makeAutoObservable((this))
     }
 
+    setRealDiscount(discount) {
+        this.realDiscount = discount
+    }
+
     setState(id){
         const needId = parseInt(id)
         let is_all_colors_Load = false
@@ -39,11 +44,9 @@ export default class ProductStore {
         let is_positions_info_Load = (id === this.nowId);
 
         if (id !== this.nowId){
-            console.log('set com load false');
             this.is_competitorSeeAlsoInfo = false
             this.is_competitorSeePhotoInfo = false
             this.is_competitorSeeFindInfo = false
-
         }
 
 
@@ -169,7 +172,11 @@ export default class ProductStore {
         else if (shortId <= 2405)  basket = '15'
         else if (shortId <= 2621)  basket = '16'
         else if (shortId <= 2837)  basket = '17'
-        else  basket = '18'
+        else if (shortId <= 3053)  basket = '18'
+        else if (shortId <= 3269)  basket = '19'
+        else if (shortId <= 3485)  basket = '20'
+        else if (shortId <= 3701)  basket = '21'
+        else  basket = '22'
 
         return basket
     }
@@ -197,8 +204,12 @@ export default class ProductStore {
 
             // Загрузим фотографии
             await this.getProductListLitePhoto(productList)
-            if (productList?.data) this.setProductList(productList?.data)
 
+            // Отсортирум по продажам
+            if (productList?.data) {
+                productList?.data.sort(function(a, b) {  return b.saleCount - a.saleCount; });
+                this.setProductList(productList?.data)
+            }
 
         } catch (e) {
             // this.setErrorMessage(e.response?.data?.message)
@@ -350,10 +361,11 @@ export default class ProductStore {
     // Получаем информацию про ИД - 1. есть ли он на вб 2. Есть ли он в нашей базе
     async  getProductStartInfo(productId){
         try{
-            this.idInfo = {isInWB : false, isInBase : false}
+            this.idInfo ={isInWB : false, isInBase : false, isFbo : false}
             const newIdInfo = await ApiService.APIGetProductStartInfo(productId)
             if (newIdInfo?.data) {
                 this.idInfo = newIdInfo?.data
+
             }
 
         } catch (e) {
@@ -385,7 +397,7 @@ export default class ProductStore {
 
             if (productAbout?.data) {
                 this.setNowId(productId)
-                if (productAbout.data.info.supplierId) this.setSupplierId(productAbout.data.info.supplierId)
+                if (productAbout.data?.info?.supplierId) this.setSupplierId(productAbout.data?.info?.supplierId)
                 this.setProductAbout(productAbout)
             }
 
@@ -402,7 +414,7 @@ export default class ProductStore {
                 this.setProductInfo(productInfo?.data)
                 if (productInfo?.data[1]) {
                     this.setProductInfo(productInfo?.data[1])
-                    if (productInfo?.data[1]?.priceHistory[0]?.d) this.startDateInBase = productInfo?.data[1].priceHistory[0].d
+                    if (productInfo?.data[1]?.priceHistory[0]?.d) this.startDateInBase = productInfo?.data[1]?.priceHistory[0]?.d
                 } else this.startDateInBase = 'нет в данных'
 
             }

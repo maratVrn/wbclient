@@ -169,6 +169,15 @@ export default class CatalogStore {
                 }
     }
 
+    async clientTestCommand(){
+        try {
+            const result = await ApiService.deleteDuplicateID()
+        } catch (e){
+            console.log(e)
+        }
+    }
+
+
     async loadServerTest(){
         try {
             const result = await ApiService.loadApiTestFunc()
@@ -176,6 +185,16 @@ export default class CatalogStore {
             console.log(e)
         }
     }
+    async duplicateTest(id, cat1, cat2){
+        try {
+            const result = await ApiService.APIDuplicateTest(id, cat1, cat2)
+            console.log(result);
+            return result
+        } catch (e){
+            console.log(e)
+        }
+    }
+
 
     async searchTest(){
         try{

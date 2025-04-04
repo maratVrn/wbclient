@@ -9,7 +9,7 @@ import {getDataFromHistory, formatCurrency} from "../math";
 
 
 const ProductYearData = (props) => {
-    const {id, isInWB, isInBase} = props;
+    const {id, isFbo, isInBase} = props;
     const {productStore} = useContext(Context)
     const [chartData, setChartData] = useState({});
     const [chartData2, setChartData2] = useState({});
@@ -26,7 +26,7 @@ const ProductYearData = (props) => {
 
                 if (productStore.productInfo) {
 
-                    const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, true)
+                    const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, isFbo, true)
 
                     setProductInfo(resultData)
 

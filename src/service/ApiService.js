@@ -1,5 +1,5 @@
 import $api_client from '../http/index'
-import $api_serv2 from '../service/serv_api'
+import $api_serv_update from '../service/serv_api'
 import $api_serv_load from '../service/serv_api_load'
 
 
@@ -12,7 +12,15 @@ export default class ApiService {
 
     // Запрос на парсинг каталога товаров с ВБ
     static async testFunc():Promise{
-        return $api_serv2.get('/test')
+        return $api_serv_update.get('/test')
+    }
+
+    static async deleteZeroID():Promise{
+        return $api_serv_update.get('/deleteZeroID')
+    }
+
+    static async deleteDuplicateID():Promise{
+        return $api_serv_update.get('/deleteDuplicateID')
     }
 
 
@@ -37,6 +45,16 @@ export default class ApiService {
             {
                 id:id,
                 findText : findText
+            }
+        )
+    }
+
+    static async APIDuplicateTest(id, cat1, cat2):Promise{
+        return $api_client.post(`/duplicateTest`,
+            {
+                id:id,
+                cat1 : cat1,
+                cat2 : cat2
             }
         )
     }
