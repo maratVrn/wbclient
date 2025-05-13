@@ -10,6 +10,10 @@
     overflow-y: scroll;
 }
 
+.nav_page{
+    padding: 0 10% 0 10% ;
+}
+
 
 .grid{
     margin: 0 0 0 0 ;
@@ -174,15 +178,7 @@ a.wb-go {
     /*margin-rigth:250px;*/
 }
 
-.footer_info{
-    background-color: #29296e;
-    height:100px;
-    /*flex-shrink: 0;*/
-    /*position: fixed;*/
-    margin-left:200px;
-    width: 500px;
-    /*margin-rigth:250px;*/
-}
+
 
 .product-order {
     margin-top: 15px;

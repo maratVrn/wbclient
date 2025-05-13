@@ -19,7 +19,7 @@ const ProductAllColors = () => {
 
     function loadColorsInfo(id){
         setIsInfoLoad(false)
-        if (id) productStore.getProductColorsInfo(id).then(() => {
+        if (id>0) productStore.getProductColorsInfo(id).then(() => {
 
             setItems(productStore.productColorsInfo)
             let colorCount = 0

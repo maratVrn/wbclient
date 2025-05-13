@@ -20,7 +20,7 @@ export default class ApiService {
     }
 
     static async deleteDuplicateID():Promise{
-        return $api_serv_update.get('/deleteDuplicateID')
+        return $api_serv_load.get('/deleteDuplicateID')
     }
 
 

@@ -6,6 +6,7 @@ import Nav from "./components/Nav";
 import ProductList from "./components/ProductList";
 import MainPage from "./components/MainPage";
 import Test from "./components/test";
+import User from "./components/user";
 import { useLocation } from 'react-router-dom';
 import ProductInfo from "./components/ProductInfo";
 import NoProduct from "./components/NoProduct";
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/products/:id" element={<ProductList/>}/>
                 <Route path="/productInfo/:id" element={<ProductInfo/>}/>
                 <Route path="/noProduct/" element={<NoProduct/>}/>
+                <Route path="/user/" element={<User/>}/>
 
             </Routes>
             <Nav/>

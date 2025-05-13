@@ -33,25 +33,29 @@ const ProductAbout = (props) => {
             productStore.getProductAbout(id).then(() => {
                 if (productStore.productAbout?.data) {
 
-                    setStartSate(productStore.startDateInBase)
-                    setColors(productStore.productAbout.data.colors)
-                    setData(productStore.productAbout.data.data)
-                    setInfo(productStore.productAbout.data.info);
+                    try {
+                        setStartSate(productStore.startDateInBase)
+                        setColors(productStore.productAbout.data.colors)
+                        setData(productStore.productAbout.data.data)
+                        setInfo(productStore.productAbout.data.info);
 
-                    // Расчитаем остатки
-                    let allQty = []
-                    if (productStore.productAbout?.data?.info?.sizes)
-                    for (let k in productStore.productAbout.data.info.sizes){
-                        let oneSize = {name: productStore.productAbout.data.info.sizes[k].name , qty : 0}
-                        for (let i in productStore.productAbout.data.info.sizes[k].stocks)
-                            try {oneSize.qty += productStore.productAbout.data.info.sizes[k].stocks[i].qty} catch (e) {}
+                        // Расчитаем остатки
+                        let allQty = []
+                        if (productStore.productAbout?.data?.info?.sizes)
+                            for (let k in productStore.productAbout.data.info.sizes) {
+                                let oneSize = {name: productStore.productAbout.data.info.sizes[k].name, qty: 0}
+                                for (let i in productStore.productAbout.data.info.sizes[k].stocks)
+                                    try {
+                                        oneSize.qty += productStore.productAbout.data.info.sizes[k].stocks[i].qty
+                                    } catch (e) {
+                                    }
 
-                        allQty.push(oneSize)
-                    }
+                                allQty.push(oneSize)
+                            }
 
-                    if (allQty.length>1)  setQty(allQty)
+                        if (allQty.length > 1) setQty(allQty)
                         else setQty(allQty[0].qty)
-
+                    } catch (e){console.log(e)}
                 }
 
             })
@@ -147,6 +151,7 @@ const ProductAbout = (props) => {
                         </div>
                     </div>
                     <span className="product-brand"> Возраст товара: {startDate}</span>
+
                     <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
                     <i className="custom-target-icon pi pi-info-circle "
                        data-pr-tooltip="Дата с которой товар добавлен в нашу базу данных и доступен для анализа"
@@ -170,7 +175,7 @@ const ProductAbout = (props) => {
                     <div className="product_color">цвет : {data.nm_colors_names}</div>
                     {
                         colors.length > 1 ?
-                            <div style={{height: '80px', paddingTop: '10px'}}>
+                            <div style={{height: '80px', paddingTop: '10px', maxWidth:'300px'}}>
 
                                 <Carousel
 

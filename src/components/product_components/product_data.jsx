@@ -19,10 +19,11 @@ const ProductData = (props) => {
 
 
     useEffect(() => {
-        // console.log('useEffect ProductData isFbo '+isFbo);
+        // console.log('useEffect ProductData ');
 
         if (isInBase)
-        if (id) productStore.getProductInfo(id).then(() => {
+
+        if (id>0) productStore.getProductInfo(id).then(() => {
 
             if (productStore.productInfo) {
 

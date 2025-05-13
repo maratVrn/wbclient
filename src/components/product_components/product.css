@@ -16,7 +16,111 @@
 
     /*box-sizing: border-box;*/
 }
+h2{
+    font-family: var(--font-family);
+    font-feature-settings: var(--font-feature-settings, normal);
+    font-size: 1.5rem;
+    font-weight: bolder;
+    color: #3c3f42;
+}
 
+
+.exmpl {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 350px;
+}
+.exmpl img {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+}
+
+.responsive-two-column-grid {
+    display:block;
+    padding:1rem;
+}
+
+.responsive-only-two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (min-width:768px) {
+    .responsive-two-column-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.footer_info{
+    cursor: pointer;
+    font-size: 14px;
+    padding-top: 5px;
+    color: #225c8e;
+}
+.footer_s{
+
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 30px;
+    color: #375d88;
+}
+
+.responsive-three-column-grid {
+    display:block;
+    padding:0.5rem
+}
+
+.flex-three-column-grid {
+    justify-content:center;
+    /*display: grid;*/
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+
+}
+
+@media (min-width:1024px) {
+    .responsive-three-column-grid {
+        display: grid;
+        grid-auto-rows: 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .flex-three-column-grid{
+        display: flex;
+        justify-content:center;
+        /*padding-left: 10px;*/
+        padding-bottom: 20px;
+    }
+}
+
+.left-sidebar {
+    display:flex;
+    flex-wrap:wrap;
+    width:100%;
+    padding:1rem;
+
+}
+@media (min-width:768px) {
+    .left-sidebar > *:nth-child(1) {
+        width:50%;
+    }
+    .left-sidebar > *:nth-child(2) {
+        width:50% ;
+        order:-1;
+    }
+}
+
+
+.mainFont {
+    font-family: var(--font-family);
+    font-feature-settings: var(--font-feature-settings, normal);
+    font-size: 14px;
+    font-weight: normal;
+
+}
 .main_photo{
     height: 100%;
     width: 100%;
@@ -177,6 +281,7 @@ span.bold {
     font-size: 14px;
     font-weight: 400;
     line-height: 28px;
+
 }
 
 .product_size_text{

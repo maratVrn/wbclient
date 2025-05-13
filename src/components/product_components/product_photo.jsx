@@ -13,14 +13,15 @@ const ProductPhoto = (props) => {
 
     useEffect(()=>{
         productStore.setNowId(0)
-        if (isInWB){
-            productStore.getProductPhoto(id).then(() => {
-                    setLittlePhotoUrl(productStore.photoUrlArray)
-                    if (productStore.photoUrlArray[0]) setMainPhotoUrl(productStore.photoUrlArray[0])
-                }
-            )
+        if (id>0) {
+            if (isInWB) {
+                productStore.getProductPhoto(id).then(() => {
+                        setLittlePhotoUrl(productStore.photoUrlArray)
+                        if (productStore.photoUrlArray[0]) setMainPhotoUrl(productStore.photoUrlArray[0])
+                    }
+                )
+            }
         }
-
     },[id, isInWB])
 
 

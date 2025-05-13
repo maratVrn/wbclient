@@ -19,15 +19,13 @@ const PositionsInfo = () => {
 
 
     function loadPositionsInfo(){
-
-
         setItems([])
-
-
-        productStore.getPositionsInfo(id).then(() => {
-            setIsInfoLoad(false)
-            setItems(productStore.positionsInfo)
-        })
+        if (id>0) {
+            productStore.getPositionsInfo(id).then(() => {
+                setIsInfoLoad(false)
+                setItems(productStore.positionsInfo)
+            })
+        }
     }
     useEffect(()=>{
         // console.log('useEffect supplierInfo');

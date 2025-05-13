@@ -3,10 +3,13 @@ import Menu from "./Menu";
 import Menu2 from "./Menu2";
 import './Nav.css';
 
+import '/node_modules/primeflex/primeflex.css';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
-import { InputText } from 'primereact/inputtext';
 import {useNavigate} from "react-router-dom";
+import { Menubar } from 'primereact/menubar';
+import logoPng from './wbsale3.png'
+
 
 const Nav = observer(() => {
     const [findText, setFindText] = useState('');
@@ -16,104 +19,115 @@ const Nav = observer(() => {
     const navigate = useNavigate();
     const {productStore} = useContext(Context)
 
-    function setMenuActive(isActive){
-        globalStore.setIsNewHoverMainMenu(false)
-        if (isActive) {
-            globalStore.setMenuActive(true)
-            globalStore.setMenuActive2(false) }
-        else {
-            globalStore.setMenuActive(false)
-            globalStore.setMenuActive2(false)
+
+
+
+    const itemRenderer = (item) => (
+        <a className="flex align-items-center p-menuitem-link">
+            <span
+                onClick={() => navigate(item.shortcut)}
+            >{item.label}</span>
+        </a>
+    );
+    const items = [
+        {
+            label: 'Аналитика',
+            items: [
+                {
+                    label: 'Анализ карточки товара',
+                    template: itemRenderer,
+                    shortcut: '/productInfo/0'
+                },
+                {
+                    label: 'Анализ продавца',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Анализ конкурентов',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Аналитика и поиск товарной ниши',
+                    template: itemRenderer
+                }
+                ,
+                {
+                    label: 'Статистика поисковых запросов',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Поиск и аналитика ниш',
+                    template: itemRenderer
+                }
+
+
+            ]
+        },
+        {
+            label: 'Управление продажами',
+            items: [
+                {
+                    label: 'Комплектация FBS',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Аналитика FBS',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Управление товарами',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Управление акциями',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Автоматический Репрайсер',
+                    template: itemRenderer
+                },
+                {
+                    label: 'Управление рекламой',
+                    template: itemRenderer
+                }
+
+            ]
+        },
+        {
+            label: 'Тарифы',
+            template: itemRenderer
+        },
+        {
+            label: 'Обучение',
+            template: itemRenderer
         }
-    }
+    ]
+    const start = <a href="/"> <img alt="logo" src={logoPng} style={{paddingRight: '40px'}} className="mr-2"></img> </a>
+    const end = <i className="pi pi-user" style={{cursor:'pointer', fontSize: '1.5rem', paddingRight:'80px', color: 'var(--primary-color)'}}
+                   onClick={() => navigate('/user/' )}></i>
 
-    function getIdInfo(id){
-
-        productStore.setState(id)
-        catalogStore.getIdInfo(id).then(() => {
-            const idInfo = catalogStore.idInfo
-            let  rt = 'Товар не найден'
-            if (idInfo[0] && idInfo[1]) {
-                rt = 'id = ' + idInfo[0].id + '   subjectId = ' + idInfo[1].subjectId
-                + '   catalogId = ' + idInfo[0].catalogId + '    totalQuantity = ' + idInfo[1].totalQuantity
-                // navigate('/productInfo/' + id.toString())
-            } //else navigate('/noProduct/')
-            navigate('/productInfo/' + id.toString())
-            setResultText(rt)
-            }
-        )
-
-    }
-
-
-
-    function serverTest(){
-        catalogStore.serverTestCommand()
-    }
-
-    function clientTest(){
-        catalogStore.clientTestCommand()
-    }
-
-    function loadServerTest(){
-        catalogStore.loadServerTest()
-    }
-
-    const handleKeyPress = (event) => {
-        if(event.key === 'Enter'){
-           //TODO: тут для начала определять что написанно id или поисковая фраза
-            // Если id то делать то что сейча
-            // Если поисковая фраза то новый алгоритм
-            getIdInfo(findText)
-        }
-    };
     return (
         <div>
-
-            <nav>
-
-                {/*<div className="burger-btn " onClick={()=>setMenuActive(!menuActive)}>*/}
-                <div className="burger-btn " onClick={() => setMenuActive(!globalStore.isMenuActive)}>
-
-                    {/*<span className={`pi pi-burger ${burgerIco}`} ></span>*/}
-                    <span
-                        className={globalStore.isMenuActive ? 'pi pi-burger pi-times' : 'pi pi-burger pi-bars'}></span>
-
-
-                </div>
-                <div className="burger-btn " onClick={() => serverTest()}>
-                    <span className='pi  pi-burger '>UP</span>
-                </div>
-
-                <div className="burger-btn " onClick={() => loadServerTest()}>
-                    <span className='pi  pi-burger '>LP</span>
-
-                </div>
-
-                <div className="burger-btn " onClick={() => clientTest()}>
-                    <span className='pi  pi-burger '>CT</span>
-
-                </div>
+            <div className='nav_page'>
+                {/*<img alt="logo" src={logoPng} height="50" ></img>*/}
+                <Menubar
+                    style={{fontSize: '16px'}}
+                    // className='w-full  border-none  top-10 left-100 p-2 z-5'
+                    model={items}
+                    start={start}
+                    end={end}
+                />
+            </div>
 
 
 
 
-                <div style={{paddingLeft: '40px', width: '400px'}}>
-                    <InputText style={{width: '350px'}} value={findText}
-                               onKeyPress={handleKeyPress}
-                               onChange={(e) => setFindText(e.target.value)}/>
-                </div>
-
-
-                <p style={{color: 'white', paddingLeft: '20px', fontSize: '20px'}}>{resultText}</p>
-
-            </nav>
-
-            <Menu/>
-            <Menu2 data={{
-                mainMenuName: globalStore.mainMenuName,
-                mainMenuId: globalStore.mainMenuID,
-                isActive: globalStore.isMenuActive2}}/>
+            {/*<Menu/>*/}
+            {/*<Menu2 data={{*/}
+            {/*    mainMenuName: globalStore.mainMenuName,*/}
+            {/*    mainMenuId: globalStore.mainMenuID,*/}
+            {/*    isActive: globalStore.isMenuActive2*/}
+            {/*}}/>*/}
 
         </div>
 

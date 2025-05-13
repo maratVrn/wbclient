@@ -416,9 +416,7 @@ export default class ProductStore {
                     this.setProductInfo(productInfo?.data[1])
                     if (productInfo?.data[1]?.priceHistory[0]?.d) this.startDateInBase = productInfo?.data[1]?.priceHistory[0]?.d
                 } else this.startDateInBase = 'нет в данных'
-
             }
-
         } catch (e) {
             // this.setErrorMessage(e.response?.data?.message)
             console.log(e)
