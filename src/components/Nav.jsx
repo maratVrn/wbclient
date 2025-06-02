@@ -40,7 +40,8 @@ const Nav = observer(() => {
                 },
                 {
                     label: 'Анализ продавца',
-                    template: itemRenderer
+                    template: itemRenderer,
+                    shortcut: '/productSupplierInfo/0'
                 },
                 {
                     label: 'Анализ конкурентов',
@@ -99,7 +100,8 @@ const Nav = observer(() => {
         },
         {
             label: 'Обучение',
-            template: itemRenderer
+            template: itemRenderer,
+            shortcut: '/training/0'
         }
     ]
     const start = <a href="/"> <img alt="logo" src={logoPng} style={{paddingRight: '40px'}} className="mr-2"></img> </a>

@@ -8,7 +8,6 @@ import ProductData from "./product_components/product_data";
 import ProductYearData from "./product_components/productYear_data";
 import ProductAbout from "./product_components/product_about";
 import ProductsSupplierInfo from "./product_components/products_supplier_Info";
-import {TabPanel, TabView} from "primereact/tabview";
 import ProductAllColors from "./product_components/product_all_colors";
 import Footer from "./product_components/footer";
 import PositionsInfo from "./product_components/positions_info";
@@ -121,19 +120,46 @@ const ProductInfo =observer( (props ) => {
 
                     </div>
                     <div className="left-sidebar" style={{alignItems: 'center'}}>
-
-
                         <div className="borderOne">
-                            <h2>Изучите товар для продажи</h2>
-                            <p className="mainFont" style={{paddingRight: '10px'}}>Изучите аналогичный товар
-                                конкурента</p>
-                            <p className="mainFont" style={{paddingRight: '10px'}}>Смотрите данные о продажах за
-                                послдений
-                                30 дней</p>
-                            <p className="mainFont" style={{paddingRight: '10px'}}>Изучайте поставки и возвраты</p>
+                            <h2>Анализируйте продажи по всем цветам товара</h2>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>В отчете доступные общие данные по
+                                продажам
+                                за 30 дней по всем цветам</p>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>Изучайте какие цвета продаются
+                                лучше</p>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>Анализируйте цены, продажи и остатки
+                                в сводной таблице</p>
                         </div>
                         <div className="borderOne exmpl">
-                            <img src={require('./product_components/images/im1.jpg')}/>
+                            <img src={require('./product_components/images/im2.jpg')}/>
+                        </div>
+
+                    </div>
+
+
+                    <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
+                        <div className="borderOne">
+                            <h2>Изучите основные показатели с начала 2025 года</h2>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>Изучите динамику продаж за год</p>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>Анализируйте частоту поставок и
+                                динамику склада</p>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>Смотрите есть ли сезонность у данного
+                                товара</p>
+                        </div>
+                        <div className="borderOne exmpl">
+                            <img src={require('./product_components/images/im3.jpg')}/>
+                        </div>
+
+                    </div>
+                    <div className="left-sidebar" style={{alignItems: 'center'}}>
+                        <div className="borderOne">
+                            <h2>Смотрите позиции в поисковой выдаче на главной странице WB </h2>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>Отчет автоматически генерирует запросы по названию товара</p>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>Система сама проверит на какой странице и месте находиться товар</p>
+                            <p className="mainFont" style={{paddingRight: '10px'}}>При необходимости добавьте свой запрос</p>
+                        </div>
+                        <div className="borderOne exmpl">
+                            <img src={require('./product_components/images/im4.jpg')}/>
                         </div>
 
                     </div>
@@ -156,26 +182,29 @@ const ProductInfo =observer( (props ) => {
                     </div>
                     {isInBase ?
                         <div>
-                            <TabView className="a-tab">
-                                <TabPanel header="Отчет по всем цветам">
-                                    <ProductAllColors id={id}/>
-                                </TabPanel>
-                                <TabPanel header="Позиции в выдаче">
-                                    <PositionsInfo id={id}/>
-                                </TabPanel>
-                                <TabPanel header="Аналитика 2025">
+                            <ProductAllColors id={id}/>
+                            <ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>
+                            <PositionsInfo id={id}/>
+                            {/*<TabView className="a-tab">*/}
+                            {/*    <TabPanel header="Отчет по всем цветам">*/}
+                            {/*        <ProductAllColors id={id}/>*/}
+                            {/*    </TabPanel>*/}
+                            {/*    <TabPanel header="Позиции в выдаче">*/}
+                            {/*        <PositionsInfo id={id}/>*/}
+                            {/*    </TabPanel>*/}
+                            {/*    <TabPanel header="Аналитика 2025">*/}
 
-                                    <ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>
-                                </TabPanel>
-                                <TabPanel header="Отчет по поставщику">
-                                    <ProductsSupplierInfo id={id}/>
+                            {/*        <ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>*/}
+                            {/*    </TabPanel>*/}
+                            {/*    <TabPanel header="Отчет по поставщику">*/}
+                            {/*        <ProductsSupplierInfo id={id}/>*/}
 
 
-                                </TabPanel>
-                                <TabPanel header="Аналитика конкурентов">
-                                    <CompetitorInfo id={id}/>
-                                </TabPanel>
-                            </TabView>
+                            {/*    </TabPanel>*/}
+                            {/*    <TabPanel header="Аналитика конкурентов">*/}
+                            {/*        <CompetitorInfo id={id}/>*/}
+                            {/*    </TabPanel>*/}
+                            {/*</TabView>*/}
                         </div>
                         : <div>товара нет в базе</div>
                     }

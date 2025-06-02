@@ -9,7 +9,9 @@ import Test from "./components/test";
 import User from "./components/user";
 import { useLocation } from 'react-router-dom';
 import ProductInfo from "./components/ProductInfo";
+import ProductsSupplierInfo from "./components/product_components/products_supplier_Info";
 import NoProduct from "./components/NoProduct";
+import Training from "./components/training_components/Training";
 import Footer from "./components/product_components/footer";
 
 function App() {
@@ -48,9 +50,10 @@ function App() {
                 <Route path="/" element={<MainPage/>}/>
                 <Route path="/products/:id" element={<ProductList/>}/>
                 <Route path="/productInfo/:id" element={<ProductInfo/>}/>
+                <Route path="/productSupplierInfo/:id" element={<ProductsSupplierInfo/>}/>
                 <Route path="/noProduct/" element={<NoProduct/>}/>
                 <Route path="/user/" element={<User/>}/>
-
+                <Route path="/training/:st" element={<Training/>}/>
             </Routes>
             <Nav/>
 

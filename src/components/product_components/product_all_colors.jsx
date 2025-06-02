@@ -49,7 +49,7 @@ const ProductAllColors = () => {
         })
     }
     useEffect(()=>{
-
+        console.log('useEffect ProductAllColors id = '+id );
         setItems([])
         setAllInfo({})
         loadColorsInfo(id)
@@ -96,18 +96,20 @@ const ProductAllColors = () => {
 
 
     return (
-        <div className="flex align-items-center" style={{justifyContent: 'center', width:'100%'}}>
-            {productStore.is_all_colors_Load ?
-                <div style={{ width:'100%'}}>
-                <span className="all_colors_info">{'      Всего товаров ' + allInfo?.colorCount +
-                    ',  за 30 дней продано  ' + allInfo?.saleCount + ' шт. на сумму ' + formatCurrency(allInfo.saleMoney)}</span>
-                <span className="all_colors_info">{'      На складе  ' + allInfo?.qty +
-                    ' шт, на сумму ' + formatCurrency(allInfo.qtyMoney)}</span>
+        <div className="flex align-items-center" style={{justifyContent: 'center', width: '100%'}}>
 
+            {productStore.is_all_colors_Load ?
+                <div style={{width: '100%', textAlign: 'center'}}>
+                    <h2>Аналитика продаж за 30 дней по всем цветам </h2>
+                    <span className="all_colors_info">{'      Всего товаров ' + allInfo?.colorCount +
+                        ',  за 30 дней продано  ' + allInfo?.saleCount + ' шт. на сумму ' + formatCurrency(allInfo.saleMoney)}</span>
+                    <span className="all_colors_info">{'      На складе  ' + allInfo?.qty +
+                        ' шт, на сумму ' + formatCurrency(allInfo.qtyMoney)}</span>
 
 
                     <div>
-                        <DataTable style={{fontSize: '14px', marginTop:'20px'}} value={items} size={'small'} paginator rows={10} rowsPerPageOptions={[10, 25, 50]} className="dataTable">
+                        <DataTable style={{fontSize: '14px', marginTop: '20px'}} value={items} size={'small'} paginator
+                                   rows={5} rowsPerPageOptions={[5, 10, 20]} className="dataTable" sortField="saleMoney" sortOrder={-1}>
                             {/*scrollable scrollHeight="400px"*/}
                             <Column header="Товар" body={NameBodyTemplate}></Column>
                             <Column header="Фото" body={imageBodyTemplate}></Column>
@@ -118,15 +120,16 @@ const ProductAllColors = () => {
                             <Column field="saleCount" sortable header="Продано шт."></Column>
                             <Column field="saleMoney" body={MoneyBodyTemplate} sortable header="Продано руб."></Column>
                             <Column field="totalQuantity" sortable header="Остатки шт"></Column>
-                            <Column field="qtyMoney" body={QtyMoneyBodyTemplate}  sortable header="Остатки руб."></Column>
+                            <Column field="qtyMoney" body={QtyMoneyBodyTemplate} sortable
+                                    header="Остатки руб."></Column>
 
 
                         </DataTable>
                     </div>
                 </div>
-:
+                :
                 <div>
-                    <button disabled={isInfoLoad} onClick={() => {
+                <button disabled={isInfoLoad} onClick={() => {
                         setIsInfoLoad(true)
                         loadColorsInfo(id)
                     }}>Сформировать отчет

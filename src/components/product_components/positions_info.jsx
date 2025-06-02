@@ -82,65 +82,69 @@ const PositionsInfo = () => {
     };
 
     return (
-        <div className="flex align-items-center" style={{justifyContent: 'center', width:'100%'}}>
-            {productStore.is_positions_info_Load ?
+        <div className="flex align-items-center" style={{justifyContent: 'center', width: '100%'}}>
 
-                <div style={{width: '100%'}}>
+                {productStore.is_positions_info_Load ?
 
+                    <div style={{width: '100%', textAlign: 'center'}}>
+                        <h2>Позиции в выдаче по поисковым запросам </h2>
 
-                    <span className="all_colors_info" style={{marginTop: '30px', marginBottom: '30px'}}>Позиции в выдаче по запросам</span>
+                        {/*<span className="all_colors_info" style={{marginTop: '30px', marginBottom: '30px'}}>Позиции в выдаче по запросам</span>*/}
 
-                    <div className="flex" style={{paddingLeft: '40px'}}>
-                        <span className="all_colors_info" style={{marginTop: '12px', marginBottom: '30px'}}>Добавить поисковую фразу</span>
-                        <InputText style={{width: '60%', height: '40px', marginLeft: '20px'}} value={findText}
-                                   onChange={(e) => setFindText(e.target.value)}/>
-                        <Button style={{width: '130px', height: '40px', marginLeft: '20px', fontSize: '14px'}}
-                                onClick={load} label="Загрузить" severity="secondary" loading={loading}/>
+                        <div className="flex" style={{paddingLeft: '40px'}}>
+                            <span className="all_colors_info" style={{marginTop: '12px', marginBottom: '30px'}}>Добавить поисковую фразу</span>
+                            <InputText style={{width: '60%', height: '40px', marginLeft: '20px'}} value={findText}
+                                       onChange={(e) => setFindText(e.target.value)}/>
+                            <Button style={{width: '130px', height: '40px', marginLeft: '20px', fontSize: '14px'}}
+                                    onClick={load} label="Загрузить" severity="secondary" loading={loading}/>
 
-                    </div>
-                    <span className="all_colors_info" style={{marginTop: '0px', marginBottom: '20px'}}>{addFindResult}</span>
+                        </div>
+                        <span className="all_colors_info"
+                              style={{marginTop: '0px', marginBottom: '20px'}}>{addFindResult}</span>
 
-                    <div>
-
-                        <DataTable style={{fontSize: '14px'}} value={items} size={'small'}
-                            // paginator rows={10}   rowsPerPageOptions={[10, 25, 50]}
-                                   className="dataTable">
-                            <Column field="searchWord" body={NameBodyTemplate} header="Поисковая фраза"></Column>
-
-                            <Column field="position" body={positionTemplate} sortable header="Позиция"></Column>
-                            <Column field="pageResult" sortable body={pageTemplate} header="Страница"></Column>
-                            <Column field="total" sortable header="Всего позиций"></Column>
-                            <Column  body={goToWB} header="Смотреть на WB"></Column>
-
-
-                        </DataTable>
-                    </div>
-
-                </div>
-                :
-                <div>
-                    <button disabled={isInfoLoad} onClick={() => {
-                        setIsInfoLoad(true)
-                        loadPositionsInfo()
-                    }}>Сформировать отчет
-                    </button>
-                    {isInfoLoad ?
                         <div>
-                            <div style={{paddingTop: '20px', paddingLeft: '40px'}}>
-                                <ProgressSpinner style={{width: '100px', height: '100px'}} strokeWidth="4"
-                                                 fill="var(--surface-ground)" animationDuration=".9s"/>
+
+                            <DataTable style={{fontSize: '14px'}} value={items} size={'small'}
+                                // paginator rows={10}   rowsPerPageOptions={[10, 25, 50]}
+                                       sortField="position" sortOrder={1}
+                                       className="dataTable">
+                                <Column field="searchWord" body={NameBodyTemplate} header="Поисковая фраза"></Column>
+
+                                <Column field="position" body={positionTemplate} sortable header="Позиция"></Column>
+                                <Column field="pageResult" sortable body={pageTemplate} header="Страница"></Column>
+                                <Column field="total" sortable header="Всего позиций"></Column>
+                                <Column body={goToWB} header="Смотреть на WB"></Column>
+
+
+                            </DataTable>
+                        </div>
+
+                    </div>
+                    :
+                    <div>
+                        <h2>Позиции в выдаче по поисковым запросам </h2>
+                        <button disabled={isInfoLoad} onClick={() => {
+                            setIsInfoLoad(true)
+                            loadPositionsInfo()
+                        }}>Сформировать отчет
+                        </button>
+                        {isInfoLoad ?
+                            <div>
+                                <div style={{paddingTop: '20px', paddingLeft: '40px'}}>
+                                    <ProgressSpinner style={{width: '100px', height: '100px'}} strokeWidth="4"
+                                                     fill="var(--surface-ground)" animationDuration=".9s"/>
+                                </div>
+
+                            </div>
+                            :
+                            <div>
+
+                                {/*что то загрузили*/}
                             </div>
 
-                        </div>
-                        :
-                        <div>
-
-                            {/*что то загрузили*/}
-                        </div>
-
-                    }
-                </div>
-            }
+                        }
+                    </div>
+                }
         </div>
     );
 };

@@ -27,7 +27,7 @@ const Footer = () => {
                                  onClick={() => navigate('/productInfo/0')}> Анализ карточки товара
                             </div>
                             <div className="footer_info"
-                                 onClick={() => navigate('/productInfo/0')}> Анализ продавца
+                                 onClick={() => navigate('/productSupplierInfo/0')}> Анализ продавца
                             </div>
                             <div className="footer_info"
                                  onClick={() => navigate('/productInfo/0')}> Анализ конкурентов

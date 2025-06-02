@@ -132,11 +132,11 @@ const ProductYearData = (props) => {
     return (
         <div>
             {isInBase ?
-                <div>
-
+                <div style={{width: '100%', textAlign: 'center'}}>
+                    <h2>Аналитика продаж за год </h2>
                     <div className="chart_info">
                     <span className="all_colors_info">
-                        Продажи (с учетом возвратов) {productInfo?.totalSaleQuantity+'   '} шт.
+                        Продажи (с учетом возвратов) {productInfo?.totalSaleQuantity + '   '} шт.
                           на сумму {formatCurrency(productInfo?.totalMoney)} </span>
                     </div>
                     <div className="item_data">
@@ -147,10 +147,10 @@ const ProductYearData = (props) => {
                         </div>
                     </div>
                     <div className="chart_info">
-                    <span   className="all_colors_info">
-                        Остатки на начало {productInfo?.startQuantity+'   '}
-                        сейчас {productInfo?.totalQuantity+'   '}
-                        Поступления  {productInfo?.addQuantity} </span>
+                    <span className="all_colors_info">
+                        Остатки на начало {productInfo?.startQuantity + '   '}
+                        сейчас {productInfo?.totalQuantity + '   '}
+                        Поступления {productInfo?.addQuantity} </span>
 
                     </div>
 
@@ -161,9 +161,9 @@ const ProductYearData = (props) => {
                     </div>
                     <div className="chart_info">
                 <span className="all_colors_info">Цена {productInfo?.price + '  '}
-                    мин.  {productInfo?.minPrice + ' '}
-                    макс.{productInfo?.maxPrice+ ' '}
-                    сред.  {productInfo?.meanPrice} </span>
+                    мин. {productInfo?.minPrice + ' '}
+                    макс.{productInfo?.maxPrice + ' '}
+                    сред. {productInfo?.meanPrice} </span>
                     </div>
                     <div className="item_data">
 
