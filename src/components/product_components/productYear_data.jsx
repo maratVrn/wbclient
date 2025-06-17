@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
 import './product.css';
 import { Chart } from 'primereact/chart';
-import {getDataFromHistory, formatCurrency} from "../math";
+import {getDataFromHistory, formatCurrency, getDataFromHistoryYear} from "../math";
 
 
 
@@ -26,7 +26,14 @@ const ProductYearData = (props) => {
 
                 if (productStore.productInfo) {
 
+                    const res = getDataFromHistoryYear(productStore.productInfo)
                     const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, isFbo, true)
+
+
+                    // for (let i = 0; i < dateArray.length; i++)
+                    //     if (i % 5 === 0) dateArray[i]= 1
+                    //         else dateArray[i] = 0
+
 
                     setProductInfo(resultData)
 
@@ -47,10 +54,37 @@ const ProductYearData = (props) => {
                                 // beginAtZero: true
                             },
                             x: {
+                                ticks: {
+                                    display: true,
+
+                                    callback: function(value, index, ticks) {
+                                        let label = null
+                                        try{
+                                            const d_arr = dateArray[index].split('.')
+                                            if (d_arr[0] === '15') {
+                                                let months = [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                                                    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ];
+                                                let mId = parseInt(d_arr[1]) -1
+                                                label = months[mId]
+                                            }
+                                        } catch (e){}
+
+                                        return label;
+                                    }
+                                },
+                                grid: {
+                                    display: false,
+                                    // color : 'rgba(193,150,73,0.5)',
+                                    drawBorder: true
+                                },
+                                beginAtZero: true,
                                 stacked: true,
-                                display: false,
-                                // beginAtZero: true
-                            }
+                            },
+                            // x: {
+                            //     stacked: true,
+                            //     display: true,
+                            //     // beginAtZero: true
+                            // }
                         }
                     };
                     setChartOptions(options);

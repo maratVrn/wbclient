@@ -12,6 +12,22 @@ function formatCurrency(txt) {
     if (res === '') res = '0'
     return res+' р.'
 }
+function getDataFromHistoryYear(productInfo){
+    let months = [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ];
+
+    let m_idx = 0
+    for (let i in productInfo.priceHistory) {
+        const crDay = productInfo.priceHistory[i].d
+        console.log(crDay + '  '+productInfo.priceHistory[i].q + '  цена '+productInfo.priceHistory[i].sp);
+        const d_arr = productInfo.priceHistory[i].d.split('.')
+        if (parseInt(d_arr[1]) > m_idx) {
+            m_idx = parseInt(d_arr[1])
+            console.log(months[m_idx - 1]);
+        }
+    }
+
+}
 
 function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025Year = false ){
     let dayCount = daysCount
@@ -203,7 +219,7 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
             saleData[i].meanQ = Math.round(10000 * (saleData[i].q - meanQ) / meanQ) / 100
             if (saleData[i].meanQ > 399) saleArray[saleData[i].i] = 0
         }
-
+        // console.log(productInfo);
         console.log(saleData);
 
         // Добавим продажи в тот день когда были поступления
@@ -278,4 +294,4 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
 }
 
 
-export {getDataFromHistory,  formatCurrency}
+export {getDataFromHistory,  formatCurrency, getDataFromHistoryYear}
