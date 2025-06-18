@@ -17,15 +17,71 @@ function getDataFromHistoryYear(productInfo){
         "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ];
 
     let m_idx = 0
+
+    let productInfoMArray = []
+    let currHistory = []
+    let addEndHistory = []
+    let m_count = 0
+    let d_start = 0
+    let needAdd = true
+    let  endDay = 31
+    try {endDay = parseInt(productInfo.priceHistory.at(-1).d.split('.')[0]) } catch (e) {}
+    let  endMonth = 12
+    try {endMonth = parseInt(productInfo.priceHistory.at(-1).d.split('.')[1]) } catch (e) {}
+
     for (let i in productInfo.priceHistory) {
-        const crDay = productInfo.priceHistory[i].d
-        console.log(crDay + '  '+productInfo.priceHistory[i].q + '  цена '+productInfo.priceHistory[i].sp);
+
         const d_arr = productInfo.priceHistory[i].d.split('.')
-        if (parseInt(d_arr[1]) > m_idx) {
-            m_idx = parseInt(d_arr[1])
-            console.log(months[m_idx - 1]);
+        let crDay = parseInt(d_arr[0])
+        let crMonth = parseInt(d_arr[1])
+
+
+        if ((crDay > endDay) && (crMonth === endMonth-1)) {
+            addEndHistory.push(productInfo.priceHistory[i])
+
         }
+        if (d_start === 0) d_start = crDay
+
+
+        if (parseInt(d_arr[1]) > m_idx) {
+            // Начался новый месяц
+            if (m_count > 0) {
+                productInfoMArray.push({
+                    priceHistory: currHistory,
+                    m_name: months[m_idx - 1]
+                })
+            }
+            m_idx = parseInt(d_arr[1])
+            m_count++
+            currHistory = []
+        }
+        currHistory.push(productInfo.priceHistory[i])
+        if ((needAdd) && (m_count === 2)){
+            if (d_start > parseInt(d_arr[0])) productInfoMArray[0].priceHistory.push(productInfo.priceHistory[i])
+                else needAdd = false
+        }
+
     }
+    productInfoMArray.push({
+        priceHistory : [...addEndHistory, ...currHistory],
+        m_name : months[m_idx-1]
+    })
+
+    for (let i in productInfoMArray) {
+        console.log(productInfoMArray[i].m_name);
+        const [dateArray, quantityArray, saleArray, salePriceArray,addQuantityArray, returnArray, resultData] =
+            getDataFromHistory(productInfoMArray[i], 31)
+
+        for (let j in productInfoMArray[i].priceHistory) console.log(productInfoMArray[i].priceHistory[j].d);
+
+        console.log('dateArray');
+        console.log(dateArray)
+        console.log('saleArray');
+        console.log(saleArray)
+
+    }
+
+
 
 }
 
@@ -77,9 +133,19 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
             counter ++
             // Сначала возмем отчетный день - последний
             if (i === dayCount) {
-                crDate = new Date();
-                q = productInfo.totalQuantity
-                sp = productInfo.price
+                // crDate = new Date();
+                // q = productInfo.totalQuantity
+                // sp = productInfo.price
+
+                // try{
+                    const s = history.at(-1).d.split('.')
+                    crDate = new Date(s[2]+'-'+s[1]+'-'+s[0]);
+
+                    console.log('crDate = '+crDate.toDateString());
+                    console.log(history.at(-1));
+                    q = parseInt(history.at(-1).q)
+                    sp = parseInt(history.at(-1).sp)
+                // } catch (e) {}
 
                 sq = 0
                 arIdx--
@@ -220,7 +286,7 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
             if (saleData[i].meanQ > 399) saleArray[saleData[i].i] = 0
         }
         // console.log(productInfo);
-        console.log(saleData);
+        // console.log(saleData);
 
         // Добавим продажи в тот день когда были поступления
 
