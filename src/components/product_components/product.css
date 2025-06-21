@@ -186,7 +186,7 @@ h2{
 }
 
 .dataTable{
-    border: 1px solid #b8bec8;
+    /*border: 1px solid #b8bec8;*/
     border-radius: 2px;
 }
 .p-datatable .p-datatable-tbody > tr.p-highlight {

@@ -29,13 +29,13 @@ const ProductInfo =observer( (props ) => {
     useEffect(()=>{
         setIsStartPage(true)
 
-        console.log('useEffect ProductInfo Id = '+id);
+        // console.log('useEffect ProductInfo Id = '+id);
         if (id > 0) {getIdInfo(id)
             setIsStartPage(false)}
     },[id])
 
     function getIdInfo(id){
-        console.log('ttt');
+        // console.log('ttt');
         if (id > 0) {
             setIsStartPage(false)
             productStore.setState(id)
@@ -47,13 +47,13 @@ const ProductInfo =observer( (props ) => {
                             + '   catalogId = ' + idInfo[0].catalogId + '    totalQuantity = ' + idInfo[1].totalQuantity
                         // navigate('/productInfo/' + id.toString())
                     } //else navigate('/noProduct/')
-                console.log(rt);
+                // console.log(rt);
                 }
             )
             productStore.setState(id)
             if (parseInt(id) > 0) {
                 productStore.getProductStartInfo(id).then(() => {
-                    console.log(productStore.idInfo.isInWB);
+                    // console.log(productStore.idInfo.isInWB);
                     setIsInWB(productStore.idInfo.isInWB)
                         setIsInBase(productStore.idInfo.isInBase)
                         setIsFbo(productStore.idInfo.isFbo)

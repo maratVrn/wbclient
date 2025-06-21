@@ -4,6 +4,7 @@ import { Carousel } from 'primereact/carousel';
 import {useNavigate} from "react-router-dom";
 import 'primeicons/primeicons.css';
 import { Tooltip } from 'primereact/tooltip';
+import ApiService from "../../service/ApiService";
 
 
 
@@ -216,6 +217,11 @@ const ProductAbout = (props) => {
                         >
                             Перейти на Wildberries
                         </a>
+                        <button onClick={() => {
+                            // const result = await ApiService.APIGetIDInfo(id)
+                            productStore.getMathData(id).then(() =>{})
+                        }}>Расчет с ВБ
+                        </button>
                     </div>
                 </div>
                 :

@@ -16,6 +16,16 @@ function getDataFromHistoryYear(productInfo){
     let months = [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
         "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ];
 
+    let dateArrayAll = []                              // Массив дат
+    let quantityArrayAll = []                          // Массив изм кол-ва
+    let addQuantityArrayAll = []                       // Массив поступлений
+    let saleArrayAll = []                              // Массив продаж
+    let returnArrayAll = []                            // массив возвратов
+    let salePriceArrayAll = []                         // Массив изм-я цены
+    let monthArray = []
+    let saleArrayMonth = []
+    let saleMoneyArrayMonth = []
+    let pInfo = {}
     let m_idx = 0
 
     let productInfoMArray = []
@@ -35,20 +45,17 @@ function getDataFromHistoryYear(productInfo){
         let crDay = parseInt(d_arr[0])
         let crMonth = parseInt(d_arr[1])
 
+        if ((crDay > endDay) && (crMonth === endMonth-1))   addEndHistory.push(productInfo.priceHistory[i])
 
-        if ((crDay > endDay) && (crMonth === endMonth-1)) {
-            addEndHistory.push(productInfo.priceHistory[i])
-
-        }
         if (d_start === 0) d_start = crDay
-
 
         if (parseInt(d_arr[1]) > m_idx) {
             // Начался новый месяц
             if (m_count > 0) {
                 productInfoMArray.push({
                     priceHistory: currHistory,
-                    m_name: months[m_idx - 1]
+                    m_name: months[m_idx - 1],
+                    m_idx : m_idx
                 })
             }
             m_idx = parseInt(d_arr[1])
@@ -64,23 +71,80 @@ function getDataFromHistoryYear(productInfo){
     }
     productInfoMArray.push({
         priceHistory : [...addEndHistory, ...currHistory],
-        m_name : months[m_idx-1]
+        m_name : months[m_idx-1],
+        m_idx : m_idx
     })
-
+    let allSaleCount = 0
+    let allSaleMoney = 0
     for (let i in productInfoMArray) {
-        console.log(productInfoMArray[i].m_name);
+        monthArray.push(productInfoMArray[i].m_name)
+
         const [dateArray, quantityArray, saleArray, salePriceArray,addQuantityArray, returnArray, resultData] =
             getDataFromHistory(productInfoMArray[i], 31)
+        let dateArrayC = []                              // Массив дат
+        let quantityArrayC = []                          // Массив изм кол-ва
+        let addQuantityArrayC = []                       // Массив поступлений
+        let saleArrayC = []                              // Массив продаж
+        let returnArrayC = []                            // массив возвратов
+        let salePriceArrayC = []                         // Массив изм-я цены
 
-        for (let j in productInfoMArray[i].priceHistory) console.log(productInfoMArray[i].priceHistory[j].d);
+        let saleMonth = 0
+        let saleMoneyMonth = 0
 
-        console.log('dateArray');
-        console.log(dateArray)
-        console.log('saleArray');
-        console.log(saleArray)
+        // console.log('m_idx = '+productInfoMArray[i].m_idx);
+        for (let k in dateArray) {
+            const d_arr = dateArray[k].split('.')
+
+            let crMonth = parseInt(d_arr[1])
+            if (crMonth === productInfoMArray[i].m_idx){
+                dateArrayC.push(dateArray[k])
+                quantityArrayC.push(quantityArray[k])
+                addQuantityArrayC.push(addQuantityArray[k])
+                saleArrayC.push(saleArray[k])
+                returnArrayC.push(returnArray[k])
+                salePriceArrayC.push(salePriceArray[k])
+                let crSaleCount = saleArray[k] - returnArray[k]
+                saleMonth += crSaleCount
+                saleMoneyMonth += crSaleCount * salePriceArray[k]
+            }
+        }
+        if (saleMonth<0) saleMonth = 0
+        if (saleMoneyMonth<0) saleMoneyMonth = 0
+        saleArrayMonth.push(saleMonth)
+        saleMoneyArrayMonth.push(saleMoneyMonth)
+        allSaleCount += saleMonth
+        allSaleMoney += saleMoneyMonth
+        dateArrayAll = [...dateArrayAll, ...dateArrayC]
+        quantityArrayAll = [...quantityArrayAll, ...quantityArrayC]
+        addQuantityArrayAll = [...addQuantityArrayAll, ...addQuantityArrayC]
+        saleArrayAll = [...saleArrayAll, ...saleArrayC]
+        returnArrayAll = [...returnArrayAll, ...returnArrayC]
+        salePriceArrayAll = [...salePriceArrayAll, ...salePriceArrayC]
+
+
+       // console.log('dateArray');
+        // console.log(dateArrayC)
 
     }
+    pInfo = {
+        allSaleCount :allSaleCount,
+        allSaleMoney :allSaleMoney,
+    }
 
+    const calcData = {
+        dateArray : dateArrayAll,
+        quantityArray : quantityArrayAll,
+        saleArray : saleArrayAll,
+        salePriceArray : salePriceArrayAll,
+        addQuantityArray : addQuantityArrayAll,
+        returnArray : returnArrayAll,
+        monthArray : monthArray,
+        saleArrayMonth : saleArrayMonth,
+        saleMoneyArrayMonth : saleMoneyArrayMonth,
+        pInfo : pInfo
+    }
+
+    return calcData
 
 
 }
@@ -141,8 +205,8 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
                     const s = history.at(-1).d.split('.')
                     crDate = new Date(s[2]+'-'+s[1]+'-'+s[0]);
 
-                    console.log('crDate = '+crDate.toDateString());
-                    console.log(history.at(-1));
+                    // console.log('crDate = '+crDate.toDateString());
+                    // console.log(history.at(-1));
                     q = parseInt(history.at(-1).q)
                     sp = parseInt(history.at(-1).sp)
                 // } catch (e) {}
@@ -247,11 +311,12 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
     // КРУТОЙ АЛГОРИТМ ОПРЕДЕЛЕНИЯ ЛЕВЫХ ПРОДАЖ
 
     let isBigQuantity = false
-    for (let i in quantityArray)
-        if (quantityArray[i]>39000) { isBigQuantity = true; break}
+    // for (let i in quantityArray)
+    //     if (quantityArray[i]>39000) { isBigQuantity = true; break}
     if (realDayCounter < 0) realDayCounter = saleArray.length
     // Вычисления делаем только если не было больших аномальных остатков, если аномальные остатки обнуляем продажи
     if ((isBigQuantity) || (realDayCounter<5)){
+
         for (let i in saleArray) saleArray[i] = 0
     }
     else
@@ -280,6 +345,7 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
         // console.log('z = ' + z);
 
         let meanQ = saleData[z].q > 0 ? saleData[z].q : 1
+
         // console.log('meanQ = ' + meanQ);
         for (let i in saleData) {
             saleData[i].meanQ = Math.round(10000 * (saleData[i].q - meanQ) / meanQ) / 100

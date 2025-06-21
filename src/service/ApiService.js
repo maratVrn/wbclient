@@ -10,9 +10,14 @@ export default class ApiService {
         return $api_serv_load.get('/test')
     }
 
-    // Запрос на парсинг каталога товаров с ВБ
+    // Команда на обновление данные
     static async testFunc():Promise{
         return $api_serv_update.get('/test')
+    }
+
+    // Получить расчет с сервера (для проверки внутреннего и внешнего расчета)
+    static async getMathData(id):Promise{
+        return $api_serv_update.get(`/getMathData/${parseInt(id)}`)
     }
 
     static async deleteZeroID():Promise{

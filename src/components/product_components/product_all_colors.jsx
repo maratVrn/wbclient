@@ -49,7 +49,7 @@ const ProductAllColors = () => {
         })
     }
     useEffect(()=>{
-        console.log('useEffect ProductAllColors id = '+id );
+        // console.log('useEffect ProductAllColors id = '+id );
         setItems([])
         setAllInfo({})
         loadColorsInfo(id)

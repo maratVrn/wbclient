@@ -28,6 +28,8 @@ export default class ProductStore {
 
     supplierId = 0                      // ИД Продавцв
 
+    productYearCalcData = {} // Рассчитанные данные по продажам продукта за год
+
 
     constructor() {
         makeAutoObservable((this))
@@ -35,6 +37,11 @@ export default class ProductStore {
 
     setRealDiscount(discount) {
         this.realDiscount = discount
+    }
+
+    setProductYearCalcData(productYearCalcData) {
+
+        this.productYearCalcData = productYearCalcData
     }
 
     setState(id){
@@ -176,7 +183,11 @@ export default class ProductStore {
         else if (shortId <= 3269)  basket = '19'
         else if (shortId <= 3485)  basket = '20'
         else if (shortId <= 3701)  basket = '21'
-        else  basket = '22'
+        else if (shortId <= 3917)  basket = '22'
+        else if (shortId <= 4133)  basket = '23'
+        else if (shortId <= 4349)  basket = '24'
+        else if (shortId <= 4565)  basket = '25'
+        else  basket = '26'
 
         return basket
     }
@@ -387,6 +398,13 @@ export default class ProductStore {
             // this.setErrorMessage(e.response?.data?.message)
             console.log(e)
         }
+    }
+
+    async getMathData(id){
+        console.log('запрос матем с сервака по id '+id);
+        const mathResult = await ApiService.getMathData(id)
+        console.log(mathResult);
+
     }
 
     async  getProductAbout(productId){

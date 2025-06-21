@@ -240,6 +240,7 @@ export default class CatalogStore {
     async  getLiteWBCatalog(){
         try{
             const response = await ApiService.APIGetLiteWBCatalog()
+            // console.log(response.data);
             this.setAllWBCatalogLite(response.data)
             await this.setNodeTree_WBCatalogLite(response.data)
 
