@@ -183,8 +183,8 @@ const ProductInfo =observer( (props ) => {
                     {isInBase ?
                         <div>
                             <ProductAllColors id={id}/>
-                            <ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>
-                            <PositionsInfo id={id}/>
+                            {/*<ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>*/}
+                            {/*<PositionsInfo id={id}/>*/}
                             {/*<TabView className="a-tab">*/}
                             {/*    <TabPanel header="Отчет по всем цветам">*/}
                             {/*        <ProductAllColors id={id}/>*/}

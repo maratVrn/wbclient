@@ -217,11 +217,11 @@ const ProductAbout = (props) => {
                         >
                             Перейти на Wildberries
                         </a>
-                        <button onClick={() => {
-                            // const result = await ApiService.APIGetIDInfo(id)
-                            productStore.getMathData(id).then(() =>{})
-                        }}>Расчет с ВБ
-                        </button>
+                        {/*<button onClick={() => {*/}
+                        {/*    // const result = await ApiService.APIGetIDInfo(id)*/}
+                        {/*    productStore.getMathData(id).then(() =>{})*/}
+                        {/*}}>Расчет с ВБ*/}
+                        {/*</button>*/}
                     </div>
                 </div>
                 :

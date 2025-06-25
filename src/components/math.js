@@ -352,7 +352,7 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
             if (saleData[i].meanQ > 399) saleArray[saleData[i].i] = 0
         }
         // console.log(productInfo);
-        // console.log(saleData);
+        console.log(saleData);
 
         // Добавим продажи в тот день когда были поступления
 
