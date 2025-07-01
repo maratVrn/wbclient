@@ -149,7 +149,7 @@ function getDataFromHistoryYear(productInfo){
 
 }
 
-function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025Year = false ){
+function getDataFromHistory (productInfo, daysCount = 30, isFbs = false, all2025Year = false ){
     let dayCount = daysCount
     if (all2025Year){
         // const now = Date.now()
@@ -281,11 +281,6 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
 
             if (isError) break
         }
-
-
-
-
-
     }
 
 
@@ -322,41 +317,34 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbo = false, all2025
     else
     {
 
-        let saleData = []
-        for (let i in saleArray)
-            if (i > 0) saleData.push({ i: i, q: saleArray[i],    meanQ: 0, })
+        if (isFbs) {
+            let saleData = []
+            for (let i in saleArray)
+                if (i > 0) saleData.push({i: i, q: saleArray[i], meanQ: 0,})
+            // отсортируем по возрастанию колличества
+            saleData.sort(function (a, b) {
+                return a.q - b.q;
+            });
 
-        // отсортируем по возрастанию колличества
-        saleData.sort(function (a, b) {  return a.q - b.q;});
+            let addQCount = 0
+            for (let i in addQuantityArray) if (addQuantityArray[i] > 0) addQCount++
 
-        let addQCount = 0
-        for (let i in addQuantityArray)  if (addQuantityArray[i] > 0) addQCount++
+            let returnCount = 0
+            for (let i in returnArray) if (returnArray[i] > 0) returnCount++
 
-        let returnCount = 0
-        for (let i in returnArray)  if (returnArray[i] > 0) returnCount++
+            if (addQCount > 8) addQCount = 8
+            let z = saleData.length - Math.round((realDayCounter - addQCount - returnCount) / 2)
+            // console.log('z = ' + z);
 
-
-
-        // console.log('realDayCounter = ' + realDayCounter);
-        // console.log('addQCount = ' + addQCount);
-        // console.log('returnCount = ' + returnCount);
-        if (addQCount>8) addQCount = 8
-        let z = saleData.length - Math.round((realDayCounter-addQCount-returnCount) / 2)
-        // console.log('z = ' + z);
-
-        let meanQ = saleData[z].q > 0 ? saleData[z].q : 1
-
-        // console.log('meanQ = ' + meanQ);
-        for (let i in saleData) {
-            saleData[i].meanQ = Math.round(10000 * (saleData[i].q - meanQ) / meanQ) / 100
-            if (saleData[i].meanQ > 399) saleArray[saleData[i].i] = 0
+            let meanQ = saleData[z].q > 0 ? saleData[z].q : 1
+            // console.log('meanQ = ' + meanQ);
+            for (let i in saleData) {
+                saleData[i].meanQ = Math.round(10000 * (saleData[i].q - meanQ) / meanQ) / 100
+                if (saleData[i].meanQ > 399) saleArray[saleData[i].i] = 0
+            }
         }
-        // console.log(productInfo);
-        console.log(saleData);
 
         // Добавим продажи в тот день когда были поступления
-
-
         // Сначала вычислим средние продажи БЕЗ поступлений
         try {
             let tsq = 0

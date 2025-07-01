@@ -15,7 +15,7 @@ export default class ProductStore {
     competitorSeePhotoInfo = []
     competitorSeeFindInfo = []
     nowId = 0
-    realDiscount = 0
+
     idInfo = {isInWB : false, isInBase : false, isFbo : false}
     startDateInBase = ''
     is_all_colors_Load = false          //  Чтобы не перегружать лишнюю инфу при переходе по табам
@@ -35,9 +35,6 @@ export default class ProductStore {
         makeAutoObservable((this))
     }
 
-    setRealDiscount(discount) {
-        this.realDiscount = discount
-    }
 
     setProductYearCalcData(productYearCalcData) {
 

@@ -40,7 +40,8 @@ const ProductInfo =observer( (props ) => {
             setIsStartPage(false)
             productStore.setState(id)
             catalogStore.getIdInfo(id).then(() => {
-                    const idInfo = catalogStore.idInfo
+                // console.log(catalogStore.idInfo);
+                const idInfo = catalogStore.idInfo
                     let rt = 'Товар не найден'
                     if (idInfo[0] && idInfo[1]) {
                         rt = 'id = ' + idInfo[0].id + '   subjectId = ' + idInfo[1].subjectId
@@ -183,7 +184,7 @@ const ProductInfo =observer( (props ) => {
                     {isInBase ?
                         <div>
                             <ProductAllColors id={id}/>
-                            {/*<ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>*/}
+                            <ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>
                             {/*<PositionsInfo id={id}/>*/}
                             {/*<TabView className="a-tab">*/}
                             {/*    <TabPanel header="Отчет по всем цветам">*/}
