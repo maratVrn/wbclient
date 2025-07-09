@@ -11,12 +11,7 @@ import { InputSwitch } from 'primereact/inputswitch';
 import Footer from "./footer";
 import {InputNumber} from "primereact/inputnumber";
 import {Button} from "primereact/button";
-import ProductPhoto from "./product_photo";
-import ProductAbout from "./product_about";
-import ProductData from "./product_data";
-import ProductAllColors from "./product_all_colors";
-import ProductYearData from "./productYear_data";
-import PositionsInfo from "./positions_info";
+import {Chart} from "primereact/chart";
 
 
 const ProductsSupplierInfo = () => {
@@ -32,6 +27,10 @@ const ProductsSupplierInfo = () => {
 
     const [subjects, setSubjects] = useState([])
     const [selectedCategory, setSelectedCategory] = useState({});
+
+    const [chartDataDoughnutMoney, setChartDataDoughnutMoney] = useState({});
+    const [chartDataDoughnutCount, setChartDataDoughnutCount] = useState({});
+    const [chartDoughnutOptions, setChartDoughnutOptions] = useState({});
 
     function setDataBySubject(subjectId){
 
@@ -76,8 +75,8 @@ const ProductsSupplierInfo = () => {
                 someItems.push(oneItem)
             }
         }
-
         setItems(someItems)
+
     }
 
     function loadSupplierInfo(){
@@ -163,6 +162,30 @@ const ProductsSupplierInfo = () => {
                         addDataInCat(productStore.supplierInfo[i])
 
                     setSubjects(someCategories);
+                    let labels =[]// productStore.allDataDoughnut.labels
+                    let countData =[]// productStore.allDataDoughnut.count[monthId]?  productStore.allDataDoughnut.count[monthId] : []
+                    let moneyData =[]// productStore.allDataDoughnut.money[monthId]?  productStore.allDataDoughnut.money[monthId] : []
+                    //console.log(subjects);
+                    for (let i=1; i<someCategories.length; i++){
+                        labels.push(someCategories[i].subjectName)
+                        countData.push(someCategories[i].saleCount)
+                        moneyData.push(someCategories[i].saleMoney)
+                    }
+                    const dataCountDoughnut = {
+                        labels: labels,
+                        datasets: [   {label: 'Продажи в шт',      data: countData,   }
+                        ]
+                    };
+                    const dataMoneyDoughnut = {
+                        labels: labels,
+                        datasets: [   {label: 'Продажи в руб.',      data: moneyData,   }
+                        ]
+                    };
+
+
+                    setChartDataDoughnutMoney(dataCountDoughnut)
+                    setChartDataDoughnutCount(dataMoneyDoughnut)
+
                     if (someCategories.length > 0) {
                         setSelectedCategory(someCategories[0])
 
@@ -201,7 +224,19 @@ const ProductsSupplierInfo = () => {
             setIsInfoLoad(true)
             loadSupplierInfo()
             }
-
+        const doughnutOptions = {
+            maintainAspectRatio: false,
+            // responsive: false,
+            cutout: '60%',
+            plugins: {
+                pointRadius: 1,
+                legend: {
+                    display: false,
+                    // position: 'right',
+                }
+            },
+        }
+        setChartDoughnutOptions(doughnutOptions)
 
 
     },[id])
@@ -333,8 +368,8 @@ const ProductsSupplierInfo = () => {
                     {productStore.is_supplier_info_Load ?
                         <div style={{width: '100%'}}>
                         <span
-                        className="all_colors_info">{'      Всего товаров ' + allInfo?.productCount + ', категорий ' + subjects.length +
-                        ',  за 30 дней продано  ' + allInfo?.saleCount + ' шт. на сумму ' + formatCurrency(allInfo.saleMoney)}</span>
+                            className="all_colors_info">{'      Всего товаров ' + allInfo?.productCount + ', категорий ' + subjects.length +
+                            ',  за 30 дней продано  ' + allInfo?.saleCount + ' шт. на сумму ' + formatCurrency(allInfo.saleMoney)}</span>
                             <span className="all_colors_info">{'      На складе  ' + allInfo?.qty +
                                 ' шт, на сумму ' + formatCurrency(allInfo.qtyMoney)}</span>
 
@@ -396,6 +431,28 @@ const ProductsSupplierInfo = () => {
                                     <Column field="qty" sortable header="Остатки"></Column>
 
                                 </DataTable>
+                            </div>
+                            <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
+                                <div className="borderOne">
+                                    <span className="all_colors_info"
+                                          style={{paddingBottom: '10px'}}>{'Продажи в шт'} </span>
+                                    <div className="flex justify-content-center">
+
+                                        <Chart type="doughnut" data={chartDataDoughnutCount}
+                                               options={chartDoughnutOptions}
+                                               className="w-full md:w-30rem"/>
+                                    </div>
+                                </div>
+                                <div className="borderOne ">
+                                  <span className="all_colors_info"
+                                  style={{paddingBottom: '10px'}}>{'Продажи в рублях'} </span>
+                                    <div className="flex justify-content-center">
+                                        <Chart type="doughnut" data={chartDataDoughnutMoney}
+                                               options={chartDoughnutOptions}
+                                               className="w-full md:w-30rem"/>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
