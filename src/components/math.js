@@ -12,7 +12,7 @@ function formatCurrency(txt) {
     if (res === '') res = '0'
     return res+' р.'
 }
-function getDataFromHistoryYear(productInfo){
+function getDataFromHistoryYear(priceHistory, id = 0){
     let months = [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
         "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ];
 
@@ -35,17 +35,51 @@ function getDataFromHistoryYear(productInfo){
     let d_start = 0
     let needAdd = true
     let  endDay = 31
-    try {endDay = parseInt(productInfo.priceHistory.at(-1).d.split('.')[0]) } catch (e) {}
+    try {endDay = parseInt(priceHistory.at(-1).d.split('.')[0]) } catch (e) {}
     let  endMonth = 12
-    try {endMonth = parseInt(productInfo.priceHistory.at(-1).d.split('.')[1]) } catch (e) {}
+    try {endMonth = parseInt(priceHistory.at(-1).d.split('.')[1]) } catch (e) {}
 
-    for (let i in productInfo.priceHistory) {
+    let newpPriceHistory = []
+    let predHistory = {}
+    for (let i in priceHistory) {
+        // if (parseInt(id) === 330345330) console.log(priceHistory[i].d+ '   '+priceHistory[i].q+ '   '+priceHistory[i].sp);
+        const d_arr = priceHistory[i].d.split('.')
+        let crDate2 = new Date(d_arr[2]+'-'+d_arr[1]+'-'+d_arr[0]);
+        crDate2.setDate(crDate2.getDate() - 1);
 
-        const d_arr = productInfo.priceHistory[i].d.split('.')
+
+
+        if (parseInt(i)>0) {
+            let d_arr2 = predHistory.d ? predHistory.d?.split('.') : ''
+            let predDate = new Date(d_arr2[2] + '-' + d_arr2[1] + '-' + d_arr2[0]);
+
+            if (predDate.toDateString() !== crDate2.toDateString())
+                {
+                let isEnd = false
+                for (let j = 0; j < 200; j++) {
+                    predDate.setDate(predDate.getDate() + 1);
+                    // console.log('Добавляем день  ' + predDate.toLocaleDateString())
+                    newpPriceHistory.push({d: predDate.toLocaleDateString(), q : predHistory.q, sp : predHistory.sp})
+                    if (predDate.toDateString() === crDate2.toDateString()) isEnd = true
+                    if (isEnd) break
+                }
+            }
+
+        }
+        predHistory = priceHistory[i]
+        // console.log(priceHistory);
+        newpPriceHistory.push(predHistory)
+
+    }
+    priceHistory = newpPriceHistory
+    // if (parseInt(id) === 330345330) console.log(newpPriceHistory);
+    for (let i in priceHistory) {
+
+        const d_arr = priceHistory[i].d.split('.')
         let crDay = parseInt(d_arr[0])
         let crMonth = parseInt(d_arr[1])
 
-        if ((crDay > endDay) && (crMonth === endMonth-1))   addEndHistory.push(productInfo.priceHistory[i])
+        if ((crDay > endDay) && (crMonth === endMonth-1))   addEndHistory.push(priceHistory[i])
 
         if (d_start === 0) d_start = crDay
 
@@ -62,9 +96,9 @@ function getDataFromHistoryYear(productInfo){
             m_count++
             currHistory = []
         }
-        currHistory.push(productInfo.priceHistory[i])
+        currHistory.push(priceHistory[i])
         if ((needAdd) && (m_count === 2)){
-            if (d_start > parseInt(d_arr[0])) productInfoMArray[0].priceHistory.push(productInfo.priceHistory[i])
+            if (d_start > parseInt(d_arr[0])) productInfoMArray[0].priceHistory.push(priceHistory[i])
                 else needAdd = false
         }
 
@@ -149,7 +183,7 @@ function getDataFromHistoryYear(productInfo){
 
 }
 
-function getDataFromHistory (productInfo, daysCount = 30, isFbs = false, all2025Year = false ){
+function getDataFromHistory (productInfo, daysCount = 30, isFbs = true, all2025Year = false ){
     let dayCount = daysCount
     if (all2025Year){
         // const now = Date.now()

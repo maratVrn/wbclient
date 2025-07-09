@@ -40,7 +40,8 @@ const ProductData = (props) => {
     function calcData(check = false){
 
 
-        const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, check, false)
+        // const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, check, false)
+        const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, true, false)
 
         setProductInfo(resultData)
         const options = {

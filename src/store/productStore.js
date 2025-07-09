@@ -29,7 +29,8 @@ export default class ProductStore {
     supplierId = 0                      // ИД Продавцв
 
     productYearCalcData = {} // Рассчитанные данные по продажам продукта за год
-
+    productYearCalcData_allColors = {} // Рассчитанные данные по продажам продукта за год по всем цветам
+    allDataDoughnut = {data : [], labels : [], count : [[]], money : [[]]}
 
     constructor() {
         makeAutoObservable((this))
@@ -37,8 +38,16 @@ export default class ProductStore {
 
 
     setProductYearCalcData(productYearCalcData) {
-
         this.productYearCalcData = productYearCalcData
+    }
+
+    setAllDataDoughnut(allDataDoughnut) {
+        this.allDataDoughnut = allDataDoughnut
+    }
+
+    setProductYearCalcData_allColors(productYearCalcData_allColors) {
+
+        this.productYearCalcData_allColors = productYearCalcData_allColors
     }
 
     setState(id){
@@ -58,6 +67,7 @@ export default class ProductStore {
             if (needId === this.productColorsInfo[i].id){
                 is_all_colors_Load = true
                 break
+
             }
 
         }
@@ -300,12 +310,13 @@ export default class ProductStore {
 
     async  getProductColorsInfo(id){
         try{
-
-            if (!this.is_all_colors_Load) {
-                const productColorsInfo = await ApiService.APIGetProductColorsInfo(id)
+           if (!this.is_all_colors_Load) {
+               // console.log('грузим');
+               const productColorsInfo = await ApiService.APIGetProductColorsInfo(id)
                 if (productColorsInfo?.data) this.setProductColorsInfo(productColorsInfo?.data)
-                this.set_is_all_colors_Load(true)
-            }
+
+               this.set_is_all_colors_Load(true)
+            } //else console.log('НЕ грузим');
 
         } catch (e) {
             // this.setErrorMessage(e.response?.data?.message)

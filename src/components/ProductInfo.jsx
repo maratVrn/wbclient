@@ -35,10 +35,10 @@ const ProductInfo =observer( (props ) => {
     },[id])
 
     function getIdInfo(id){
-        // console.log('ttt');
+        // console.log('useEffect ProductIfo id = '+id );
         if (id > 0) {
             setIsStartPage(false)
-            productStore.setState(id)
+
             catalogStore.getIdInfo(id).then(() => {
                 // console.log(catalogStore.idInfo);
                 const idInfo = catalogStore.idInfo

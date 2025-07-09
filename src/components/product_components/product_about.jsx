@@ -132,25 +132,25 @@ const ProductAbout = (props) => {
                         }
 
                     </div>
-                    <div>
-                        <div>
-                            <span className="product-brand"> Реальная скидка: {productStore.realDiscount+ ' %'}</span>
+                    {/*<div>*/}
+                    {/*    <div>*/}
+                    {/*        <span className="product-brand"> Реальная скидка: {productStore.realDiscount+ ' %'}</span>*/}
 
 
-                            <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
-                            <i className="custom-target-icon pi pi-info-circle "
-                               data-pr-tooltip="Скидка на товар расчитанная исходя из медианной цены и данных по продажам что в итоге показывает реальную скидку "
-                               style={{
-                                   fontSize: '1.2rem',
-                                   cursor: 'pointer',
-                                   marginLeft: '10px',
-                                   color: 'tan',
-                                   marginTop: '10px'
-                               }}>
+                    {/*        <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>*/}
+                    {/*        <i className="custom-target-icon pi pi-info-circle "*/}
+                    {/*           data-pr-tooltip="Скидка на товар расчитанная исходя из медианной цены и данных по продажам что в итоге показывает реальную скидку "*/}
+                    {/*           style={{*/}
+                    {/*               fontSize: '1.2rem',*/}
+                    {/*               cursor: 'pointer',*/}
+                    {/*               marginLeft: '10px',*/}
+                    {/*               color: 'tan',*/}
+                    {/*               marginTop: '10px'*/}
+                    {/*           }}>*/}
 
-                            </i>
-                        </div>
-                    </div>
+                    {/*        </i>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                     <span className="product-brand"> Возраст товара: {startDate}</span>
 
                     <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>

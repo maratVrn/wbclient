@@ -22,9 +22,11 @@ const ProductAllColors = () => {
     let { id } = useParams();
 
     function loadColorsInfo(id){
-        setIsInfoLoad(false)
-        if (id>0) productStore.getProductColorsInfo(id).then(() => {
 
+        setIsInfoLoad(false)
+        if (id>0) productStore.setState(id)
+        if (id>0) productStore.getProductColorsInfo(id).then(() => {
+            // console.log('getProductColorsInfo');
             let labels = []
             let countData = []
             let moneyData = []
@@ -95,11 +97,8 @@ const ProductAllColors = () => {
                 legend: {
                     display: false,
                     // position: 'right',
-
                 }
             },
-
-
         }
 
 
