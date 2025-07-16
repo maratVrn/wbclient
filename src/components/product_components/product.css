@@ -195,10 +195,20 @@ h2{
 }
 
 .all_colors_info{
-
     text-align: center;
     font-size: 15px;
     font-weight: 550;
+    margin: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.textMain{
+    /*text-align: center;*/
+    font-size: 15px;
+    font-weight: 480;
     margin: 5px;
     display: -webkit-box;
     -webkit-line-clamp: 3;

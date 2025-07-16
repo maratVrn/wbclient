@@ -115,6 +115,8 @@ const ProductYearData = (props) => {
                                 tmpAllDataDoughnut.count[0].push(parseInt(currCalcData.pInfo.allSaleCount))
                                 tmpAllDataDoughnut.money[0].push(parseInt(currCalcData.pInfo.allSaleMoney))
                             }
+
+
                         productStore.setProductYearCalcData_allColors(allCalcData)
                         someMonth.push({
                             monthId: 0,

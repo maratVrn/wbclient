@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import {Context} from "../../index";
-import {formatCurrency} from "../math";
+import {formatCurrency, getDataFromHistoryYear} from "../math";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {useNavigate, useParams} from "react-router-dom";
@@ -12,6 +12,7 @@ import Footer from "./footer";
 import {InputNumber} from "primereact/inputnumber";
 import {Button} from "primereact/button";
 import {Chart} from "primereact/chart";
+import ProductsDataCalcStore from "../../store/productsDataCalcStore";
 
 
 const ProductsSupplierInfo = () => {
@@ -19,21 +20,21 @@ const ProductsSupplierInfo = () => {
     const [isStartPage, setIsStartPage] = useState(true)
     const [findText, setFindText] = useState('');
     const {productStore} = useContext(Context)
-    const [checked, setChecked] = useState(false);
+    const {productsDataCalcStore} = useContext(Context)
+    const [checked, setChecked] = useState(true);
     const [items, setItems] = useState([])
     const [allInfo, setAllInfo] = useState({})
     const [isInfoLoad, setIsInfoLoad] = useState(false)
     const navigate = useNavigate();
-
-    const [subjects, setSubjects] = useState([])
     const [selectedCategory, setSelectedCategory] = useState({});
-
-    const [chartDataDoughnutMoney, setChartDataDoughnutMoney] = useState({});
-    const [chartDataDoughnutCount, setChartDataDoughnutCount] = useState({});
     const [chartDoughnutOptions, setChartDoughnutOptions] = useState({});
+    const [chartOptionsMonth, setChartOptionsMonth] = useState({});
+
+    const [chartDataMonth_allMonth, setChartDataMonth_allMonth] = useState({});
+    const [chartDataMoneyMonth_allMonth, setChartDataMoneyMonth_allMonth] = useState({});
+
 
     function setDataBySubject(subjectId){
-
         setItems([])
         let someItems = []
 
@@ -82,126 +83,38 @@ const ProductsSupplierInfo = () => {
     function loadSupplierInfo(){
 
         setItems([])
-        setSubjects([])
-        console.log('supplierId = '+productStore.supplierId);
+        productsDataCalcStore.setNoData()
         productStore.getProductAbout(id).then(() => {
             if (productStore.supplierId > 0) {
                 console.log('supplierId = ' + productStore.supplierId);
                 if (productStore.supplierId > 0) productStore.getSupplierInfo(productStore.supplierId).then(() => {
+
+                    productsDataCalcStore.setProductList(productStore.supplierInfo)
+                    productsDataCalcStore.setCategoriesList()
+                    productsDataCalcStore.calcAllYearDataByMonth()
                     setIsInfoLoad(false)
-                    let someCategories = []
-                    someCategories.push({
-                        subjectId: 0,
-                        subjectName: 'Все категории',
-                        count: 0,
-                        saleCount: 0,
-                        saleMoney: 0,
-                        totalQuantity: 0,
-                        qtyMoney: 0
-                    })
-
-                    function addDataInCat(data) {
-                        let saleCount = 0, saleMoney = 0, totalQuantity = 0, qtyMoney = 0
-
-                        if (data.productInfo)
-                            try {
-                                saleMoney = data.productInfo.saleMoney
-                                saleCount = data.productInfo.saleCount
-                                totalQuantity = data.productInfo.totalQuantity
-                                qtyMoney = totalQuantity * data.productInfo.price
-                            } catch (e) {
-                            }
 
 
-                        if (someCategories[0]) {
-                            someCategories[0].count++
-                            someCategories[0].saleMoney += saleMoney
-                            someCategories[0].saleCount += saleCount
-                            someCategories[0].totalQuantity += totalQuantity
-                            someCategories[0].qtyMoney += qtyMoney
-                        }
+                    if (productsDataCalcStore.categoriesListAnd30DaysData.length > 0) {
+                        setSelectedCategory(productsDataCalcStore.categoriesListAnd30DaysData[0])
 
-                        let subjectId = 0
-                        let subjectName = ''
-                        try {
-
-                            subjectId = data.idInfo.subjectId
-                            subjectName = data.idInfo.subjectName
-                        } catch (e) {
-                        }
-                        if (subjectId > 0) {
-                            let isIn = false
-                            for (let j in someCategories) {
-                                if (parseInt(someCategories[j].subjectId) === parseInt(subjectId)) {
-                                    someCategories[j].count++
-                                    someCategories[j].saleMoney += saleMoney
-                                    someCategories[j].saleCount += saleCount
-                                    someCategories[j].totalQuantity += totalQuantity
-                                    someCategories[j].qtyMoney += qtyMoney
-                                    isIn = true
-                                    break
-                                }
-                            }
-                            if (!isIn) someCategories.push({
-                                subjectId: parseInt(subjectId),
-                                subjectName: subjectName,
-                                count: 1,
-                                saleCount: saleCount,
-                                saleMoney: saleMoney,
-                                totalQuantity: totalQuantity,
-                                qtyMoney: qtyMoney
-                            })
-
-                        }
-
-
-                    }
-
-
-                    for (let i in productStore.supplierInfo)
-                        addDataInCat(productStore.supplierInfo[i])
-
-                    setSubjects(someCategories);
-                    let labels =[]// productStore.allDataDoughnut.labels
-                    let countData =[]// productStore.allDataDoughnut.count[monthId]?  productStore.allDataDoughnut.count[monthId] : []
-                    let moneyData =[]// productStore.allDataDoughnut.money[monthId]?  productStore.allDataDoughnut.money[monthId] : []
-                    //console.log(subjects);
-                    for (let i=1; i<someCategories.length; i++){
-                        labels.push(someCategories[i].subjectName)
-                        countData.push(someCategories[i].saleCount)
-                        moneyData.push(someCategories[i].saleMoney)
-                    }
-                    const dataCountDoughnut = {
-                        labels: labels,
-                        datasets: [   {label: 'Продажи в шт',      data: countData,   }
-                        ]
-                    };
-                    const dataMoneyDoughnut = {
-                        labels: labels,
-                        datasets: [   {label: 'Продажи в руб.',      data: moneyData,   }
-                        ]
-                    };
-
-
-                    setChartDataDoughnutMoney(dataCountDoughnut)
-                    setChartDataDoughnutCount(dataMoneyDoughnut)
-
-                    if (someCategories.length > 0) {
-                        setSelectedCategory(someCategories[0])
-
-                        // console.log(someCategories[0]);
                         const info = {
-                            productCount: someCategories[0].count,
-                            saleMoney: someCategories[0].saleMoney,
-                            saleCount: someCategories[0].saleCount,
-                            qty: someCategories[0].totalQuantity,
-                            qtyMoney: someCategories[0].qtyMoney
+                            productCount: productsDataCalcStore.categoriesListAnd30DaysData[0].count,
+                            saleMoney: productsDataCalcStore.categoriesListAnd30DaysData[0].saleMoney,
+                            saleCount: productsDataCalcStore.categoriesListAnd30DaysData[0].saleCount,
+                            qty: productsDataCalcStore.categoriesListAnd30DaysData[0].totalQuantity,
+                            qtyMoney: productsDataCalcStore.categoriesListAnd30DaysData[0].qtyMoney
                         }
                         setAllInfo(info)
+
 
                     }
 
                     setDataBySubject(0)
+                    setData(0)
+
+                    // productsDataCalcStore.allCalcYearCategoriesData
+
 
                 })
             } else {
@@ -215,10 +128,72 @@ const ProductsSupplierInfo = () => {
 
     }
 
+    function setData(){
+
+        let monthArray = []
+        let saleArrayMonth_allMonth = []
+        let saleMoneyArrayMonth_allMonth = []
+
+        monthArray = productsDataCalcStore.selectedCalcYearData_bySubjectID.monthArray
+        saleArrayMonth_allMonth = productsDataCalcStore.selectedCalcYearData_bySubjectID.saleArrayMonth
+        saleMoneyArrayMonth_allMonth = productsDataCalcStore.selectedCalcYearData_bySubjectID.saleMoneyArrayMonth
+
+
+        const dataMonth_allMonth = {
+            labels: monthArray,
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Продажи (шт)',
+                    data: saleArrayMonth_allMonth,
+                    backgroundColor: 'rgba(187,229,236,0.5)',
+                    borderColor: 'rgba(38,197,255,0.5)',
+                    hoverBackgroundColor: 'rgba(38,197,255,0.5)',
+                    borderWidth: 2,
+                },
+                {
+                    type: 'line',
+                    label: 'Продажи (шт)',
+                    borderColor: 'rgba(211,53,143,0.5)',
+                    borderWidth: 1,
+                    fill: false,
+                    tension: 0.4,
+                    data: saleArrayMonth_allMonth,
+                },
+            ]
+        };
+        const dataMoneyMonth_allMonth = {
+            labels: monthArray,
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Продажи (руб)',
+                    data: saleMoneyArrayMonth_allMonth,
+                    backgroundColor: 'rgba(187,229,236,0.5)',
+                    borderColor: 'rgba(38,197,255,0.5)',
+                    hoverBackgroundColor: 'rgba(38,197,255,0.5)',
+                    borderWidth: 2,
+                },
+                {
+                    type: 'line',
+                    label: 'Продажи (руб)',
+                    borderColor: 'rgba(211,53,143,0.5)',
+                    borderWidth: 1,
+                    fill: false,
+                    tension: 0.4,
+                    data: saleMoneyArrayMonth_allMonth,
+                },
+            ]
+        };
+
+        setChartDataMonth_allMonth(dataMonth_allMonth)
+        setChartDataMoneyMonth_allMonth(dataMoneyMonth_allMonth)
+
+    }
+
     useEffect(()=>{
         // console.log('useEffect supplierInfo + id '+id);
         setIsStartPage(true)
-        // console.log('useEffect ProductInfo Id = '+id);
         if (id > 0) {
             setIsStartPage(false)
             setIsInfoLoad(true)
@@ -237,6 +212,41 @@ const ProductsSupplierInfo = () => {
             },
         }
         setChartDoughnutOptions(doughnutOptions)
+        const optionsMonth = {
+            maintainAspectRatio: false,
+            aspectRatio: 0.6,
+            plugins: {
+                pointRadius: 1,
+                legend: {
+                    display: false,
+                }
+            },
+            scales: {
+
+                y: {
+                    stacked: true,
+                    display: true,
+                    grid: {    display: false,
+                    },
+                },
+                x: {
+
+                    grid: {
+                        display: false,
+                        // color : 'rgba(193,150,73,0.5)',
+                        drawBorder: true
+                    },
+                    beginAtZero: true,
+                    stacked: true,
+                },
+                // x: {
+                //     stacked: true,
+                //     display: true,
+                //     // beginAtZero: true
+                // }
+            }
+        };
+        setChartOptionsMonth(optionsMonth)
 
 
     },[id])
@@ -271,10 +281,19 @@ const ProductsSupplierInfo = () => {
     };
 
     function onCategoriesChange(value){
-
         if (value) {
             setSelectedCategory(value)
             if (value.subjectId >= 0) setDataBySubject(value.subjectId)
+        }
+    }
+
+    function onCategoriesChangeAllYear(value){
+        if (value) {
+            setSelectedCategory(value)
+            if (value.subjectId >= 0) {
+                productsDataCalcStore.setMonthDataBySubjectId(value.subjectId)
+                setData(0)
+            }
         }
     }
 
@@ -367,27 +386,51 @@ const ProductsSupplierInfo = () => {
 
                     {productStore.is_supplier_info_Load ?
                         <div style={{width: '100%'}}>
-                        <span
-                            className="all_colors_info">{'      Всего товаров ' + allInfo?.productCount + ', категорий ' + subjects.length +
-                            ',  за 30 дней продано  ' + allInfo?.saleCount + ' шт. на сумму ' + formatCurrency(allInfo.saleMoney)}</span>
-                            <span className="all_colors_info">{'      На складе  ' + allInfo?.qty +
-                                ' шт, на сумму ' + formatCurrency(allInfo.qtyMoney)}</span>
+                            <div className="responsive-two-column-grid" style={{
+                                alignItems: 'center',
+                                backgroundColor: 'rgb(240,242,244)',
+                                paddingTop: '12px',
+                                paddingBottom: '12px',
+                                borderRadius: '12px'
+                            }}>
+                                <div className="borderOne">
+                                <span className="textMain"
+                                      style={{marginLeft: '20px'}}>Продавец: {productStore.supplierAbout?.trademark}</span>
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>Организация: {productStore.supplierAbout?.supplierName}</span>
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>ИД продавца: {productStore.supplierId}</span>
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>ИНН: {productStore.supplierAbout?.inn}</span>
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>ОГРНИП: {productStore.supplierAbout?.ogrnip}</span>
+                                </div>
+                                <div className="borderOne ">
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>Товаров на wildberries: {allInfo?.productCount}</span>
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>Категорий на wildberries: {productsDataCalcStore.categoriesListAnd30DaysData.length}</span>
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>{'За 30 дней продано  ' + allInfo?.saleCount + ' шт. на сумму ' + formatCurrency(allInfo.saleMoney)}</span>
+                                    <span className="textMain"
+                                          style={{marginLeft: '20px'}}>{'На складе  ' + allInfo?.qty + ' шт, на сумму ' + formatCurrency(allInfo.qtyMoney)}</span>
+                                </div>
 
-                            <div style={{display: 'flex'}}>
-
-                                <InputSwitch checked={checked} onChange={(e) => setChecked(e.value)}/>
-                                <span className="all_colors_info" style={{marginLeft: '20px'}}>Отобразить категории в виде таблицы</span>
                             </div>
+
+                            <div style={{justifyContent: 'center', textAlign: 'center', paddingBottom: '20px'}}>
+                                <h2>Общая аналитика продаж по всем категориям за 30 дней</h2></div>
+
                             <div style={{marginTop: '20px'}}></div>
                             {checked ?
-                                <DataTable style={{fontSize: '13px', width: '100%'}} value={subjects} size={'small'}
+                                <DataTable style={{fontSize: '13px', width: '100%'}} value={productsDataCalcStore.categoriesListAnd30DaysData} size={'small'}
                                            paginator
                                            rows={10} rowsPerPageOptions={[10, 25]}
                                            selectionMode="single" selection={selectedCategory}
                                            onSelectionChange={(e) => onCategoriesChange(e.value)}
                                            className="dataTable">
                                     <Column field="subjectName" header="Категория"></Column>
-                                    <Column field="count" sortable header="Кол-во"></Column>
+                                    <Column field="count" sortable header="Кол-во товаров"></Column>
                                     <Column field="saleCount" sortable header="Продано шт."></Column>
                                     <Column field="saleMoney" body={MoneyBodyTemplate} sortable
                                             header="Продано руб."></Column>
@@ -399,7 +442,7 @@ const ProductsSupplierInfo = () => {
 
                                 :
                                 <div className="flex flex-wrap gap-3 dataTable" style={{padding: '10px'}}>
-                                    {subjects.map((subject) => {
+                                    {productsDataCalcStore.categoriesListAnd30DaysData.map((subject) => {
                                         return (
                                             <div key={subject.subjectId}>
                                                 <RadioButton inputId={subject.subjectId} name="category" value={subject}
@@ -414,11 +457,13 @@ const ProductsSupplierInfo = () => {
 
                                 </div>
                             }
-                            <span className="all_colors_info" style={{marginTop: '30px', marginBottom: '30px'}}>Продажи по выбранной катеогрии за 30 дней</span>
+                            <span className="all_colors_info" style={{marginTop: '30px', marginBottom: '30px'}}>Список товаров и аналитика выбранной катеогрии за 30 дней</span>
 
                             <div>
-                                <DataTable style={{fontSize: '14px'}} value={items} size={'small'} paginator rows={10}
-                                           rowsPerPageOptions={[10, 25, 50]} className="dataTable">
+
+
+                                <DataTable style={{fontSize: '14px'}} value={items} size={'small'} paginator rows={5}
+                                           rowsPerPageOptions={[5, 10, 25, 50]} className="dataTable">
                                     <Column field="id" body={NameBodyTemplate} header="Артикул"></Column>
                                     <Column header="Фото" body={imageBodyTemplate}></Column>
                                     <Column field="inBase" header="Есть в базе?"></Column>
@@ -432,28 +477,106 @@ const ProductsSupplierInfo = () => {
 
                                 </DataTable>
                             </div>
+                            <span className="all_colors_info" style={{marginTop: '30px', marginBottom: '30px'}}>Распределение продаж по категориям за 30 дней</span>
                             <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
                                 <div className="borderOne">
                                     <span className="all_colors_info"
                                           style={{paddingBottom: '10px'}}>{'Продажи в шт'} </span>
                                     <div className="flex justify-content-center">
 
-                                        <Chart type="doughnut" data={chartDataDoughnutCount}
+                                        <Chart type="doughnut"
+                                               data={productsDataCalcStore.doughnut30DaysData_byCategories.dataCountDoughnut30Days}
+                                               // data={chartDataDoughnutCount}
                                                options={chartDoughnutOptions}
                                                className="w-full md:w-30rem"/>
                                     </div>
                                 </div>
                                 <div className="borderOne ">
                                   <span className="all_colors_info"
-                                  style={{paddingBottom: '10px'}}>{'Продажи в рублях'} </span>
+                                        style={{paddingBottom: '10px'}}>{'Продажи в рублях'} </span>
                                     <div className="flex justify-content-center">
-                                        <Chart type="doughnut" data={chartDataDoughnutMoney}
+                                        <Chart type="doughnut"
+                                               data={productsDataCalcStore.doughnut30DaysData_byCategories.dataMoneyDoughnut30Days}
+                                               // data={chartDataDoughnutMoney}
                                                options={chartDoughnutOptions}
                                                className="w-full md:w-30rem"/>
                                     </div>
                                 </div>
 
                             </div>
+
+
+                            <div style={{width: '100%', textAlign: 'center', paddingTop: '20px'}}>
+                                <h2>Общая аналитика продаж за 2025 год</h2>
+                                <DataTable style={{fontSize: '13px', width: '100%'}}
+                                           value={productsDataCalcStore.allCalcYearCategoriesData}
+
+                                           size={'small'}
+                                           paginator
+                                           rows={5} rowsPerPageOptions={[5, 10, 25]}
+                                           selectionMode="single" selection={selectedCategory}
+                                           sortField="saleMoney"
+                                           sortOrder={-1}
+                                           onSelectionChange={(e) => onCategoriesChangeAllYear(e.value)}
+                                           className="dataTable">
+                                    <Column field="subjectName" header="Категория"></Column>
+                                    <Column field="count" sortable header="Кол-во товаров"></Column>
+                                    <Column field="saleCount" sortable header="Продано шт."></Column>
+                                    <Column field="saleMoney" body={MoneyBodyTemplate} sortable
+                                            header="Продано руб."></Column>
+
+                                </DataTable>
+
+                                <div className="chart_info">
+                                    <span className="all_colors_info"> Продажи по месяцам ВСЕ товары в выбранной категории (шт) </span>
+                                </div>
+                                <div className="item_data">
+                                    <div className="chart_item">
+                                        <Chart type="bar" className="all_div" data={chartDataMonth_allMonth}
+                                               options={chartOptionsMonth}/>
+                                    </div>
+                                </div>
+
+                                <div className="chart_info">
+                                    <span className="all_colors_info"> Продажи по месяцам ВСЕ товары в выбранной категории (руб) </span>
+                                </div>
+                                <div className="item_data">
+                                    <div className="chart_item">
+                                        <Chart type="bar" className="all_div" data={chartDataMoneyMonth_allMonth}
+                                               options={chartOptionsMonth}/>
+                                    </div>
+                                </div>
+                                <div className="chart_info">
+                                    <span className="all_colors_info"> Распределение продаж по категориям </span>
+                                </div>
+                                <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
+                                    <div className="borderOne">
+                                    <span className="all_colors_info"
+                                          style={{paddingBottom: '10px'}}>{'Продажи в шт'} </span>
+                                        <div className="flex justify-content-center">
+
+                                            <Chart type="doughnut"
+                                                   data={productsDataCalcStore.doughnutYearData_byCategories.dataCountDoughnutYear}
+                                                // data={chartDataDoughnutCount}
+                                                   options={chartDoughnutOptions}
+                                                   className="w-full md:w-30rem"/>
+                                        </div>
+                                    </div>
+                                    <div className="borderOne ">
+                                  <span className="all_colors_info"
+                                        style={{paddingBottom: '10px'}}>{'Продажи в рублях'} </span>
+                                        <div className="flex justify-content-center">
+                                            <Chart type="doughnut"
+                                                   data={productsDataCalcStore.doughnutYearData_byCategories.dataMoneyDoughnutYear}
+                                                // data={chartDataDoughnutMoney}
+                                                   options={chartDoughnutOptions}
+                                                   className="w-full md:w-30rem"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
                         </div>
 
                         :

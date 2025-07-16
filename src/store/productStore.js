@@ -11,6 +11,7 @@ export default class ProductStore {
     productAbout = []
     productColorsInfo = []
     supplierInfo = []
+    supplierAbout = {}
     competitorSeeAlsoInfo = []
     competitorSeePhotoInfo = []
     competitorSeeFindInfo = []
@@ -30,12 +31,17 @@ export default class ProductStore {
 
     productYearCalcData = {} // Рассчитанные данные по продажам продукта за год
     productYearCalcData_allColors = {} // Рассчитанные данные по продажам продукта за год по всем цветам
-    allDataDoughnut = {data : [], labels : [], count : [[]], money : [[]]}
+    allDataDoughnut = {data : [], labels : [], count : [[]], money : [[]]} // Данные для круговой диаграммы продаж
+
+    productYearCalcData_allSupplier = {} // Рассчитанные данные по продажам продукта за год по всем цветам
+    allDataDoughnut_Supplier = {data : [], labels : [], count : [[]], money : [[]]} // Данные для круговой диаграммы продаж
 
     constructor() {
         makeAutoObservable((this))
     }
-
+    setProductYearCalcData_allSupplier(productYearCalcData_allSupplier) {
+        this.productYearCalcData_allSupplier = productYearCalcData_allSupplier
+    }
 
     setProductYearCalcData(productYearCalcData) {
         this.productYearCalcData = productYearCalcData
@@ -121,8 +127,9 @@ export default class ProductStore {
         this.productColorsInfo = productColorsInfo
     }
 
-    setSupplierInfo (supplierInfo){
+    setSupplierInfo (supplierInfo, supplierAbout){
         this.supplierInfo = supplierInfo
+        this.supplierAbout = supplierAbout
     }
 
 
@@ -330,8 +337,7 @@ export default class ProductStore {
 
             if (!this.is_supplier_info_Load) {
                 const productSupplierInfo = await ApiService.APIGetSupplierInfo(supplierId)
-                console.log(productSupplierInfo?.data);
-                if (productSupplierInfo?.data) this.setSupplierInfo(productSupplierInfo?.data)
+                if (productSupplierInfo?.data[0]) this.setSupplierInfo(productSupplierInfo?.data[0], productSupplierInfo?.data[1])
                 this.set_is_supplier_info_Load(true)
             }
 
