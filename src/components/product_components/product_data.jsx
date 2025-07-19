@@ -148,7 +148,7 @@ const ProductData = (props) => {
                         <div style={{display: 'flex'}}>
 
                             <InputSwitch style={{ height:'18px', width:'50px'}} checked={checked} onChange={(e) => calcData(e.value)}/>
-                            <span className="" style={{marginLeft: '20px'}}>Расчет фбс (dtype = {productStore.productInfo.dtype})</span>
+                            <span className="" style={{marginLeft: '20px'}}>Расчет фбс (dtype = {productStore.productInfo?.dtype})</span>
                         </div>
                     </div>
                     <div className="chart_info">

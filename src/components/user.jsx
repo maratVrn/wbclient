@@ -36,7 +36,8 @@ const User = observer(() => {
 
     return (
         <div className="page" >
-            <nav onClick={() => globalStore.setAllMenuActive(!globalStore.isMenuActive)}>
+            <nav >
+                {/*onClick={() => globalStore.setAllMenuActive(!globalStore.isMenuActive)}*/}
 
                 {/*<div className="burger-btn " onClick={()=>setMenuActive(!menuActive)}>*/}
                 <div className="burger-btn " onClick={() => setMenuActive(!globalStore.isMenuActive)}>

@@ -337,6 +337,7 @@ export default class ProductStore {
 
             if (!this.is_supplier_info_Load) {
                 const productSupplierInfo = await ApiService.APIGetSupplierInfo(supplierId)
+                console.log(productSupplierInfo.data);
                 if (productSupplierInfo?.data[0]) this.setSupplierInfo(productSupplierInfo?.data[0], productSupplierInfo?.data[1])
                 this.set_is_supplier_info_Load(true)
             }

@@ -34,10 +34,18 @@ function getDataFromHistoryYear(priceHistory, id = 0){
     let m_count = 0
     let d_start = 0
     let needAdd = true
+
+    let nawDay = new Date()
+    if (nawDay.getDate() !== parseInt(priceHistory.at(-1).d.split('.')[0])){
+        priceHistory.push({d: nawDay.toLocaleDateString(), q : priceHistory.at(-1).q, sp : priceHistory.at(-1).sp})
+    }
+
     let  endDay = 31
     try {endDay = parseInt(priceHistory.at(-1).d.split('.')[0]) } catch (e) {}
     let  endMonth = 12
     try {endMonth = parseInt(priceHistory.at(-1).d.split('.')[1]) } catch (e) {}
+
+
 
     let newpPriceHistory = []
     let predHistory = {}
@@ -114,7 +122,7 @@ function getDataFromHistoryYear(priceHistory, id = 0){
         monthArray.push(productInfoMArray[i].m_name)
 
         const [dateArray, quantityArray, saleArray, salePriceArray,addQuantityArray, returnArray, resultData] =
-            getDataFromHistory(productInfoMArray[i], 31)
+            getDataFromHistory(productInfoMArray[i], 31, true, true)
         let dateArrayC = []                              // Массив дат
         let quantityArrayC = []                          // Массив изм кол-ва
         let addQuantityArrayC = []                       // Массив поступлений
@@ -183,15 +191,9 @@ function getDataFromHistoryYear(priceHistory, id = 0){
 
 }
 
-function getDataFromHistory (productInfo, daysCount = 30, isFbs = true, all2025Year = false ){
+function getDataFromHistory (productInfo, daysCount = 30, isFbs = true, calcYear = false ){
     let dayCount = daysCount
-    if (all2025Year){
-        // const now = Date.now()
-        const nowDay = new Date(Date.now())
 
-        const dateStart = new Date(2025, 0, 0)
-        dayCount  = Math.round((nowDay.getTime() - dateStart.getTime())/(1000 * 60 * 60 * 24));
-    }
 
 
 
@@ -231,20 +233,18 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbs = true, all2025Y
             counter ++
             // Сначала возмем отчетный день - последний
             if (i === dayCount) {
-                // crDate = new Date();
-                // q = productInfo.totalQuantity
-                // sp = productInfo.price
 
-                // try{
+                if (calcYear){
                     const s = history.at(-1).d.split('.')
                     crDate = new Date(s[2]+'-'+s[1]+'-'+s[0]);
-
-                    // console.log('crDate = '+crDate.toDateString());
-                    // console.log(history.at(-1));
                     q = parseInt(history.at(-1).q)
                     sp = parseInt(history.at(-1).sp)
-                // } catch (e) {}
+                } else {
+                    crDate = new Date();
+                    q = productInfo.totalQuantity
+                    sp = productInfo.price
 
+                }
                 sq = 0
                 arIdx--
                 minPrice = sp
