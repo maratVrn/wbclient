@@ -683,7 +683,7 @@ const ProductYearData = (props) => {
                     <span className="all_colors_info" style={{
                         paddingTop: '20px',
                         paddingBottom: '20px'
-                    }}>{'      Распределение продаж по цветам  '} </span>
+                    }}>{'      Лучшие товары по продажам за 2025 год  '} </span>
                     <div>
                         <DataTable style={{fontSize: '14px', marginTop: '20px'}} value={items} size={'small'} paginator
                                    rows={5} rowsPerPageOptions={[5, 10, 20]} className="dataTable" sortField="saleMoney"
@@ -699,6 +699,10 @@ const ProductYearData = (props) => {
 
                         </DataTable>
                     </div>
+                    <span className="all_colors_info" style={{
+                        paddingTop: '20px',
+                        paddingBottom: '20px'
+                    }}>{'      Распределение продаж по цветам  '} </span>
                     <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
                         <div className="borderOne">
                             <span className="all_colors_info" style={{paddingBottom: '10px'}}>{'Продажи в шт'} </span>

@@ -374,11 +374,13 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbs = true, calcYear
             // console.log('meanQ = ' + meanQ);
             for (let i in saleData) {
                 saleData[i].meanQ = Math.round(10000 * (saleData[i].q - meanQ) / meanQ) / 100
-                if (saleData[i].meanQ > 3990) saleArray[saleData[i].i] = 0
+                if (saleData[i].meanQ > 1890) saleArray[saleData[i].i] = 0
             }
             // console.log('z = '+z+ '  meanQ = '+meanQ);
-            // console.log(history);
-            // console.log(saleData);
+            if (productInfo.id === 50956864) {
+                console.log(history);
+                console.log(saleData);
+            }
         }
 
         // Добавим продажи в тот день когда были поступления

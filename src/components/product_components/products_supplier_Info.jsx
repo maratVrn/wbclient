@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import {Context} from "../../index";
-import {formatCurrency, getDataFromHistoryYear} from "../math";
+import {formatCurrency} from "../math";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, Link } from "react-router-dom";
 import { RadioButton } from "primereact/radiobutton";
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputSwitch } from 'primereact/inputswitch';
@@ -134,10 +134,12 @@ const ProductsSupplierInfo = () => {
         let saleArrayMonth_allMonth = []
         let saleMoneyArrayMonth_allMonth = []
 
-        monthArray = productsDataCalcStore.selectedCalcYearData_bySubjectID.monthArray
-        saleArrayMonth_allMonth = productsDataCalcStore.selectedCalcYearData_bySubjectID.saleArrayMonth
-        saleMoneyArrayMonth_allMonth = productsDataCalcStore.selectedCalcYearData_bySubjectID.saleMoneyArrayMonth
+        for (let i = 1; i < productsDataCalcStore.selectedCalcYearData_bySubjectID.monthArray.length; i++) {
+            monthArray.push(productsDataCalcStore.selectedCalcYearData_bySubjectID.monthArray[i])
+            saleArrayMonth_allMonth.push(productsDataCalcStore.selectedCalcYearData_bySubjectID.saleArrayMonth[i])
+            saleMoneyArrayMonth_allMonth.push(productsDataCalcStore.selectedCalcYearData_bySubjectID.saleMoneyArrayMonth[i])
 
+        }
 
         const dataMonth_allMonth = {
             labels: monthArray,
@@ -257,14 +259,29 @@ const ProductsSupplierInfo = () => {
 
             productStore.setNewLoadStates(false, true)
             navigate('/productInfo/' + id.toString())
+
         }
     }
 
     const NameBodyTemplate = (product) => {
-        // className="table_info" style={{width:'130px'}}
+
         return <div >
-            <span   style={{cursor:'pointer'}}
-                    onClick={() => getIdInfo(product.id)}>{product.id}</span>
+            {/*{*/}
+            {/*    parseInt(id) === parseInt(product.id) ?*/}
+            {/*        <Link style={{textDecoration: 'none'}} to={`/productInfo/${parseInt(product.id)}`} target="_blank"*/}
+            {/*              rel="noopener noreferrer">*/}
+            {/*    <span style={{cursor: 'pointer', color: '#4b5563'}}>{product.id}</span>*!/*/}
+            {/*        </Link>*/}
+            {/*        :<div>*/}
+            {/*        <span style={{cursor: 'pointer', color: '#4b5563'}}>{product.id}</span>*/}
+            {/*        </div>*/}
+            {/*}*/}
+                    <Link style={{textDecoration: 'none'}} to={`/productInfo/${parseInt(product.id)}`} target="_blank"
+                          rel="noopener noreferrer">
+                        <span style={{cursor: 'pointer', color: '#4b5563'}}>{product.id}</span>
+                    </Link>
+
+
         </div>;
     };
 
@@ -298,11 +315,17 @@ const ProductsSupplierInfo = () => {
     }
 
     const imageBodyTemplate = (product) => {
-        return <img src={product.photoUrl} alt={product.photoUrl} className="w-2rem shadow-2 border-round"
-                    style={{cursor:'pointer'}}
-                    onClick={() => getIdInfo(product.id)}
+        return <div>
+            <Link style={{textDecoration: 'none'}} to={`/productInfo/${parseInt(product.id)}`} target="_blank"
+                  rel="noopener noreferrer">
+                <img src={product.photoUrl} alt={product.photoUrl} className="w-2rem shadow-2 border-round"
+                     style={{cursor:'pointer'}}
+                     onClick={() => getIdInfo(product.id)}
 
-        />;
+                />
+            </Link>
+
+        </div>
     };
 
     const checkDataAndFindProduct = () => {

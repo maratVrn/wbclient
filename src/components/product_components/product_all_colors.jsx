@@ -161,7 +161,10 @@ const ProductAllColors = () => {
                     <span className="all_colors_info">{'      На складе  ' + allInfo?.qty +
                         ' шт, на сумму ' + formatCurrency(allInfo.qtyMoney)}</span>
 
-
+                    <span className="all_colors_info" style={{
+                        paddingTop: '20px',
+                        paddingBottom: '20px'
+                    }}>{'      Лучшие товары по продажам за 30 дней '} </span>
                     <div>
                         <DataTable style={{fontSize: '14px', marginTop: '20px'}} value={items} size={'small'} paginator
                                    rows={5} rowsPerPageOptions={[5, 10, 20]} className="dataTable" sortField="saleMoney"
@@ -182,7 +185,10 @@ const ProductAllColors = () => {
 
                         </DataTable>
                     </div>
-                    <span className="all_colors_info" style={{paddingTop: '20px', paddingBottom:'20px'}}>{'      Распределение продаж по цветам  '} </span>
+                    <span className="all_colors_info" style={{
+                        paddingTop: '20px',
+                        paddingBottom: '20px'
+                    }}>{'      Распределение продаж по цветам  '} </span>
                     <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
                         <div className="borderOne">
                             <span className="all_colors_info" style={{paddingBottom: '10px'}}>{'Продажи в шт'} </span>
@@ -193,7 +199,8 @@ const ProductAllColors = () => {
                             </div>
                         </div>
                         <div className="borderOne ">
-                            <span className="all_colors_info" style={{paddingBottom: '10px'}}>{'Продажи в рублях'} </span>
+                            <span className="all_colors_info"
+                                  style={{paddingBottom: '10px'}}>{'Продажи в рублях'} </span>
                             <div className="flex justify-content-center">
                                 <Chart type="doughnut" data={chartDataMoney} options={chartOptions}
                                        className="w-full md:w-30rem"/>
