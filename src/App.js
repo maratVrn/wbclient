@@ -23,6 +23,21 @@ function App() {
     // }, [location]);
 
     useEffect(()=>{
+
+        // Прием сообщений от сервера - обнвление данных для админки
+        // const eventSource = new EventSource('http://localhost:5006/sse');
+        // eventSource.onmessage = (event) => {
+        //     const newData = JSON.parse(event.data);
+        //     console.log('newData');
+        //     console.log(newData);
+        // };
+
+
+        // return () => {
+        //     eventSource.close();
+        // };
+
+
         catalogStore.getLiteWBCatalog().then(() => {
                 console.log('Загрузили каталог');
 
