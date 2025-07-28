@@ -14,14 +14,16 @@ import CatalogStore from "./store/catalogStore";
 import ProductStore from "./store/productStore";
 import GlobalStore from "./store/globalStore";
 import ProductsDataCalcStore from "./store/productsDataCalcStore";
+import ServerUpdateStore from "./store/serverUpdateStore";
 
 // Создаем контекст - классы сданными с которыми работаем внутри сессии
 const catalogStore = new CatalogStore()
+const serverUpdateStore = new ServerUpdateStore()
 const productStore = new ProductStore()
 const globalStore = new GlobalStore()
 const productsDataCalcStore = new ProductsDataCalcStore()
 export const Context = createContext({
-    catalogStore, productStore,globalStore, productsDataCalcStore
+    catalogStore, productStore,globalStore, productsDataCalcStore, serverUpdateStore
 })
 
 

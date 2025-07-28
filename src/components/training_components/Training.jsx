@@ -1,95 +1,87 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {Button} from "primereact/button";
-import {useRef, useEffect, useState} from "react";
-import { ColorPicker } from 'primereact/colorpicker';
+import {useEffect} from "react";
+import { Message } from 'primereact/message';
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
+import { Card } from 'primereact/card';
+import { ScrollTop } from 'primereact/scrolltop';
 
-const Training = () => {
-    const canvasRef = useRef(null);
-    const [canvasContext, setCanvasContext] = useState(null);
-    const [color, setColor] = useState(null);
+const Training = observer(  () => {
+    const {serverUpdateStore} = useContext(Context)
+    const [allMessages, setAllMessages] = useState([])
+    const eventSource = new EventSource('http://localhost:5006/sse');
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        canvas.width = 250;
-        canvas.height = 500;
-        const context = canvas.getContext("2d");
-        const img = new Image();
-        img.src = require('./11.jpg')
-        context.drawImage(img, 0, 0, 250, 500)
-        setCanvasContext(context);
-    }, [canvasRef]);
 
-    const startColor = () => {
-        const img = new Image();
-        img.src = require('./images/11.jpg')
-        canvasContext.drawImage(img, 0, 0, 250, 500)
-        console.log('tut');
-    }
+        // Прием сообщений от сервера - обнвление данных для админки
+        eventSource.onmessage = (event) => {
+            try {
+                serverUpdateStore.setIsServerOpen(true)
+                const newData = JSON.parse(event.data);
+                serverUpdateStore.addServerMessages(newData)
+                showEndMessage()
+            } catch (e) {
+                console.log('ошибка'+e);
+            }
+        };
 
-    function genNewColor(r, g, b, x,  factor = 0, i){
+        eventSource.onerror = (err) => {
+            serverUpdateStore.setIsServerOpen(false)
+            console.error("В EventSource произошла ошибка:", err); }
+    }, []);
 
-        let avg = 0.3  * r + 0.59 * g + 0.11 * b;
-        // let avg = 122
-        let [r2, g2, b2] = hexToRgb(color)
-        return [r+r2, g+g2, b+b2, 255];
-        // return [avg, avg, avg, 255];
-    }
-    const newColor = () => {
-        const img = new Image();
-        img.src = require('./images/11.jpg')
-        canvasContext.drawImage(img, 0, 0, 250, 500)
-        let imageData =canvasContext.getImageData(0, 0, 250, 500)
 
-        let res = [];
-        let len = imageData.length;
-        for (let i = 0; i < imageData.data.length; i += 4) {
-            res = genNewColor( imageData.data[i], imageData.data[i+1], imageData.data[i+2], imageData.data[i+3], 0, i);
-            imageData.data[i]       = res[0]
-            imageData.data[i + 1]   = res[1];
-            imageData.data[i + 2]   = res[2];
-            imageData.data[i + 3]   = res[3];
+    function showEndMessage() {
+        // console.log('showEndMessage');
+        let newMessages = []
+        for (let i in serverUpdateStore.newServerMessages) {
+            newMessages.push(serverUpdateStore.newServerMessages[i].message.toString())
         }
-        canvasContext.putImageData(imageData, 0, 0);
+
+        setAllMessages(newMessages)
+    }
+
+    function clearEndMessage() {
+        serverUpdateStore.clearNewServerMessages()
+        setAllMessages([])
+    }
+
+
+    function showAllMessage() {
+        let newMessages = []
+        for (let i in serverUpdateStore.allServerMessages)
+            newMessages.push(serverUpdateStore.allServerMessages[i].message.toString())
+        serverUpdateStore.setNewMessagesAsAll()
+        setAllMessages(newMessages)
 
     }
 
-    const hexToRgb = hex => {
-        let [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
-        // console.log('r = '+r+'  g = '+ g+'  b = '+ b);
-        return [ r, g, b ]
-    };
 
-    const setColorPickerColor = (newColor) =>{
-        // console.log(color);
-        // hexToRgb(color)
-
-        setColor(newColor)
-    }
     return (
         <div className="page">
-
-            <div className="card flex justify-content-center">
-                <ColorPicker value={color} onChange={(e) => setColorPickerColor(e.value)}/>
-            </div>
-            <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
-
-                <div className="borderOne ">
-                    <canvas ref={canvasRef}></canvas>
-                </div>
-
-                <div className="borderOne">
-                    <Button onClick={() => startColor()} className="mainFont"
-                            style={{paddingLeft: '20px', maxWidth: '120px', height: '40px'}} label="загрузить"/>
-
-                    <Button onClick={() => newColor()} className="mainFont"
-                            style={{paddingLeft: '20px', maxWidth: '120px', height: '40px'}} label="Поменять цвет"/>
-                </div>
-
+            {
+                serverUpdateStore.isServerOpen ?
+                    <Message severity="success" text="Сервер работает"/>
+                    : <Message severity="error" text="Ошибка соединения"/>
+            }
+            <div className="card flex flex-wrap justify-content-center gap-3">
+                <Button onClick={() => clearEndMessage()} label="Очистить" text />
+                <Button onClick={() => showEndMessage()} label="Последние сообщения" text />
+                <Button onClick={() => showAllMessage()} label="Все сообщения" text/>
             </div>
 
+            <div className="card">
+                <div style={{width: '250px', height: '200px', 'overflow': 'auto'}}>
+                    {allMessages.map((text, idx) =>
+                        <p style={{fontSize: '14px'}} className="m-0" key={idx}>{text}</p>
+                    )}
+                </div>
+                <ScrollTop target="parent" threshold={100} className="w-2rem h-2rem border-round bg-primary" icon="pi pi-arrow-up text-base" />
+            </div>
 
         </div>
     );
-};
+});
 
 export default Training;
