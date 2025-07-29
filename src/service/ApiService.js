@@ -5,6 +5,21 @@ import $api_serv_load from '../service/serv_api_load'
 
 export default class ApiService {
 
+    //************************  Команды серверу обновления *******************************
+
+    static async APILoadNewProducts(onWork, loadPageCount, loadOnlyNew):Promise{
+        return $api_serv_load.post(`/loadNewProducts`,
+
+            {
+                onWork:onWork,
+                loadPageCount : loadPageCount,
+                loadOnlyNew : loadOnlyNew
+            }
+        )
+    }
+
+    //************************  ******************** *******************************
+
     // Запрос на парсинг каталога товаров с ВБ
     static async loadApiTestFunc():Promise{
         return $api_serv_load.get('/test')
