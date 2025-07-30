@@ -8,14 +8,20 @@ export default class ApiService {
     //************************  Команды серверу обновления *******************************
 
     static async APILoadNewProducts(onWork, loadPageCount, loadOnlyNew):Promise{
-        return $api_serv_load.post(`/loadNewProducts`,
 
-            {
-                onWork:onWork,
+        return $api_serv_load.get(`/loadNewProducts`, { params: { onWork:onWork,
                 loadPageCount : loadPageCount,
-                loadOnlyNew : loadOnlyNew
-            }
-        )
+                loadOnlyNew : loadOnlyNew }, })
+
+        // return $api_serv_load.post(`/loadNewProducts`,
+        //
+        //     {
+        //         onWork:onWork,
+        //         loadPageCount : loadPageCount,
+        //         loadOnlyNew : loadOnlyNew
+        //     }
+        // ).then(res => console.log(res))
+        //     .catch(err => console.log('Login: ', err));
     }
 
     //************************  ******************** *******************************

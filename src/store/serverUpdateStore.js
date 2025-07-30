@@ -30,8 +30,13 @@ export default class ServerUpdateStore {
 
     async loadNewProducts(onWork, loadPageCount, loadOnlyNew){
         try {
-
-            const result = await ApiService.APILoadNewProducts(onWork, loadPageCount, loadOnlyNew)
+            console.log('tt');
+            let result = []
+            try {
+                result = await ApiService.APILoadNewProducts(onWork, loadPageCount, loadOnlyNew)
+            } catch (e) {
+                console.log(e);
+            }
             console.log(result);
             return result
         } catch (e){
