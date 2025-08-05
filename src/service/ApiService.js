@@ -7,22 +7,21 @@ export default class ApiService {
 
     //************************  Команды серверу обновления *******************************
 
-    static async APILoadNewProducts(onWork, loadPageCount, loadOnlyNew):Promise{
+    static async APILoadNewProducts(loadPageCount, loadOnlyNew):Promise{
 
-        return $api_serv_load.get(`/loadNewProducts`, { params: { onWork:onWork,
+        return $api_serv_load.get(`/loadNewProducts`, { params: {
                 loadPageCount : loadPageCount,
                 loadOnlyNew : loadOnlyNew }, })
-
-        // return $api_serv_load.post(`/loadNewProducts`,
-        //
-        //     {
-        //         onWork:onWork,
-        //         loadPageCount : loadPageCount,
-        //         loadOnlyNew : loadOnlyNew
-        //     }
-        // ).then(res => console.log(res))
-        //     .catch(err => console.log('Login: ', err));
     }
+
+    static async APIGetStartServerInfo():Promise{
+        return $api_serv_load.get(`/getStartServerInfo`)
+    }
+
+    static async APIGetCurrServerInfo():Promise{
+        return $api_serv_load.get(`/getCurrServerInfo`)
+    }
+
 
     //************************  ******************** *******************************
 

@@ -1,47 +1,49 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import ApiService from "../service/ApiService";
 
 export default class ServerUpdateStore {
-    isServerOpen = false
-    newServerMessages = []
-    allServerMessages = []
+    GlobalState = {}
+
+    loadNewProductsMessages = []
+    endLoadNewProductsMessage = ''
+
     constructor() {
         makeAutoObservable((this))
     }
 
-    setIsServerOpen(isServerOpen){
-        this.isServerOpen = isServerOpen
-    }
+    setNewMessageData(data){
+        this.GlobalState = data
 
-    addServerMessages (message){
-        this.newServerMessages = message.message.toString()
-        // console.log(this.newServerMessages);
-        this.allServerMessages.push(message)
-    }
-
-    setNewMessagesAsAll (){
-        this.newServerMessages = [... this.allServerMessages]
-    }
-
-
-    clearNewServerMessages (){
-        this.newServerMessages = []
-    }
-
-    async loadNewProducts(onWork, loadPageCount, loadOnlyNew){
-        try {
-            console.log('tt');
-            let result = []
-            try {
-                result = await ApiService.APILoadNewProducts(onWork, loadPageCount, loadOnlyNew)
-            } catch (e) {
-                console.log(e);
-            }
-            console.log(result);
-            return result
-        } catch (e){
-            console.log(e)
+        if (this.endLoadNewProductsMessage !== this.GlobalState.loadNewProducts.endState) {
+            this.loadNewProductsMessages.unshift(this.GlobalState.loadNewProducts.endStateTime + ' ' + this.GlobalState.loadNewProducts.endState)
+            this.endLoadNewProductsMessage = this.GlobalState.loadNewProducts.endState
+            // console.log('Новое сообщение');
+        } else {
+            this.loadNewProductsMessages[0] = this.GlobalState.loadNewProducts.endStateTime + ' ' + this.GlobalState.loadNewProducts.endState
+            // console.log('Дублируется сообщение');
         }
+
+
+    }
+
+    async getCurrServerInfo(){
+        let result = []
+        try {
+            result = await ApiService.APIGetCurrServerInfo()
+            runInAction(() => {this.setNewMessageData(result.data)})
+        } catch (e) {console.log(e);}
+        return result
+    }
+
+    async loadNewProducts(loadPageCount, loadOnlyNew) {
+        let result = []
+        try {
+
+
+            result = await ApiService.APILoadNewProducts(loadPageCount, loadOnlyNew)
+            runInAction(() => {this.setNewMessageData(result.data)})
+        } catch (e) {console.log(e);}
+        return result
     }
 
 
