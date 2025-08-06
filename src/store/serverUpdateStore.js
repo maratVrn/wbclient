@@ -4,6 +4,8 @@ import ApiService from "../service/ApiService";
 export default class ServerUpdateStore {
     GlobalState = {}
 
+    allTask = []
+
     loadNewProductsMessages = []
     endLoadNewProductsMessage = ''
 
@@ -45,6 +47,15 @@ export default class ServerUpdateStore {
         } catch (e) {console.log(e);}
         return result
     }
+    async loadAllTask(deleteIdList) {
+        let result = []
+        try {
+            result = await ApiService.APILoadAllTask(deleteIdList)
+            runInAction(() => {this.allTask = result.data})
+        } catch (e) {console.log(e);}
+        return result
+    }
+
 
 
 }

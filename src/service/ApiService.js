@@ -8,10 +8,13 @@ export default class ApiService {
     //************************  Команды серверу обновления *******************************
 
     static async APILoadNewProducts(loadPageCount, loadOnlyNew):Promise{
-
         return $api_serv_load.get(`/loadNewProducts`, { params: {
                 loadPageCount : loadPageCount,
                 loadOnlyNew : loadOnlyNew }, })
+    }
+
+    static async APILoadAllTask(deleteIdList):Promise{
+        return $api_serv_load.get(`/getAllTask`, { params: {deleteIdList : deleteIdList} })
     }
 
     static async APIGetStartServerInfo():Promise{

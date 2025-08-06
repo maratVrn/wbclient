@@ -7,127 +7,167 @@ import {observer} from "mobx-react-lite";
 import { Dialog } from 'primereact/dialog';
 import { Checkbox } from 'primereact/checkbox';
 import { InputNumber } from 'primereact/inputnumber';
+import {DataTable} from "primereact/datatable";
+import {Column} from "primereact/column";
 
 
 const Training = observer(  () => {
     const {serverUpdateStore} = useContext(Context)
+
+    const [showAllTaskVisible, setShowAllTaskVisible] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     // Состояния комманд
     const [loadPageCount, setLoadPageCount] = useState(20);
     const [loadOnlyNew, setLoadOnlyNew] = useState(true);
     const [loadNewProductsHistoryVisible, setLoadNewProductsHistoryVisible] = useState(false);
 
+
     useEffect(() => {
-
-        console.log('Запросили стартовое состояние')
-        serverUpdateStore.getCurrServerInfo().then(() => {
-            console.log(' пришел ответ стартового состояния');
-        })
-
-
-
+        // console.log('Запросили стартовое состояние')
+        serverUpdateStore.getCurrServerInfo().then(() => {})
         const timer = setInterval(() => {
-            console.log('Запросили промежуточное состояние')
-
-            serverUpdateStore.getCurrServerInfo().then(() => {
-
-                // setServerData(serverUpdateStore.GlobalState)
-
-            })
+            // console.log('Запросили промежуточное состояние')
+            serverUpdateStore.getCurrServerInfo().then(() => {})
         }, 5000);
         return () => clearTimeout(timer);
-
-
     }, []);
 
-    //
-    // function showEndMessage() {
-    //     // console.log('showEndMessage');
-    //     // let newMessages = []
-    //     // for (let i in serverUpdateStore.newServerMessages) {
-    //     //     newMessages.push(serverUpdateStore.newServerMessages[i].message.toString())
-    //     // }
-    //     //
-    //     // setAllMessages(newMessages)
-    // }
-    //
-    // function clearEndMessage() {
-    //     serverUpdateStore.clearNewServerMessages()
-    //     setAllMessages([])
-    // }
-
-
-    // function showAllMessage() {
-    //     let newMessages = []
-    //     for (let i in serverUpdateStore.allServerMessages)
-    //         newMessages.push(serverUpdateStore.allServerMessages[i].message.toString())
-    //     serverUpdateStore.setNewMessagesAsAll()
-    //     setAllMessages(newMessages)
-    //
-    // }
-
     async function starLoadNewProducts() {
-
-
-        console.log('Отправляем команду на сервер starLoadNewProducts');
-        console.log('loadPageCount = '+loadPageCount);
         serverUpdateStore.loadNewProducts(loadPageCount, loadOnlyNew).then(() => {})
-
     }
+    async function loadAndShowAllTask(needDelete = false) {
+        let deleteIdList = []
+        if (needDelete)  for (let i in selectedTask) deleteIdList.push(parseInt(selectedTask[i].id))
+        await serverUpdateStore.loadAllTask(deleteIdList).then(() => {})
+        setSelectedTask(null)
+        setShowAllTaskVisible(true)
+    }
+
     return (
+
         <div className="page">
-            {
-                serverUpdateStore.GlobalState?.isServerWork ?
-                    <Message severity="success" text="Сервер работает"/>
-                    : <Message severity="error" text="Ошибка соединения"/>
-            }
+            {serverUpdateStore.GlobalState?.isServerWork ? <Message severity="success" text="Сервер работает"/> :
+                <Message severity="error" text="Ошибка соединения"/>}
+            <Button severity="secondary"
+                    style={{height: '22px', fontSize: '14px', marginLeft: '20px', marginBottom: '10px'}}
+                    icon="pi pi-bars" onClick={() => loadAndShowAllTask()}/>
+            <Dialog header="Текущие задачи" visible={showAllTaskVisible} style={{width: '70vw', height: '70vw'}}
+                    onHide={() => {
+                        if (!showAllTaskVisible) return;
+                        setShowAllTaskVisible(false);
+                    }}>
+                <div>
+                    <Button severity="secondary" label="Удалить"
+                            style={{height: '28px', fontSize: '12px', marginBottom: '10px', marginTop: '5px'}}
+                            onClick={() => loadAndShowAllTask(true)}/>
+                    <div style={{width: '100%', height: '100%', 'overflow': 'auto', paddingTop: '10px'}}>
+                        <DataTable style={{fontSize: '14px'}} value={serverUpdateStore.allTask} size={'small'}
+                                   className="dataTable"
+                                   selection={selectedTask}
+                                   onSelectionChange={(e) => setSelectedTask(e.value)}
+                        >
 
-            <div style={{paddingTop: '22px'}} className="card flex flex-wrap  gap-3 ">
+                            <Column selectionMode="multiple" field="id" header="id"></Column>
+                            <Column field="id" sortable header="id"></Column>
+                            <Column field="taskName" sortable header="Задача"></Column>
+                            <Column field="isEnd" sortable header="Завершена"></Column>
+                            <Column field="endI" sortable header="Состояние"></Column>
 
-                <Button style={{height: '22px', fontSize: '14px'}}
-                        severity={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "success" : "secondary"}
-                        label="Загрузка новых товаров"
-                        icon={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "pi pi-check" : ""}
-                        onClick={(e) => starLoadNewProducts()}
+                        </DataTable>
 
-                />
 
-                <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Кол-во страниц</p>
-                <InputNumber style={{height: '22px'}} value={loadPageCount}
-                             onValueChange={(e) => setLoadPageCount(e.value)} useGrouping={false}/>
-                <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Загружать только новые</p>
-                <Checkbox onChange={e => setLoadOnlyNew(e.checked)} checked={loadOnlyNew}></Checkbox>
-
-                <Button  severity="secondary" style={{height: '28px', fontSize: '16px'}} icon="pi pi-bars" onClick={() => setLoadNewProductsHistoryVisible(true)} />
-                <Dialog header="История сообщений" visible={loadNewProductsHistoryVisible} style={{ width: '70vw', height:'70vw' }} onHide={() => {if (!loadNewProductsHistoryVisible) return; setLoadNewProductsHistoryVisible(false); }}>
-                    <div >
-                        <Button severity="secondary"  label="Очистить" style={{height: '28px', fontSize: '12px', marginBottom: '10px', marginTop:'5px'}}
-                                onClick={() => serverUpdateStore.loadNewProductsMessages.length = 0}/>
-                        <div style={{width: '100%', height: '100%',  'overflow': 'auto', paddingTop: '10px'}}>
-                            {serverUpdateStore.loadNewProductsMessages.map((text, idx) =>
-                                <p style={{fontSize: '14px'}} className="m-0" key={idx}>{text}</p>
-                            )}
-                        </div>
                     </div>
-                </Dialog>
+                </div>
+            </Dialog>
 
-            </div>
-            <div style={{paddingTop: '22px'}} className="card flex flex-wrap  gap-3 ">
-                <p style={{fontSize: '14px', paddingTop: '5px'}} className="m-0">Текущие состояние
-                    : {serverUpdateStore.GlobalState?.loadNewProducts?.endStateTime} {serverUpdateStore.GlobalState?.loadNewProducts?.endState}</p>
+            <div style={{paddingTop: '22px'}}>
 
+                <div style={{paddingTop: '22px'}} className="card flex flex-wrap  gap-3 ">
+
+                    <Button style={{height: '22px', fontSize: '14px'}}
+                            severity={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "success" : "secondary"}
+                            label="Загрузка новых товаров"
+                            icon={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "pi pi-check" : ""}
+                            onClick={(e) => starLoadNewProducts()}
+
+                    />
+
+                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Кол-во страниц</p>
+                    <InputNumber style={{height: '22px'}} value={loadPageCount}
+                                 onValueChange={(e) => setLoadPageCount(e.value)} useGrouping={false}/>
+                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Загружать только новые</p>
+                    <Checkbox onChange={e => setLoadOnlyNew(e.checked)} checked={loadOnlyNew}></Checkbox>
+
+                    <Button severity="secondary" style={{height: '22px', fontSize: '14px'}} icon="pi pi-bars"
+                            onClick={() => setLoadNewProductsHistoryVisible(true)}/>
+                    <Dialog header="История сообщений" visible={loadNewProductsHistoryVisible}
+                            style={{width: '70vw', height: '70vw'}} onHide={() => {
+                        if (!loadNewProductsHistoryVisible) return;
+                        setLoadNewProductsHistoryVisible(false);
+                    }}>
+                        <div>
+                            <Button severity="secondary" label="Очистить"
+                                    style={{height: '28px', fontSize: '12px', marginBottom: '10px', marginTop: '5px'}}
+                                    onClick={() => serverUpdateStore.loadNewProductsMessages.length = 0}/>
+                            <div style={{width: '100%', height: '100%', 'overflow': 'auto', paddingTop: '10px'}}>
+                                {serverUpdateStore.loadNewProductsMessages.map((text, idx) =>
+                                    <p style={{fontSize: '14px'}} className="m-0" key={idx}>{text}</p>
+                                )}
+                            </div>
+                        </div>
+                    </Dialog>
+
+                </div>
+                <div style={{paddingLeft: '260px'}}>
+                    <p style={{fontSize: '14px'}} className="m-0">Текущие состояние
+                        : {serverUpdateStore.GlobalState?.loadNewProducts?.endStateTime} {serverUpdateStore.GlobalState?.loadNewProducts?.endState}</p>
+                </div>
             </div>
 
-            <div className="card">
-            <p style={{fontSize: '14px'}} className="m-0">{serverUpdateStore.newServerMessages}</p>
-                {/*<div style={{width: '250px', height: '200px', 'overflow': 'auto'}}>*/}
-                {/*    {allMessages.map((text, idx) =>*/}
-                {/*        <p style={{fontSize: '14px'}} className="m-0" key={idx}>{text}</p>*/}
-                {/*    )}*/}
-                {/*</div>*/}
-                {/*<ScrollTop target="parent" threshold={100} className="w-2rem h-2rem border-round bg-primary"*/}
-                {/*           icon="pi pi-arrow-up text-base"/>*/}
+            <div style={{paddingTop: '2px'}}>
+                <div style={{paddingTop: '22px'}} className="card flex flex-wrap  gap-3 ">
+
+                    <Button style={{height: '22px', fontSize: '14px'}}
+                            severity={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "success" : "secondary"}
+                            label="Загрузка новых товаров"
+                            icon={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "pi pi-check" : ""}
+                            onClick={(e) => starLoadNewProducts()}
+
+                    />
+
+                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Кол-во страниц</p>
+                    <InputNumber style={{height: '22px'}} value={loadPageCount}
+                                 onValueChange={(e) => setLoadPageCount(e.value)} useGrouping={false}/>
+                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Загружать только новые</p>
+                    <Checkbox onChange={e => setLoadOnlyNew(e.checked)} checked={loadOnlyNew}></Checkbox>
+
+                    <Button severity="secondary" style={{height: '22px', fontSize: '14px'}} icon="pi pi-bars"
+                            onClick={() => setLoadNewProductsHistoryVisible(true)}/>
+                    <Dialog header="История сообщений" visible={loadNewProductsHistoryVisible}
+                            style={{width: '70vw', height: '70vw'}} onHide={() => {
+                        if (!loadNewProductsHistoryVisible) return;
+                        setLoadNewProductsHistoryVisible(false);
+                    }}>
+                        <div>
+                            <Button severity="secondary" label="Очистить"
+                                    style={{height: '28px', fontSize: '12px', marginBottom: '10px', marginTop: '5px'}}
+                                    onClick={() => serverUpdateStore.loadNewProductsMessages.length = 0}/>
+                            <div style={{width: '100%', height: '100%', 'overflow': 'auto', paddingTop: '10px'}}>
+                                {serverUpdateStore.loadNewProductsMessages.map((text, idx) =>
+                                    <p style={{fontSize: '14px'}} className="m-0" key={idx}>{text}</p>
+                                )}
+                            </div>
+                        </div>
+                    </Dialog>
+
+                </div>
+                <div style={{paddingLeft: '260px'}}>
+                    <p style={{fontSize: '14px'}} className="m-0">Текущие состояние
+                        : {serverUpdateStore.GlobalState?.loadNewProducts?.endStateTime} {serverUpdateStore.GlobalState?.loadNewProducts?.endState}</p>
+                </div>
             </div>
+
 
         </div>
     );
