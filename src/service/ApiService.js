@@ -17,21 +17,38 @@ export default class ApiService {
         return $api_serv_load.get(`/getAllTask`, { params: {deleteIdList : deleteIdList} })
     }
 
-    static async APIGetStartServerInfo():Promise{
-        return $api_serv_load.get(`/getStartServerInfo`)
-    }
 
     static async APIGetCurrServerInfo():Promise{
         return $api_serv_load.get(`/getCurrServerInfo`)
     }
 
+    static async APIGetAllProductCount():Promise{
+        return $api_serv_load.get(`/getAllProductCount`)
+    }
 
-    //************************  ******************** *******************************
+    static async APIGetWBCatalog_fromWB():Promise{
+        return $api_serv_load.get(`/getWBCatalog_fromWB`)
+    }
+
+    static async deleteDuplicateID():Promise{
+        return $api_serv_load.get('/deleteDuplicateID')
+    }
+
+    static async setNoUpdateProducts():Promise{
+        return $api_serv_load.get('/setNoUpdateProducts')
+    }
+
 
     // Запрос на парсинг каталога товаров с ВБ
     static async loadApiTestFunc():Promise{
         return $api_serv_load.get('/test')
     }
+
+    static async APIUploadTest():Promise{
+        return $api_serv_load.post(`/uploadNewWordStatisticData`)
+    }
+    //************************  ******************** *******************************
+
 
     // Команда на обновление данные
     static async testFunc():Promise{
@@ -47,9 +64,6 @@ export default class ApiService {
         return $api_serv_update.get('/deleteZeroID')
     }
 
-    static async deleteDuplicateID():Promise{
-        return $api_serv_load.get('/deleteDuplicateID')
-    }
 
 
     static async APIGetLiteWBCatalog():Promise{
@@ -113,9 +127,7 @@ export default class ApiService {
         return $api_client.get(`/searchTest`)
     }
 
-    static async APIUploadTest():Promise{
-        return $api_serv_load.post(`/uploadNewWordStatisticData`)
-    }
+
 
     static async APISearchWordUpload():Promise{
         return $api_client.post(`/searchWordsUpload`)

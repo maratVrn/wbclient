@@ -9,6 +9,12 @@ export default class ServerUpdateStore {
     loadNewProductsMessages = []
     endLoadNewProductsMessage = ''
 
+    deleteDuplicateIDMessages = []
+    endDeleteDuplicateIDMessage = ''
+
+    setNoUpdateProductsMessages = []
+    endSetNoUpdateProductsMessage = ''
+
     constructor() {
         makeAutoObservable((this))
     }
@@ -19,11 +25,27 @@ export default class ServerUpdateStore {
         if (this.endLoadNewProductsMessage !== this.GlobalState.loadNewProducts.endState) {
             this.loadNewProductsMessages.unshift(this.GlobalState.loadNewProducts.endStateTime + ' ' + this.GlobalState.loadNewProducts.endState)
             this.endLoadNewProductsMessage = this.GlobalState.loadNewProducts.endState
-            // console.log('Новое сообщение');
         } else {
             this.loadNewProductsMessages[0] = this.GlobalState.loadNewProducts.endStateTime + ' ' + this.GlobalState.loadNewProducts.endState
-            // console.log('Дублируется сообщение');
         }
+
+
+        if (this.endDeleteDuplicateIDMessage !== this.GlobalState.deleteDuplicateID.endState) {
+            this.deleteDuplicateIDMessages.unshift(this.GlobalState.deleteDuplicateID.endStateTime + ' ' + this.GlobalState.deleteDuplicateID.endState)
+            this.endDeleteDuplicateIDMessage = this.GlobalState.deleteDuplicateID.endState
+        } else {
+            this.deleteDuplicateIDMessages[0] = this.GlobalState.deleteDuplicateID.endStateTime + ' ' + this.GlobalState.deleteDuplicateID.endState
+        }
+
+
+
+        if (this.endSetNoUpdateProductsMessage !== this.GlobalState.setNoUpdateProducts.endState) {
+            this.setNoUpdateProductsMessages.unshift(this.GlobalState.setNoUpdateProducts.endStateTime + ' ' + this.GlobalState.setNoUpdateProducts.endState)
+            this.endSetNoUpdateProductsMessage = this.GlobalState.setNoUpdateProducts.endState
+        } else {
+            this.setNoUpdateProductsMessages[0] = this.GlobalState.setNoUpdateProducts.endStateTime + ' ' + this.GlobalState.setNoUpdateProducts.endState
+        }
+
 
 
     }
@@ -37,11 +59,53 @@ export default class ServerUpdateStore {
         return result
     }
 
-    async loadNewProducts(loadPageCount, loadOnlyNew) {
+
+
+
+    async deleteDuplicateID() {
+        let result = []
+        try {
+            result = await ApiService.deleteDuplicateID()
+            runInAction(() => {this.setNewMessageData(result.data)})
+        } catch (e) {console.log(e);}
+        return result
+    }
+
+    async setNoUpdateProducts() {
+        let result = []
+        try {
+            result = await ApiService.setNoUpdateProducts()
+            runInAction(() => {this.setNewMessageData(result.data)})
+        } catch (e) {console.log(e);}
+        return result
+    }
+
+
+
+
+    async getAllProductCount() {
         let result = []
         try {
 
+            result = await ApiService.APIGetAllProductCount()
+            // runInAction(() => {this.setNewMessageData(result.data)})
+        } catch (e) {console.log(e);}
+        return result
+    }
 
+    async getWBCatalog_fromWB() {
+        let result = []
+        try {
+
+            result = await ApiService.APIGetWBCatalog_fromWB()
+            // runInAction(() => {this.setNewMessageData(result.data)})
+        } catch (e) {console.log(e);}
+        return result
+    }
+
+    async loadNewProducts(loadPageCount, loadOnlyNew) {
+        let result = []
+        try {
             result = await ApiService.APILoadNewProducts(loadPageCount, loadOnlyNew)
             runInAction(() => {this.setNewMessageData(result.data)})
         } catch (e) {console.log(e);}
