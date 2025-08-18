@@ -12,8 +12,14 @@ export default class ServerUpdateStore {
     deleteDuplicateIDMessages = []
     endDeleteDuplicateIDMessage = ''
 
-    setNoUpdateProductsMessages = []
     endSetNoUpdateProductsMessage = ''
+    setNoUpdateProductsMessages = []
+
+    endUpdateAllProductListMessage = ''
+    updateAllProductListMessages = []
+
+    endServerMessage = ''
+    ServerMessages = []
 
     constructor() {
         makeAutoObservable((this))
@@ -21,6 +27,22 @@ export default class ServerUpdateStore {
 
     setNewMessageData(data){
         this.GlobalState = data
+
+
+        if (this.endServerMessage !== this.GlobalState.serverState.endState) {
+            this.ServerMessages.unshift(this.GlobalState.serverState.endStateTime + ' ' + this.GlobalState.serverState.endState)
+            this.endServerMessage = this.GlobalState.serverState.endState
+        } else {
+            this.ServerMessages[0] = this.GlobalState.serverState.endStateTime + ' ' + this.GlobalState.serverState.endState
+        }
+
+        if (this.endUpdateAllProductListMessage !== this.GlobalState.updateAllProductList.endState) {
+            this.updateAllProductListMessages.unshift(this.GlobalState.updateAllProductList.endStateTime + ' ' + this.GlobalState.updateAllProductList.endState)
+            this.endUpdateAllProductListMessage = this.GlobalState.updateAllProductList.endState
+        } else {
+            this.updateAllProductListMessages[0] = this.GlobalState.updateAllProductList.endStateTime + ' ' + this.GlobalState.updateAllProductList.endState
+        }
+
 
         if (this.endLoadNewProductsMessage !== this.GlobalState.loadNewProducts.endState) {
             this.loadNewProductsMessages.unshift(this.GlobalState.loadNewProducts.endStateTime + ' ' + this.GlobalState.loadNewProducts.endState)
@@ -36,8 +58,6 @@ export default class ServerUpdateStore {
         } else {
             this.deleteDuplicateIDMessages[0] = this.GlobalState.deleteDuplicateID.endStateTime + ' ' + this.GlobalState.deleteDuplicateID.endState
         }
-
-
 
         if (this.endSetNoUpdateProductsMessage !== this.GlobalState.setNoUpdateProducts.endState) {
             this.setNoUpdateProductsMessages.unshift(this.GlobalState.setNoUpdateProducts.endStateTime + ' ' + this.GlobalState.setNoUpdateProducts.endState)

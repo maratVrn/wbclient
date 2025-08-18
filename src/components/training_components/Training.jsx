@@ -23,7 +23,11 @@ const Training = observer(  () => {
     const [loadNewProductsHistoryVisible, setLoadNewProductsHistoryVisible] = useState(false);
     const [deleteDuplicateIDHistoryVisible, setDeleteDuplicateIDHistoryVisible] = useState(false);
     const [setNoUpdateProductsVisible, setSetNoUpdateProductsVisible] = useState(false);
+    const [updateAllProductListHistoryVisible, setUpdateAllProductListVisible] = useState(false);
+    const [serverMessageHistoryVisible, setServerMessageHistoryVisible] = useState(false);
 
+    const [needCalcData, setNeedCalcData] = useState(false);
+    const [updateAll, setUpdateAll] = useState(false);
 
     useEffect(() => {
         // console.log('Запросили стартовое состояние')
@@ -73,11 +77,33 @@ const Training = observer(  () => {
             <div className="flex">
                 {serverUpdateStore.GlobalState?.isServerWork ? <Message severity="success" text="Сервер работает"/> :
                     <Message severity="error" text="Ошибка соединения"/>}
+
                 <p style={{fontSize: '14px', paddingLeft: '20px', paddingTop: '14px'}}
                    className="m-0">{serverUpdateStore.GlobalState?.serverStartMessage}</p>
+
+
+                <Button severity="secondary" style={{height: '22px', fontSize: '14px', marginLeft: '20px', marginTop: '10px'}} icon="pi pi-bars"
+                        onClick={() => setServerMessageHistoryVisible(true)}/>
+                <Dialog header="История сообщений" visible={serverMessageHistoryVisible}
+                        style={{width: '70vw', height: '70vw'}} onHide={() => {
+                    if (!serverMessageHistoryVisible) return;
+                    setServerMessageHistoryVisible(false);
+                }}>
+                    <div>
+                        <Button severity="secondary" label="Очистить"
+                                style={{height: '28px', fontSize: '12px', marginBottom: '10px', marginTop: '5px'}}
+                                onClick={() => serverUpdateStore.ServerMessages.length = 0}/>
+                        <div style={{width: '100%', height: '100%', 'overflow': 'auto', paddingTop: '10px'}}>
+                            {serverUpdateStore.ServerMessages.map((text, idx) =>
+                                <p style={{fontSize: '14px'}} className="m-0" key={idx}>{text}</p>
+                            )}
+                        </div>
+                    </div>
+                </Dialog>
+
                 <Button severity="secondary"
                         style={{height: '22px', fontSize: '14px', marginLeft: '20px', marginTop: '10px'}}
-                        icon="pi pi-bars" onClick={() => loadAndShowAllTask()}/>
+                        icon="pi pi-star" onClick={() => loadAndShowAllTask()}/>
                 <Dialog header="Текущие задачи" visible={showAllTaskVisible} style={{width: '70vw', height: '70vw'}}
                         onHide={() => {
                             if (!showAllTaskVisible) return;
@@ -166,6 +192,10 @@ const Training = observer(  () => {
 
                     />
 
+                        <p style={{fontSize: '14px'}} className="m-0">Текущие состояние
+                            : {serverUpdateStore.GlobalState?.setNoUpdateProducts?.endStateTime} {serverUpdateStore.GlobalState?.setNoUpdateProducts?.endState}</p>
+
+
                     {/*<p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Кол-во страниц</p>*/}
                     {/*<InputNumber style={{height: '22px'}} value={loadPageCount}*/}
                     {/*             onValueChange={(e) => setLoadPageCount(e.value)} useGrouping={false}/>*/}
@@ -193,13 +223,10 @@ const Training = observer(  () => {
                     </Dialog>
 
                 </div>
-                <div style={{paddingLeft: '260px'}}>
-                    <p style={{fontSize: '14px'}} className="m-0">Текущие состояние
-                        : {serverUpdateStore.GlobalState?.setNoUpdateProducts?.endStateTime} {serverUpdateStore.GlobalState?.setNoUpdateProducts?.endState}</p>
-                </div>
+
             </div>
 
-             {/*Удаление дубликатов*/}
+            {/*Удаление дубликатов*/}
             <div style={{paddingTop: '2px'}}>
                 <div style={{paddingTop: '22px'}} className="card flex flex-wrap  gap-3 ">
 
@@ -242,25 +269,25 @@ const Training = observer(  () => {
                 <div style={{paddingTop: '22px'}} className="card flex flex-wrap  gap-3 ">
 
                     <Button style={{height: '22px', fontSize: '14px'}}
-                            severity={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "success" : "secondary"}
+                            severity={serverUpdateStore.GlobalState?.updateAllProductList?.onWork ? "success" : "secondary"}
                             label="Обновление остатков"
-                            icon={serverUpdateStore.GlobalState?.loadNewProducts?.onWork ? "pi pi-check" : ""}
+                            icon={serverUpdateStore.GlobalState?.updateAllProductList?.onWork ? "pi pi-check" : ""}
                             onClick={(e) => starLoadNewProducts()}
 
                     />
 
-                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Кол-во страниц</p>
-                    <InputNumber style={{height: '22px'}} value={loadPageCount}
-                                 onValueChange={(e) => setLoadPageCount(e.value)} useGrouping={false}/>
-                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Загружать только новые</p>
-                    <Checkbox onChange={e => setLoadOnlyNew(e.checked)} checked={loadOnlyNew}></Checkbox>
+                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Расчет продаж</p>
+                    <Checkbox onChange={e => setNeedCalcData(e.checked)} checked={needCalcData}></Checkbox>
+                    <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Обновлять все ИД</p>
+                    <Checkbox onChange={e => setUpdateAll(e.checked)} checked={updateAll}></Checkbox>
 
                     <Button severity="secondary" style={{height: '22px', fontSize: '14px'}} icon="pi pi-bars"
-                            onClick={() => setLoadNewProductsHistoryVisible(true)}/>
-                    <Dialog header="История сообщений" visible={loadNewProductsHistoryVisible}
+                            onClick={() => setUpdateAllProductListVisible(true)}/>
+
+                    <Dialog header="История сообщений" visible={updateAllProductListHistoryVisible}
                             style={{width: '70vw', height: '70vw'}} onHide={() => {
-                        if (!loadNewProductsHistoryVisible) return;
-                        setLoadNewProductsHistoryVisible(false);
+                        if (!updateAllProductListHistoryVisible) return;
+                        setUpdateAllProductListVisible(false);
                     }}>
                         <div>
                             <Button severity="secondary" label="Очистить"
