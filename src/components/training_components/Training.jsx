@@ -35,13 +35,18 @@ const Training = observer(  () => {
         const timer = setInterval(() => {
             // console.log('Запросили промежуточное состояние')
             serverUpdateStore.getCurrServerInfo().then(() => {})
-        }, 5000);
+        }, 1000);
         return () => clearTimeout(timer);
     }, []);
 
     async function startLoadNewProducts() {
         serverUpdateStore.loadNewProducts(loadPageCount, loadOnlyNew).then(() => {})
     }
+
+    async function updateAllProductList() {
+        serverUpdateStore.updateAllProductList(needCalcData, updateAll).then(() => {})
+    }
+
 
     async function getAllProductCount() {
         serverUpdateStore.getAllProductCount().then(() => {})
@@ -149,8 +154,10 @@ const Training = observer(  () => {
                     />
 
                     <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Кол-во страниц</p>
-                    <InputNumber style={{height: '22px'}} value={loadPageCount}
+
+                    <InputNumber style={{height: '22px', width:'70px'}} value={loadPageCount}
                                  onValueChange={(e) => setLoadPageCount(e.value)} useGrouping={false}/>
+
                     <p style={{fontSize: '14px', paddingLeft: '20px'}} className="m-0">Загружать только новые</p>
                     <Checkbox onChange={e => setLoadOnlyNew(e.checked)} checked={loadOnlyNew}></Checkbox>
 
@@ -272,7 +279,7 @@ const Training = observer(  () => {
                             severity={serverUpdateStore.GlobalState?.updateAllProductList?.onWork ? "success" : "secondary"}
                             label="Обновление остатков"
                             icon={serverUpdateStore.GlobalState?.updateAllProductList?.onWork ? "pi pi-check" : ""}
-                            onClick={(e) => starLoadNewProducts()}
+                            onClick={(e) => updateAllProductList()}
 
                     />
 
@@ -292,9 +299,9 @@ const Training = observer(  () => {
                         <div>
                             <Button severity="secondary" label="Очистить"
                                     style={{height: '28px', fontSize: '12px', marginBottom: '10px', marginTop: '5px'}}
-                                    onClick={() => serverUpdateStore.loadNewProductsMessages.length = 0}/>
+                                    onClick={() => serverUpdateStore.updateAllProductListMessages.length = 0}/>
                             <div style={{width: '100%', height: '100%', 'overflow': 'auto', paddingTop: '10px'}}>
-                                {serverUpdateStore.loadNewProductsMessages.map((text, idx) =>
+                                {serverUpdateStore.updateAllProductListMessages.map((text, idx) =>
                                     <p style={{fontSize: '14px'}} className="m-0" key={idx}>{text}</p>
                                 )}
                             </div>
@@ -304,7 +311,7 @@ const Training = observer(  () => {
                 </div>
                 <div style={{paddingLeft: '260px'}}>
                     <p style={{fontSize: '14px'}} className="m-0">Текущие состояние
-                        : {serverUpdateStore.GlobalState?.loadNewProducts?.endStateTime} {serverUpdateStore.GlobalState?.loadNewProducts?.endState}</p>
+                        : {serverUpdateStore.GlobalState?.updateAllProductList?.endStateTime} {serverUpdateStore.GlobalState?.updateAllProductList?.endState}</p>
                 </div>
             </div>
 

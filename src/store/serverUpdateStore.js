@@ -131,6 +131,17 @@ export default class ServerUpdateStore {
         } catch (e) {console.log(e);}
         return result
     }
+
+    async updateAllProductList(needCalcData, updateAll) {
+        let result = []
+        try {
+            result = await ApiService.APIUpdateAllProductList(needCalcData, updateAll)
+            runInAction(() => {this.setNewMessageData(result.data)})
+        } catch (e) {console.log(e);}
+        return result
+    }
+
+
     async loadAllTask(deleteIdList) {
         let result = []
         try {

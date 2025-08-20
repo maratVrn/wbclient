@@ -13,6 +13,14 @@ export default class ApiService {
                 loadOnlyNew : loadOnlyNew }, })
     }
 
+
+    static async APIUpdateAllProductList(needCalcData, updateAll):Promise{
+        return $api_serv_load.get(`/updateAllProductList`, { params: {
+                needCalcData : needCalcData,
+                updateAll : updateAll }, })
+    }
+
+
     static async APILoadAllTask(deleteIdList):Promise{
         return $api_serv_load.get(`/getAllTask`, { params: {deleteIdList : deleteIdList} })
     }

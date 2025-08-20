@@ -10,6 +10,10 @@
     overflow-y: scroll;
 }
 
+.p-inputnumber input {
+    width: 100%;
+}
+
 .nav_page{
     padding: 0 10% 0 10% ;
 }
