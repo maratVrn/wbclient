@@ -7,6 +7,7 @@ import ProductList from "./components/ProductList";
 import MainPage from "./components/MainPage";
 import User from "./components/user";
 import ProductInfo from "./components/ProductInfo";
+import CompetitorInfo from "./components/product_components/competitor_info";
 import ProductsSupplierInfo from "./components/product_components/products_supplier_Info";
 import NoProduct from "./components/NoProduct";
 import Training from "./components/training_components/Training";
@@ -21,9 +22,14 @@ function App() {
 
     useEffect(()=>{
 
+        console.log('Главный useEffect');
 
-
-
+        serverUpdateStore.getCurrServerInfo().then(() => {})
+        const timer = setInterval(() => {
+            // console.log('Запросили промежуточное состояние')
+            serverUpdateStore.getCurrServerInfo().then(() => {})
+        }, 1000);
+        return () => clearTimeout(timer);
 
 
         // return () => {
@@ -59,6 +65,8 @@ function App() {
                 <Route path="/products/:id" element={<ProductList/>}/>
                 <Route path="/productInfo/:id" element={<ProductInfo/>}/>
                 <Route path="/productSupplierInfo/:id" element={<ProductsSupplierInfo/>}/>
+                <Route path="/competitorInfo/:id" element={<CompetitorInfo/>}/>
+
                 <Route path="/noProduct/" element={<NoProduct/>}/>
                 <Route path="/user/" element={<User/>}/>
                 <Route path="/training/:st" element={<Training/>}/>

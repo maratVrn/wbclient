@@ -45,7 +45,8 @@ const Nav = observer(() => {
                 },
                 {
                     label: 'Анализ конкурентов',
-                    template: itemRenderer
+                    template: itemRenderer,
+                    shortcut: '/competitorInfo/0'
                 },
                 {
                     label: 'Аналитика и поиск товарной ниши',

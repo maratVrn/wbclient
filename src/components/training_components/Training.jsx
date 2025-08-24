@@ -31,12 +31,12 @@ const Training = observer(  () => {
 
     useEffect(() => {
         // console.log('Запросили стартовое состояние')
-        serverUpdateStore.getCurrServerInfo().then(() => {})
-        const timer = setInterval(() => {
-            // console.log('Запросили промежуточное состояние')
-            serverUpdateStore.getCurrServerInfo().then(() => {})
-        }, 1000);
-        return () => clearTimeout(timer);
+        // serverUpdateStore.getCurrServerInfo().then(() => {})
+        // const timer = setInterval(() => {
+        //     // console.log('Запросили промежуточное состояние')
+        //     serverUpdateStore.getCurrServerInfo().then(() => {})
+        // }, 1000);
+        // return () => clearTimeout(timer);
     }, []);
 
     async function startLoadNewProducts() {
@@ -84,7 +84,7 @@ const Training = observer(  () => {
                     <Message severity="error" text="Ошибка соединения"/>}
 
                 <p style={{fontSize: '14px', paddingLeft: '20px', paddingTop: '14px'}}
-                   className="m-0">{serverUpdateStore.GlobalState?.serverStartMessage}</p>
+                   className="m-0">{serverUpdateStore.GlobalState?.serverState?.endState}</p>
 
 
                 <Button severity="secondary" style={{height: '22px', fontSize: '14px', marginLeft: '20px', marginTop: '10px'}} icon="pi pi-bars"
@@ -127,6 +127,7 @@ const Training = observer(  () => {
 
                                 <Column selectionMode="multiple" field="id" header="id"></Column>
                                 <Column field="id" sortable header="id"></Column>
+                                <Column field="dt"  header="Дата"></Column>
                                 <Column field="taskName" sortable header="Задача"></Column>
                                 <Column field="isEnd" sortable header="Завершена"></Column>
                                 <Column field="endI" sortable header="Состояние"></Column>

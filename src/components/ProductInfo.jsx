@@ -85,8 +85,8 @@ const ProductInfo =observer( (props ) => {
             {isStartPage ?
                 <div style={{justifyContent: 'center', textAlign: 'center', paddingBottom: '20px'}}>
                     <h2>Аналитика карточки товара на Wildberries</h2>
-                    <p className="mainFont">Анализируйте товары конкурентов, находите лучшие варианты продаж, смотрите
-                        данные по продажам за год, анализируйте поставки, сезонность и лучшие цветовые решения</p>
+                    <p className="mainFont">Анализируйте определенный товар, изучайте
+                        данные по продажам, анализируйте поставки, сезонность и лучшие цветовые решения</p>
                 </div>
                 : <div style={{justifyContent: 'center', textAlign: 'center', paddingBottom: '20px'}}>
                     <h2>Аналитика карточки товара на Wildberries</h2></div>
@@ -185,6 +185,7 @@ const ProductInfo =observer( (props ) => {
                         <div>
                             <ProductAllColors id={id}/>
                             <ProductYearData id={id} isFbo={isFbo} isInBase={isInBase}/>
+
                             {/*<PositionsInfo id={id}/>*/}
                             {/*<TabView className="a-tab">*/}
                             {/*    <TabPanel header="Отчет по всем цветам">*/}
