@@ -432,6 +432,7 @@ export default class ProductStore {
             if (productAbout?.data) {
                 this.setNowId(productId)
                 if (productAbout.data?.info?.supplierId) this.setSupplierId(productAbout.data?.info?.supplierId)
+                console.log(productAbout);
                 this.setProductAbout(productAbout)
             }
 

@@ -11,7 +11,7 @@ import CompetitorInfo from "./components/product_components/competitor_info";
 import ProductsSupplierInfo from "./components/product_components/products_supplier_Info";
 import NoProduct from "./components/NoProduct";
 import Training from "./components/training_components/Training";
-import Footer from "./components/product_components/footer";
+import Test from "./components/test";
 
 
 function App() {
@@ -68,6 +68,7 @@ function App() {
                 <Route path="/competitorInfo/:id" element={<CompetitorInfo/>}/>
 
                 <Route path="/noProduct/" element={<NoProduct/>}/>
+                <Route path="/test/" element={<Test/>}/>
                 <Route path="/user/" element={<User/>}/>
                 <Route path="/training/:st" element={<Training/>}/>
             </Routes>

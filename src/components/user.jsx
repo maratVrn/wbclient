@@ -3,6 +3,8 @@ import {Context} from "../index";
 import Menu from "./Menu";
 import Menu2 from "./Menu2";
 import {observer} from "mobx-react-lite";
+import './css/landibg.css';
+import Footer from "./product_components/footer";
 
 const User = observer(() => {
     const {productStore} = useContext(Context)
@@ -36,33 +38,117 @@ const User = observer(() => {
 
     return (
         <div className="page" >
-            <nav >
-                {/*onClick={() => globalStore.setAllMenuActive(!globalStore.isMenuActive)}*/}
-
-                {/*<div className="burger-btn " onClick={()=>setMenuActive(!menuActive)}>*/}
-                <div className="burger-btn " onClick={() => setMenuActive(!globalStore.isMenuActive)}>
-
-                    {/*<span className={`pi pi-burger ${burgerIco}`} ></span>*/}
-                    <span
-                        className={globalStore.isMenuActive ? 'pi pi-burger pi-times' : 'pi pi-burger pi-bars'}></span>
+            <div style={{ justifyContent:'center', display:'flex'}}>
+            <div className="form" style={{ maxWidth:'400px'}}>
+                <h1 className="h4">Войдите в кабинет</h1>
 
 
-                </div>
-                <div className="burger-btn " onClick={() => serverTest()}>
-                    <span className='pi  pi-burger '>UP</span>
-                </div>
+                <form id="login-form" className="form-body without-loading-block" action="/login/" method="post">
+                    <input type="hidden" name="_csrf"
+                           value="VxRcAZoKGpKjP0BLjInlP1d9sqdmQMcCjV-V-wKHLuAdcGVN10lo2e9rNybF7qtVCDvDn1F1n0vaDvO2cLNLlA=="/>
+                    <div className="form-block">
+                        <div className="form-control">
+                            <div className="control-label">Введите email</div>
+                            <div className="input field-loginform-email required" data-input="">
+                                <div className="input-container" data-input-container="">
+                                    <div className="input-main">
 
-                <div className="burger-btn " onClick={() => loadServerTest()}>
-                    <span className='pi  pi-burger '>LP</span>
+                                        <input type="text" id="loginform-email" className="input-element"
+                                               name="LoginForm[email]" data-input-element="" autoComplete="off"
+                                               placeholder="usermail@info.com"
+                                               template="&lt;div class=&quot;control-label&quot;&gt;{label}&lt;/div&gt;"
+                                               aria-required="true"/>
+                                    </div>
 
-                </div>
+                                </div>
+                                <div className="input-message is-error"><p className="message-text"></p></div>
+                            </div>
+                        </div>
+                        <div className="form-control">
+                            <div className="control-label">Введите пароль</div>
 
-                <div className="burger-btn " onClick={() => clientTest()}>
-                    <span className='pi  pi-burger '>CT</span>
+                            <div className="input is-with-icon field-loginform-password required" data-input="">
+                                <div className="input-container" data-input-container="">
+                                    <div className="input-main">
 
-                </div>
+                                        <input type="password" id="loginform-password" className="input-element"
+                                               name="LoginForm[password]" data-input-element="" placeholder="•••••••••"
+                                               autoComplete="off" aria-required="true"/>
+                                    </div>
+                                    <div className="input-control password-visibility-control"
+                                         data-password-visibility-control="data-password-visibility-control">
+                                        <svg className="svg-icon control-icon password-visibility-visible" width="24"
+                                             height="24" viewBox="0 0 24 24">
+                                            <use
+                                                href="/static/images/icons/icons.svg?v=1756110266#visibility_on_24px"></use>
+                                        </svg>
+                                        <svg className="svg-icon control-icon password-visibility-invisible" width="24"
+                                             height="24" viewBox="0 0 24 24">
+                                            <use
+                                                href="/static/images/icons/icons.svg?v=1756110266#visibility_off_24px"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="input-message is-error"><p className="message-text"></p></div>
+                            </div>
+                            <div className="input recaptcha-container field-loginform-recaptcha">
+                                <input type="hidden" id="loginform-recaptcha" className="input-element"
+                                       name="LoginForm[reCaptcha]" data-input-element=""/>
+                                <div className="input-message is-error"><p className="message-text"></p></div>
+                            </div>
+                            <a className="text is-sm is-end" href="/request-password-reset/">Забыли пароль?</a></div>
+                    </div>
 
-            </nav>
+                    <button type="submit" className="btn-v2 is-dark" name="login-button">
+                        <div className="btn-inner">
+                            <svg className="svg-icon btn-icon" width="24" height="24" viewBox="0 0 24 24">
+                                <use href="/static/images/icons/icons.svg?v=1756110266#confirm_24px"></use>
+                            </svg>
+                            <div className="btn-text">Войти</div>
+                        </div>
+                    </button>
+                    <div className="recaptcha-protection-text">
+                        <div className="recaptcha-protection-text ">
+                            <div className="protection-text">
+                                <span>Этот сайт защищен с помощью reCAPTCHA и соответствует</span>
+                                <a href="https://policies.google.com/privacy" target="_blank" rel="nofollow noopener">Политике
+                                    конфиденциальности</a> и
+                                <a href="https://policies.google.com/terms" target="_blank" rel="nofollow noopener">Условиям
+                                    использования</a> Google.
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            {/*<nav>*/}
+            {/*    /!*onClick={() => globalStore.setAllMenuActive(!globalStore.isMenuActive)}*!/*/}
+
+            {/*    /!*<div className="burger-btn " onClick={()=>setMenuActive(!menuActive)}>*!/*/}
+            {/*    <div className="burger-btn " onClick={() => setMenuActive(!globalStore.isMenuActive)}>*/}
+
+            {/*        /!*<span className={`pi pi-burger ${burgerIco}`} ></span>*!/*/}
+            {/*        <span*/}
+            {/*            className={globalStore.isMenuActive ? 'pi pi-burger pi-times' : 'pi pi-burger pi-bars'}></span>*/}
+
+
+            {/*    </div>*/}
+            {/*    <div className="burger-btn " onClick={() => serverTest()}>*/}
+            {/*        <span className='pi  pi-burger '>UP</span>*/}
+            {/*    </div>*/}
+
+            {/*    <div className="burger-btn " onClick={() => loadServerTest()}>*/}
+            {/*        <span className='pi  pi-burger '>LP</span>*/}
+
+            {/*    </div>*/}
+
+            {/*    <div className="burger-btn " onClick={() => clientTest()}>*/}
+            {/*        <span className='pi  pi-burger '>CT</span>*/}
+
+            {/*    </div>*/}
+
+            {/*</nav>*/}
 
             <Menu/>
             <Menu2 data={{
@@ -70,6 +156,9 @@ const User = observer(() => {
                 mainMenuId: globalStore.mainMenuID,
                 isActive: globalStore.isMenuActive2
             }}/>
+            </div>
+
+            <Footer/>
         </div>
     );
 });

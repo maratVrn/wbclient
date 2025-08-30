@@ -48,7 +48,7 @@ h2{
     grid-template-columns: 1fr 1fr;
 }
 
-@media (min-width:768px) {
+@media (min-width:1268px) {
     .responsive-two-column-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -66,6 +66,19 @@ h2{
     font-weight: bold;
     padding-top: 30px;
     color: #375d88;
+}
+
+.main_s3{
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    justify-items: start;
+    gap: 20px;
+    padding: 0 34px 22px;
+    border: 4px solid rgba(77, 77, 213, 0.35);
+    border-radius: 40px;
+    overflow: hidden;
+    margin : 2%;
+
 }
 
 .responsive-three-column-grid {

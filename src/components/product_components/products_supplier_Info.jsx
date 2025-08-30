@@ -40,7 +40,9 @@ const ProductsSupplierInfo = () => {
 
         for (let i in productStore.supplierInfo) {
 
-            if ((productStore.supplierInfo[i].idInfo.subjectId === subjectId) || (subjectId ===0)){
+            if ((productStore.supplierInfo[i].idInfo.subjectId === subjectId) || (subjectId ===0))
+                // if (productStore.supplierInfo[i].productInfo?.price > 250)
+                {
                 let price = 0
                 let saleCount = 0
                 let saleMoney = 0

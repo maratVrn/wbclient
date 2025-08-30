@@ -50,7 +50,8 @@ const Nav = observer(() => {
                 },
                 {
                     label: 'Аналитика и поиск товарной ниши',
-                    template: itemRenderer
+                    template: itemRenderer,
+                    shortcut: '/test/'
                 }
                 ,
                 {

@@ -106,7 +106,7 @@ const ProductInfo =observer( (props ) => {
             {isStartPage ?
                 <div>
                     <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
-                        <div className="borderOne">
+                        <div className="borderOne" >
                             <h2>Изучите товар для продажи</h2>
                             <p className="mainFont" style={{paddingRight: '10px'}}>Изучите аналогичный товар
                                 конкурента</p>
