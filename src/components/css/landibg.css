@@ -1156,12 +1156,24 @@ hr {
     gap: 20px
 }
 
+
+
 .header .header-desktop .header-menu .menu-item:not(.is-active) .menu-item-container {
     z-index: -1;
     opacity: 0;
     transform: translateY(-20px);
     pointer-events: none;
     user-select: none
+
+}
+
+.header .header-desktop .header-menu  .menu-item-container-not-active {
+    z-index: -1;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+    user-select: none
+
 }
 
 .header .header-desktop .header-menu .menu-item.is-active .menu-item-btn,.header .header-desktop .header-menu .menu-item:hover .menu-item-btn {
@@ -1176,7 +1188,7 @@ hr {
     gap: 4px
 }
 
-.header .header-desktop .header-menu .menu-item-container {
+.header .header-desktop .header-menu .menu-item-container  {
     position: absolute;
     top: 100%;
     left: 0;
@@ -1380,7 +1392,8 @@ hr {
 }
 
 .header .header-mobile {
-    position: fixed;
+    /*position: fixed;*/
+
     z-index: 20;
     width: 100%;
     height: 92px;
@@ -1499,6 +1512,7 @@ hr {
 
 .header .header-mobile .header-menu .menu-services .service-item {
     display: grid;
+    cursor : pointer;
     grid-template-areas: "icon badge" "title title" "description description";
     grid-template-columns: 1fr auto;
     justify-content: space-between;

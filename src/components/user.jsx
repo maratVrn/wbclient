@@ -4,7 +4,7 @@ import Menu from "./Menu";
 import Menu2 from "./Menu2";
 import {observer} from "mobx-react-lite";
 import './css/landibg.css';
-import Footer from "./product_components/footer";
+import Footer from "./footer";
 
 const User = observer(() => {
     const {productStore} = useContext(Context)

@@ -3,7 +3,7 @@ import {TabPanel, TabView} from "primereact/tabview";
 import CompetitorSeeAlsoInfo from "./competitor_seeAlso_Info";
 import CompetitorSeePhotoInfo from "./competitor_seePhotoInfo";
 import CompetitorSeeFind from "./competitor_seeFind";
-import Footer from "./footer";
+import Footer from "../footer";
 import {useNavigate, useParams} from "react-router-dom";
 import {InputNumber} from "primereact/inputnumber";
 import {Button} from "primereact/button";

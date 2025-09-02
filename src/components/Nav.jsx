@@ -8,7 +8,7 @@ import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {useNavigate} from "react-router-dom";
 import { Menubar } from 'primereact/menubar';
-import logoPng from './wbsale3.png'
+
 
 
 const Nav = observer(() => {
@@ -106,7 +106,7 @@ const Nav = observer(() => {
             shortcut: '/training/0'
         }
     ]
-    const start = <a href="/"> <img alt="logo" src={logoPng} style={{paddingRight: '40px'}} className="mr-2"></img> </a>
+    const start = <a href="/"> <img alt="logo"style={{paddingRight: '40px'}} className="mr-2"></img> </a>
     const end = <i className="pi pi-user" style={{cursor:'pointer', fontSize: '1.5rem', paddingRight:'80px', color: 'var(--primary-color)'}}
                    onClick={() => navigate('/user/' )}></i>
 

@@ -8,7 +8,7 @@ import {useNavigate, useParams, Link } from "react-router-dom";
 import { RadioButton } from "primereact/radiobutton";
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputSwitch } from 'primereact/inputswitch';
-import Footer from "./footer";
+import Footer from "../footer";
 import {InputNumber} from "primereact/inputnumber";
 import {Button} from "primereact/button";
 import {Chart} from "primereact/chart";

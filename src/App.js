@@ -12,6 +12,9 @@ import ProductsSupplierInfo from "./components/product_components/products_suppl
 import NoProduct from "./components/NoProduct";
 import Training from "./components/training_components/Training";
 import Test from "./components/test";
+import Header from "./components/Header";
+import Contacts from "./components/Contacts";
+import Footer from "./components/footer";
 
 
 function App() {
@@ -58,6 +61,7 @@ function App() {
         // <Test/>
 
         <BrowserRouter>
+            <Header/>
             {/*<Test/>*/}
             <Routes>
 
@@ -70,13 +74,10 @@ function App() {
                 <Route path="/noProduct/" element={<NoProduct/>}/>
                 <Route path="/test/" element={<Test/>}/>
                 <Route path="/user/" element={<User/>}/>
+                <Route path="/contacts/" element={<Contacts/>}/>
                 <Route path="/training/:st" element={<Training/>}/>
             </Routes>
-            <Nav/>
-
-            {/*{*/}
-            {/*    eventSource.close()*/}
-            {/*};*/}
+            <Footer/>
         </BrowserRouter>
 
     );

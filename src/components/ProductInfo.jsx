@@ -9,7 +9,7 @@ import ProductYearData from "./product_components/productYear_data";
 import ProductAbout from "./product_components/product_about";
 import ProductsSupplierInfo from "./product_components/products_supplier_Info";
 import ProductAllColors from "./product_components/product_all_colors";
-import Footer from "./product_components/footer";
+import Footer from "./footer";
 import PositionsInfo from "./product_components/positions_info";
 import CompetitorInfo from "./product_components/competitor_info";
 import {InputNumber} from "primereact/inputnumber";

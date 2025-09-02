@@ -1,13 +1,20 @@
 .menu{
     position: fixed;
-    width: 300px;
-    height: 100%;
+    /*width: 300px;*/
+    height: 200px;
     top:100px;
     left: 0;
     transform: translateX(-100%);
-    transition: all 0.5s;
+    /*transition: all 0.5s;*/
     background-color: white;
     z-index: 100;
+
+    /*position: absolute;*/
+    /*top: 100%;*/
+    /*left: 0;*/
+    width: 100%;
+    /*padding-top: 20px;*/
+    transition: ease transform .3s, ease opacity .3s;
 
 
 }
