@@ -9,6 +9,7 @@ import { Checkbox } from 'primereact/checkbox';
 import { InputNumber } from 'primereact/inputnumber';
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
+import ApiService from "../../service/ApiService";
 
 
 const Training = observer(  () => {
@@ -65,6 +66,13 @@ const Training = observer(  () => {
         serverUpdateStore.getWBCatalog_fromWB().then(() => {})
     }
 
+    async function loadServerTest(){
+        try {
+            const result = await ApiService.loadApiTestFunc()
+        } catch (e){
+            console.log(e)
+        }
+    }
 
 
 
@@ -322,6 +330,9 @@ const Training = observer(  () => {
                             severity="info"  label="Обновить каталог с ВБ"  onClick={(e) => getWBCatalog_fromWB()} />
                     <Button style={{height: '22px', fontSize: '14px'}}
                         severity="info"   label="Собрать информацию по ИД"   onClick={(e) => getAllProductCount()}  />
+                    <Button style={{height: '22px', fontSize: '14px'}}
+                            severity="info"   label="Тестовая функция"   onClick={(e) => loadServerTest()}  />
+
                 </div>
 
             </div>
