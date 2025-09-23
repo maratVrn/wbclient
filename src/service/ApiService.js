@@ -1,5 +1,4 @@
 import $api_client from '../http/index'
-import $api_serv_update from '../service/serv_api'
 import $api_serv_load from '../service/serv_api_load'
 
 
@@ -49,28 +48,13 @@ export default class ApiService {
 
     // Запрос на парсинг каталога товаров с ВБ
     static async loadApiTestFunc():Promise{
-        return $api_serv_load.get('/test')
+        return $api_serv_load.get('/wbServerTest')
     }
 
     static async APIUploadTest():Promise{
         return $api_serv_load.post(`/uploadNewWordStatisticData`)
     }
     //************************  ******************** *******************************
-
-
-    // Команда на обновление данные
-    static async testFunc():Promise{
-        return $api_serv_update.get('/test')
-    }
-
-    // Получить расчет с сервера (для проверки внутреннего и внешнего расчета)
-    static async getMathData(id):Promise{
-        return $api_serv_update.get(`/getMathData/${parseInt(id)}`)
-    }
-
-    static async deleteZeroID():Promise{
-        return $api_serv_update.get('/deleteZeroID')
-    }
 
 
 
@@ -133,6 +117,10 @@ export default class ApiService {
 
     static async APISearchTest():Promise{
         return $api_client.get(`/searchTest`)
+    }
+
+    static async APIClientTest():Promise{
+        return $api_client.get(`/wbServerTest`)
     }
 
 

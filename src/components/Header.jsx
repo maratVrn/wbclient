@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import logoSvg from "./logo-dark.svg";
 import downSvg from "./images/down.svg";
 import './css/form.css';
-import './css/landibg.css';
+import './css/wbsale.css';
 import {useNavigate} from "react-router-dom";
 
 const Header = () => {
@@ -41,7 +41,7 @@ const Header = () => {
     return (
         // <header className="header is-active" style={{backgroundColor: '#f8f8f8'}}>
         <header className={isHeaderActive ? 'header is-active' : 'header'} style={{backgroundColor: '#f8f8f8'}}>
-            <div className="header-desktop container-fluid">
+            <div className="header-desktop container-fluid" style={{paddingLeft:'60px'}}>
 
                 <a className="header-logo" href="/">
 
@@ -261,16 +261,15 @@ const Header = () => {
                             </div>
                         </a></div>
                 </div>
-                <div className="space-xs menu-controls">
-                    <a className="btn-v2 is-secondary" href="/user/">
-                        <div className="btn-inner">
-                            <div className="btn-text">Вход</div>
-                        </div>
-                    </a> <a className="btn-v2 is-dark" href="/signup/">
-                    <div className="btn-inner">
-                        <div className="btn-text">Регистрация</div>
-                    </div>
-                </a></div>
+                <div className="space-xs menu-controls" style={{paddingLeft:'150px', paddingRight:'40px'}}>
+
+                    <a className="header-control" href="/user/">
+                        <i className="svg-icon nam-anam is-36 pi pi-user" style={{
+                            cursor: 'pointer', fontSize: '1.5rem'
+                        }}></i>
+
+                    </a>
+                </div>
             </div>
 
 

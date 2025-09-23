@@ -3,7 +3,7 @@ import {Context} from "../index";
 import Menu from "./Menu";
 import Menu2 from "./Menu2";
 import {observer} from "mobx-react-lite";
-import './css/landibg.css';
+import './css/wbsale.css';
 import Footer from "./footer";
 
 const User = observer(() => {
@@ -38,13 +38,13 @@ const User = observer(() => {
 
     return (
         <div className="page" >
-            <div style={{ justifyContent:'center', display:'flex'}}>
-            <div className="form" style={{ maxWidth:'400px'}}>
+            <div >
+            <div className="form" style={{ maxWidth:'500px'}}>
                 <h1 className="h4">Войдите в кабинет</h1>
 
 
-                <form id="login-form" className="form-body without-loading-block" action="/login/" method="post">
-                    <input type="hidden" name="_csrf"
+                <form className="form-body ">
+                    <input type="hidden"
                            value="VxRcAZoKGpKjP0BLjInlP1d9sqdmQMcCjV-V-wKHLuAdcGVN10lo2e9rNybF7qtVCDvDn1F1n0vaDvO2cLNLlA=="/>
                     <div className="form-block">
                         <div className="form-control">
@@ -91,42 +91,31 @@ const User = observer(() => {
                                 </div>
                                 <div className="input-message is-error"><p className="message-text"></p></div>
                             </div>
-                            <div className="input recaptcha-container field-loginform-recaptcha">
-                                <input type="hidden" id="loginform-recaptcha" className="input-element"
-                                       name="LoginForm[reCaptcha]" data-input-element=""/>
-                                <div className="input-message is-error"><p className="message-text"></p></div>
-                            </div>
+
                             <a className="text is-sm is-end" href="/request-password-reset/">Забыли пароль?</a></div>
                     </div>
 
-                    <button type="submit" className="btn-v2 is-dark" name="login-button">
+                    <button type="submit" className="btn-v2 is-dark" >
                         <div className="btn-inner">
-                            <svg className="svg-icon btn-icon" width="24" height="24" viewBox="0 0 24 24">
-                                <use href="/static/images/icons/icons.svg?v=1756110266#confirm_24px"></use>
-                            </svg>
                             <div className="btn-text">Войти</div>
                         </div>
                     </button>
-                    <div className="recaptcha-protection-text">
-                        <div className="recaptcha-protection-text ">
-                            <div className="protection-text">
-                                <span>Этот сайт защищен с помощью reCAPTCHA и соответствует</span>
-                                <a href="https://policies.google.com/privacy" target="_blank" rel="nofollow noopener">Политике
-                                    конфиденциальности</a> и
-                                <a href="https://policies.google.com/terms" target="_blank" rel="nofollow noopener">Условиям
-                                    использования</a> Google.
-                            </div>
+
+                    <button type="submit" className="btn-v2">
+                        <div className="btn-inner">
+                            <div className="btn-text">Регистрация</div>
                         </div>
-                    </div>
+                    </button>
+
                 </form>
             </div>
 
 
-            {/*<nav>*/}
-            {/*    /!*onClick={() => globalStore.setAllMenuActive(!globalStore.isMenuActive)}*!/*/}
+                {/*<nav>*/}
+                {/*    /!*onClick={() => globalStore.setAllMenuActive(!globalStore.isMenuActive)}*!/*/}
 
-            {/*    /!*<div className="burger-btn " onClick={()=>setMenuActive(!menuActive)}>*!/*/}
-            {/*    <div className="burger-btn " onClick={() => setMenuActive(!globalStore.isMenuActive)}>*/}
+                {/*    /!*<div className="burger-btn " onClick={()=>setMenuActive(!menuActive)}>*!/*/}
+                {/*    <div className="burger-btn " onClick={() => setMenuActive(!globalStore.isMenuActive)}>*/}
 
             {/*        /!*<span className={`pi pi-burger ${burgerIco}`} ></span>*!/*/}
             {/*        <span*/}

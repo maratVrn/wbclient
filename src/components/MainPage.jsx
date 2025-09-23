@@ -1,7 +1,7 @@
 import React, {useContext, useRef, useState} from 'react';
 import './page.css';
 import './css/form.css';
-import './css/landibg.css';
+import './css/wbsale.css';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import { FileUpload } from 'primereact/fileupload';
@@ -536,13 +536,12 @@ const MainPage = () => {
                                     <h2 class="section-title">Тарифы</h2>
                                 </div>
                                 <div className="section-body">
-                                    <p className="section-text">Любой тариф можно попробовать <b>в течение 3
-                                        дней</b> всего <b>за 30₽</b>. Платите только за необходимое</p>
+                                    <p className="section-text">Любой тариф можно попробовать <b> бесплатно </b>в течение 5
+                                        дней</p>
 
-                                    <div className="btn-v2 is-accent" data-toggle="custom-modal"
-                                         data-target="join-to-demo-modal">
+                                    <div className="btn-v2 is-accent" >
                                         <div className="btn-inner">
-                                            <div className="btn-text">Записаться на демонстрацию сервиса</div>
+                                            <div className="btn-text">Получить бесплатный доступ</div>
                                         </div>
                                     </div>
                                     <div className="custom-modal join-to-demo-modal is-large"
@@ -680,19 +679,7 @@ const MainPage = () => {
                                                             время
                                                             для онлайн-встречи
                                                         </div>
-                                                        <div className="recaptcha-protection-text">
-                                                            <div className="recaptcha-protection-text ">
-                                                                <div className="protection-text">
-                                                                    <span>Этот сайт защищен с помощью reCAPTCHA и соответствует</span>
-                                                                    <a href="https://policies.google.com/privacy"
-                                                                       target="_blank" rel="nofollow noopener">Политике
-                                                                        конфиденциальности</a> и
-                                                                    <a href="https://policies.google.com/terms"
-                                                                       target="_blank" rel="nofollow noopener">Условиям
-                                                                        использования</a> Google.
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
                                                     </form>
                                                 </div>
                                             </div>

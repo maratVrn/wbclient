@@ -15,6 +15,8 @@ import Test from "./components/test";
 import Header from "./components/Header";
 import Contacts from "./components/Contacts";
 import Footer from "./components/footer";
+import Oferta from "./components/oferta";
+import ConfPolicy from "./components/confPolicy";
 
 
 function App() {
@@ -27,12 +29,12 @@ function App() {
 
         console.log('Главный useEffect');
 
-        serverUpdateStore.getCurrServerInfo().then(() => {})
-        const timer = setInterval(() => {
-            // console.log('Запросили промежуточное состояние')
-            serverUpdateStore.getCurrServerInfo().then(() => {})
-        }, 1000);
-        return () => clearTimeout(timer);
+        // serverUpdateStore.getCurrServerInfo().then(() => {})
+        // const timer = setInterval(() => {
+        //     // console.log('Запросили промежуточное состояние')
+        //     serverUpdateStore.getCurrServerInfo().then(() => {})
+        // }, 1000);
+        // return () => clearTimeout(timer);
 
 
         // return () => {
@@ -74,6 +76,9 @@ function App() {
                 <Route path="/noProduct/" element={<NoProduct/>}/>
                 <Route path="/test/" element={<Test/>}/>
                 <Route path="/user/" element={<User/>}/>
+                <Route path="/oferta/" element={<Oferta/>}/>
+                <Route path="/confPolicy/" element={<ConfPolicy/>}/>
+
                 <Route path="/contacts/" element={<Contacts/>}/>
                 <Route path="/training/:st" element={<Training/>}/>
             </Routes>
