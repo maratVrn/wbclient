@@ -2,22 +2,25 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
 import './product.css';
 import { Chart } from 'primereact/chart';
-import {getDataFromHistory, formatCurrency} from "../math";
+import {getPriceFromHistory, formatCurrency} from "../math";
 import {InputSwitch} from "primereact/inputswitch";
+import {RadioButton} from "primereact/radiobutton";
 
 
 
 
 
 const ProductData = (props) => {
-    const {id, isFbo, isInBase} = props;
+    const {id, isInBase} = props;
     const {productStore} = useContext(Context)
-    const [chartData, setChartData] = useState({});
-    const [chartData2, setChartData2] = useState({});
-    const [chartData3, setChartData3] = useState({});
-    const [chartOptions, setChartOptions] = useState({});
     const [productInfo, setProductInfo] = useState([]);
-    const [checked, setChecked] = useState(false);
+    const [chartPriceData, setChartPriceData] = useState({});
+    const [chartOptions, setChartOptions] = useState({});
+
+    const [daysCount, setDaysCount] = useState([
+        {daysId: 0, daysName: '30 дней', daysCount : 30},{daysId: 1, daysName: '60 дней', daysCount : 60},
+        {daysId: 2, daysName: '90 дней', daysCount : 90},{daysId: 3, daysName: '180 дней', daysCount : 180}, ,{daysId: 4, daysName: '360 дней', daysCount : 360}])
+    const [selectedDays, setSelectedDays] = useState({daysId: 0, daysName: '30 дней', daysCount : 30});
 
     useEffect(() => {
         // console.log('useEffect ProductData ');
@@ -27,7 +30,7 @@ const ProductData = (props) => {
         if (id>0) productStore.getProductInfo(id).then(() => {
 
             if (productStore.productInfo) {
-                calcData()
+                calcData(selectedDays.daysCount)
 
 
             }
@@ -37,13 +40,10 @@ const ProductData = (props) => {
 
     }, [id, isInBase]);
 
-    function calcData(check = false){
-
-
-        // const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, check, false)
-        const [dateArray, quantityArray, saleArray, salePriceArray, addQuantityArray, returnArray, resultData] = getDataFromHistory(productStore.productInfo, 30, true, false)
-
+    function calcData(daysCount){
+        const [dateArray, priceArray,  resultData] = getPriceFromHistory(productStore.productInfo, daysCount, true)
         setProductInfo(resultData)
+
         const options = {
             maintainAspectRatio: false,
             aspectRatio: 0.6,
@@ -68,58 +68,12 @@ const ProductData = (props) => {
             }
         };
         setChartOptions(options);
-
-        const data = {
-            labels: dateArray,
-            datasets: [
-                {
-                    label: 'Продажи',
-                    data: saleArray,
-                    backgroundColor: 'rgba(200,245,251,0.5)',
-                    borderColor: 'rgba(38,197,255,0.5)',
-                    hoverBackgroundColor: 'rgba(38,197,255,0.5)',
-                    borderWidth: 2,
-                },
-                {
-                    label: 'Возвраты',
-                    data: returnArray,
-                    backgroundColor: 'rgba(241,208,152,0.5)',
-                    borderColor: 'rgba(193,150,73,0.5)',
-                    hoverBackgroundColor: 'rgba(193,150,73,0.5)',
-                    borderWidth: 2,
-
-                }
-            ]
-        };
-        const data2 = {
-            labels: dateArray,
-            datasets: [
-                {
-                    label: 'Остатки',
-                    data: quantityArray,
-                    backgroundColor: 'rgba(200,245,251,0.5)',
-                    borderColor: 'rgba(38,197,255,0.5)',
-                    hoverBackgroundColor: 'rgba(38,197,255,0.5)',
-                    borderWidth: 2,
-
-                },
-                {
-                    label: 'Поступления',
-                    data: addQuantityArray,
-                    backgroundColor: 'rgba(241,208,152,0.5)',
-                    borderColor: 'rgba(193,150,73,0.5)',
-                    hoverBackgroundColor: 'rgba(193,150,73,0.5)',
-                    borderWidth: 2,
-
-                }
-            ]
-        };
-        const data3 = {
+        const priceData3 = {
             labels: dateArray,
             datasets: [
                 {
                     label: 'Цена ',
-                    data: salePriceArray,
+                    data: priceArray,
                     fill: true,
                     tension: 1,
                     borderWidth: 3,
@@ -132,63 +86,53 @@ const ProductData = (props) => {
                 }
             ]
         };
-        setChartData(data);
-        setChartData2(data2);
-        setChartData3(data3);
-        setChecked(check)
+        setChartPriceData(priceData3);
+
     }
 
+    function onDaysChange(value){
+        // console.log(value);
+        if (value) {
+            setSelectedDays(value)
+            if (value.daysId >= 0) calcData(value.daysCount)
+        }
+    }
 
     return (
         <div>
             {isInBase ?
                 <div>
-                    <div style={{textAlign: 'center'}}><span
-                        className="chart_main_text">Аналитика товара за 30 дней </span>
-                        <div style={{display: 'flex'}}>
 
-                            <InputSwitch style={{ height:'18px', width:'50px'}} checked={checked} onChange={(e) => calcData(e.value)}/>
-                            <span className="" style={{marginLeft: '20px'}}>Расчет фбс (dtype = {productStore.productInfo?.dtype})</span>
-                        </div>
+                    <h2>График изменения цены за {selectedDays.daysName}  </h2>
+                    <div className="flex flex-wrap gap-3 dataTable" style={{padding: '10px'}}>
+
+
+                        {daysCount.map((m1) => {
+                            return (
+                                <div key={m1.daysId}>
+                                    <RadioButton inputId={m1.daysId} name="month" value={m1}
+                                                 onChange={(e) => onDaysChange(e.value)}
+                                                 checked={selectedDays.daysId === m1.daysId}
+                                    />
+                                    <label htmlFor={m1.daysId}
+                                           className="ml-2">{m1.daysName}</label>
+                                </div>
+                            );
+                        })}
+
+
                     </div>
-                    <div className="chart_info">
-                    <span
-                        className="chart_info_text">Продажи (с учетом возвратов) <span
-                        className="bold">{productInfo?.totalSaleQuantity} шт.</span>  на сумму <span
-                        className="bold">{formatCurrency(productInfo?.totalMoney)} </span>  </span>
-                    </div>
+
+                    {/*    <div className="chart_info">*/}
+                    {/*<span className="chart_info_text">Цена <span className="bold">{productInfo?.price + '  '} </span>*/}
+                    {/*    мин. <span className="bold"> {productInfo?.minPrice + ' '}</span>*/}
+                    {/*    макс. <span className="bold">{productInfo?.maxPrice} </span>*/}
+                    {/*    сред. <span className="bold"> {productInfo?.meanPrice} </span></span>*/}
+                    {/*    </div>*/}
                     <div className="item_data">
 
                         <div className="chart_item">
-
-                            <Chart type="bar" className="all_div" data={chartData} options={chartOptions}/>
-                        </div>
-                    </div>
-                    <div className="chart_info">
-                    <span
-                        className="chart_info_text">Остатки на начало <span
-                        className="bold">{productInfo?.startQuantity} </span>сейчас <span
-                        className="bold">{productInfo?.totalQuantity} </span></span>
-                        <span
-                            className="chart_info_text"> Поступления <span
-                            className="bold"> {productInfo?.addQuantity} </span> </span>
-                    </div>
-
-                    <div className="item_data">
-                        <div className="chart_item">
-                            <Chart className="all_div" type="bar" data={chartData2} options={chartOptions}/>
-                        </div>
-                    </div>
-                    <div className="chart_info">
-                <span className="chart_info_text">Цена <span className="bold">{productInfo?.price + '  '} </span>
-                    мин. <span className="bold"> {productInfo?.minPrice + ' '}</span>
-                    макс. <span className="bold">{productInfo?.maxPrice} </span>
-                    сред. <span className="bold"> {productInfo?.meanPrice} </span></span>
-                    </div>
-                    <div className="item_data">
-
-                        <div className="chart_item">
-                            <Chart className="all_div" type="line" data={chartData3} options={chartOptions}/>
+                            <Chart className="all_div" type="line" data={chartPriceData} options={chartOptions}/>
                         </div>
                     </div>
                 </div>

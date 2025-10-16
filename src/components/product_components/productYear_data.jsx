@@ -13,7 +13,7 @@ import {useNavigate} from "react-router-dom";
 
 
 const ProductYearData = (props) => {
-    const {id, isFbo, isInBase} = props;
+    const {id,  isInBase} = props;
 
     const navigate = useNavigate();
 

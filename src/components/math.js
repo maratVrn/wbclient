@@ -452,5 +452,114 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbs = true, calcYear
     return [dateArray, quantityArray, saleArray, salePriceArray,addQuantityArray, returnArray, resultData]
 }
 
+function getPriceFromHistory (productInfo, dayCount = 30,  calcYear = false ){
 
-export {getDataFromHistory,  formatCurrency, getDataFromHistoryYear}
+
+    const history = productInfo.priceHistory        // История загр с БД
+    let dateArray = []                              // Массив дат
+    let priceArray = []                         // Массив изм-я цены
+    let startDateInBase = ''                        // С Какой даты товар в базе
+
+    let minPrice = 0                                // минимальная цена
+    let maxPrice = 0                                // максимальная цена
+
+    let crDate = new Date()
+
+
+    let realDayCounter = -1
+
+    if (history?.length >0) {
+
+        startDateInBase = history[0].d
+
+
+        let arIdx = -1
+        let isError = false
+        let d = ''
+        let sp = 0
+        let q = 0
+        let sq = 0
+        let counter = 0
+        for (let i = dayCount; i > 0; i--) {
+            counter ++
+            // Сначала возмем отчетный день - последний
+            if (i === dayCount) {
+
+                if (calcYear){
+                    const s = history.at(-1).d.split('.')
+                    crDate = new Date(s[2]+'-'+s[1]+'-'+s[0]);
+                    q = parseInt(history.at(-1).q)
+                    sp = parseInt(history.at(-1).sp)
+                } else {
+                    crDate = new Date();
+                    q = productInfo.totalQuantity
+                    sp = productInfo.price
+
+                }
+                sq = 0
+                arIdx--
+                minPrice = sp
+                maxPrice = sp
+
+            } else {
+                crDate.setDate(crDate.getDate() - 1);
+
+                // Если послдений день истории
+                if (Math.abs(arIdx) >  history.length){
+                    sq = 0
+                    q = 0
+                    sp = 0
+                    if (realDayCounter<0) realDayCounter = counter
+                }
+
+                if (Math.abs(arIdx) <=  history.length){
+                    let d_tmp =  history.at(arIdx).d
+                    sq = 0
+                    // проверим есть ли дата внутри
+                    if (crDate.toLocaleDateString() === d_tmp){
+
+                        if (history.at(arIdx).sp>0) {
+                            sp = history.at(arIdx).sp
+                            if (sp>maxPrice) maxPrice = sp
+                            if (sp<minPrice) minPrice = sp
+                        }
+                        arIdx--
+                    }
+                }
+            }
+
+            dateArray.push(crDate.toLocaleDateString())
+
+            if (Math.abs(arIdx)-1 <=  history.length){
+                if (sp>0) priceArray.push(sp)
+                else priceArray.push(null)
+            } else { priceArray.push(null)
+                q = 0}
+
+
+
+
+
+
+           if (isError) break
+        }
+    }
+
+
+    priceArray = priceArray.reverse()
+    dateArray = dateArray.reverse()
+    const resultData = {
+        startDateInBase : startDateInBase,
+        totalQuantity : productInfo.totalQuantity,
+        price :productInfo.price,
+        minPrice : minPrice,
+        maxPrice : maxPrice,
+        meanPrice :  Math.floor((maxPrice+minPrice)/2),
+        realDiscount : 0
+    }
+
+    return [dateArray, priceArray,  resultData]
+}
+
+
+export {getDataFromHistory,  formatCurrency, getDataFromHistoryYear, getPriceFromHistory}

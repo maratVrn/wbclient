@@ -26,11 +26,11 @@ h2{
 
 
 .exmpl {
-    overflow: hidden;
+    /*overflow: hidden;*/
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 350px;
+    /*height: 350px;*/
 }
 .exmpl img {
     object-fit: cover;
@@ -254,7 +254,7 @@ h2{
     width: 100%;
 }
 .chart_item{
-    height: 97px;
+    height: 200px;
     width: 100%;
 
 }

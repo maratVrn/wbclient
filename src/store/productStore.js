@@ -137,9 +137,7 @@ export default class ProductStore {
         this.productAbout = productAbout
     }
 
-    setPriceHistory (priceHistory){
-        this.priceHistory = priceHistory
-    }
+
     setPhotoUrlArray (urlArray){
         this.photoUrlArray = urlArray
     }
@@ -148,29 +146,6 @@ export default class ProductStore {
         this.productInfo = productInfo
     }
 
-    async saveDataToCVS(CatalogID,fname, dtype){
-        try{
-
-            const result = await ApiService.APISaveProductList(CatalogID,fname,dtype)
-            console.log(result);
-            //if (result?.data) this.setProductList(result?.data)
-        } catch (e) {
-            this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
-
-    async testFunc(){
-        try{
-
-            const result = await ApiService.testFunc()
-            console.log(result);
-
-        } catch (e) {
-            this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
 
     getBasketFromID(shortId){
 
@@ -201,7 +176,15 @@ export default class ProductStore {
         else if (shortId <= 4133)  basket = '23'
         else if (shortId <= 4349)  basket = '24'
         else if (shortId <= 4565)  basket = '25'
-        else  basket = '26'
+        else if (shortId <= 4781)  basket = '26'
+        else if (shortId <= 4997)  basket = '27'
+        else if (shortId <= 5213)  basket = '28'
+        else if (shortId <= 5239)  basket = '29'
+        else if (shortId <= 5445)  basket = '30'
+        else if (shortId <= 5671)  basket = '31'
+        else if (shortId <= 5887)  basket = '32'
+        else if (shortId <= 6103)  basket = '33'
+        else  basket = '34'
 
         return basket
     }
@@ -223,8 +206,12 @@ export default class ProductStore {
 
     }
 
+
+
+
     async  getProductList(catalogID){
         try{
+
             const productList = await ApiService.APIGetProductList(catalogID)
 
             // Загрузим фотографии
@@ -432,7 +419,6 @@ export default class ProductStore {
             if (productAbout?.data) {
                 this.setNowId(productId)
                 if (productAbout.data?.info?.supplierId) this.setSupplierId(productAbout.data?.info?.supplierId)
-                console.log(productAbout);
                 this.setProductAbout(productAbout)
             }
 
@@ -445,6 +431,7 @@ export default class ProductStore {
         try{
             this.setProductInfo(null)
             const productInfo = await ApiService.APIGetProductInfo(productId)
+
             if (productInfo?.data) {
                 this.setProductInfo(productInfo?.data)
                 if (productInfo?.data[1]) {

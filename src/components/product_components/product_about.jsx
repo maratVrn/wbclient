@@ -176,7 +176,7 @@ const ProductAbout = (props) => {
                     <div className="product_color">цвет : {data.nm_colors_names}</div>
                     {
                         colors.length > 1 ?
-                            <div style={{height: '80px', paddingTop: '10px', maxWidth:'300px'}}>
+                            <div style={{height: '80px', paddingTop: '10px', maxWidth:'500px'}}>
 
                                 <Carousel
 

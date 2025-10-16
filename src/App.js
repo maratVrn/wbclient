@@ -27,7 +27,7 @@ function App() {
 
     useEffect(()=>{
 
-        console.log('Главный useEffect');
+        // console.log('Главный useEffect');
 
         // serverUpdateStore.getCurrServerInfo().then(() => {})
         // const timer = setInterval(() => {
@@ -42,11 +42,11 @@ function App() {
         // };
 
 
-        catalogStore.getLiteWBCatalog().then(() => {
-                console.log('Загрузили каталог');
-
-            }
-        )
+        // catalogStore.getLiteWBCatalog().then(() => {
+        //         console.log('Загрузили каталог');
+        //
+        //     }
+        // )
 
         // console.log('Загрузка стартовых данных');
         //
@@ -70,6 +70,7 @@ function App() {
                 <Route path="/" element={<MainPage/>}/>
                 <Route path="/products/:id" element={<ProductList/>}/>
                 <Route path="/productInfo/:id" element={<ProductInfo/>}/>
+                <Route path="/productList/:query" element={<ProductList/>}/>
                 <Route path="/productSupplierInfo/:id" element={<ProductsSupplierInfo/>}/>
                 <Route path="/competitorInfo/:id" element={<CompetitorInfo/>}/>
 

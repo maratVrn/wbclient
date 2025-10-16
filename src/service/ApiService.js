@@ -67,6 +67,20 @@ export default class ApiService {
         return $api_client.get(`/getProductList/${parseInt(catalogID)}`)
     }
 
+    static async APIGetSearchResult(searchQuery, pageCount = 1):Promise{
+        return $api_client.post(`/getSearchResult`,
+            {
+                searchQuery :   searchQuery,
+                pageCount   :   pageCount,
+
+            }
+        )
+
+
+    }
+
+
+
     static async APIGetProductColorsInfo(id):Promise{
         return $api_client.get(`/getProductColorsInfo/${parseInt(id)}`)
     }
