@@ -1,6 +1,6 @@
 import ApiService from "../service/ApiService";
 import {makeAutoObservable} from "mobx";
-
+import WbService from "../service/WbService";
 
 export default class ProductStore {
     productList = []
@@ -147,75 +147,13 @@ export default class ProductStore {
     }
 
 
-    getBasketFromID(shortId){
-
-        let basket = ''
-        if (shortId <= 143) { basket = '01'}
-        else if (shortId <= 287)   basket = '02'
-        else if (shortId <= 431)   basket = '03'
-        else if (shortId <= 719)   basket = '04'
-        else if (shortId <= 1007)  basket = '05'
-        else if (shortId <= 1061)  basket = '06'
-        else if (shortId <= 1115)  basket = '07'
-        else if (shortId <= 1169)  basket = '08'
-        else if (shortId <= 1313)  basket = '09'
-        else if (shortId <= 1601)  basket = '10'
-        else if (shortId <= 1655)  basket = '11'
-        else if (shortId <= 1919)  basket = '12'
-        else if (shortId <= 2045)  basket = '13'
-        else if (shortId <= 2090)  basket = '14'
-        else if (shortId <= 2189)  basket = '14'
-        else if (shortId <= 2405)  basket = '15'
-        else if (shortId <= 2621)  basket = '16'
-        else if (shortId <= 2837)  basket = '17'
-        else if (shortId <= 3053)  basket = '18'
-        else if (shortId <= 3269)  basket = '19'
-        else if (shortId <= 3485)  basket = '20'
-        else if (shortId <= 3701)  basket = '21'
-        else if (shortId <= 3917)  basket = '22'
-        else if (shortId <= 4133)  basket = '23'
-        else if (shortId <= 4349)  basket = '24'
-        else if (shortId <= 4565)  basket = '25'
-        else if (shortId <= 4781)  basket = '26'
-        else if (shortId <= 4997)  basket = '27'
-        else if (shortId <= 5213)  basket = '28'
-        else if (shortId <= 5239)  basket = '29'
-        else if (shortId <= 5445)  basket = '30'
-        else if (shortId <= 5671)  basket = '31'
-        else if (shortId <= 5887)  basket = '32'
-        else if (shortId <= 6103)  basket = '33'
-        else  basket = '34'
-
-        return basket
-    }
-
-    getLitePhotoUrl(id){
-        const shortId = Math.floor(id / 100000)
-        const part = Math.floor(id / 1000)
-        const basket = this.getBasketFromID(shortId)
-        return `https://basket-${basket}.wbbasket.ru/vol${shortId}/part${part}/${id}/images/c516x688/1.webp`
-    }
-
-    // Подгрузим фотографии
-    async getProductListLitePhoto(productList) {
-        for (let i in productList?.data) {
-            if (productList.data[i].id) {
-                productList.data[i].photoUrl = this.getLitePhotoUrl(productList.data[i].id)
-            }
-        }
-
-    }
-
-
-
-
     async  getProductList(catalogID){
         try{
 
             const productList = await ApiService.APIGetProductList(catalogID)
 
-            // Загрузим фотографии
-            await this.getProductListLitePhoto(productList)
+            // // Загрузим фотографии
+            // await this.getProductListLitePhoto(productList)
 
             // Отсортирум по продажам
             if (productList?.data) {
@@ -375,10 +313,25 @@ export default class ProductStore {
     // Получаем информацию про ИД - 1. есть ли он на вб 2. Есть ли он в нашей базе
     async  getProductStartInfo(productId){
         try{
-            this.idInfo ={isInWB : false, isInBase : false, isFbo : false}
+            this.idInfo ={isInWB : false, isInBase : false}
             const newIdInfo = await ApiService.APIGetProductStartInfo(productId)
+
             if (newIdInfo?.data) {
+
+                if (newIdInfo?.data?.productInfo?.priceHistory[0]?.d) this.startDateInBase = newIdInfo?.data?.productInfo?.priceHistory[0]?.d
+                    else this.startDateInBase = 'нет данных'
+
+                if (newIdInfo?.data?.idInfoWB?.price) if (newIdInfo?.data?.idInfoWB?.price>0){
+                    const dt = new Date().toLocaleDateString()
+                    const nowPrice =  {d: dt, sp: newIdInfo?.data?.idInfoWB?.price, q:newIdInfo?.data?.idInfoWB?.totalQuantity? newIdInfo?.data?.idInfoWB?.totalQuantity : 0}
+                    if (newIdInfo?.data?.productInfo?.priceHistory.at(-1).d === dt) newIdInfo?.data?.productInfo?.priceHistory.pop()
+                    newIdInfo?.data?.productInfo?.priceHistory.push(nowPrice)
+                }
+
+
                 this.idInfo = newIdInfo?.data
+
+
 
             }
 
@@ -391,10 +344,9 @@ export default class ProductStore {
     async  getProductPhoto(productId){
         try{
             this.setPhotoUrlArray([])
-            const productPhoto = await ApiService.APIGetProductPhoto(productId)
-
-            if (productPhoto?.data) {
-                this.setPhotoUrlArray(productPhoto?.data)
+            const productPhoto = await WbService.loadPhotoUrl(productId)
+            if (productPhoto) {
+                this.setPhotoUrlArray(productPhoto)
             }
 
         } catch (e) {
@@ -403,12 +355,6 @@ export default class ProductStore {
         }
     }
 
-    async getMathData(id){
-        console.log('запрос матем с сервака по id '+id);
-        const mathResult = await ApiService.getMathData(id)
-        console.log(mathResult);
-
-    }
 
     async  getProductAbout(productId){
         try{
@@ -435,9 +381,22 @@ export default class ProductStore {
             if (productInfo?.data) {
                 this.setProductInfo(productInfo?.data)
                 if (productInfo?.data[1]) {
-                    this.setProductInfo(productInfo?.data[1])
+                    // this.setProductInfo(productInfo?.data[1])
                     if (productInfo?.data[1]?.priceHistory[0]?.d) this.startDateInBase = productInfo?.data[1]?.priceHistory[0]?.d
-                } else this.startDateInBase = 'нет в данных'
+
+                    if (productInfo?.data[1].price) if (productInfo?.data[1].price >0 )
+                    {
+                        const dt = new Date().toLocaleDateString()
+                        const nowPrice =  {d: dt, sp: productInfo?.data[1].price, q:productInfo?.data[1]?.totalQuantity? productInfo?.data[1]?.totalQuantity : 0}
+                        if (productInfo?.data[1]?.priceHistory.at(-1).d === dt) productInfo?.data[1]?.priceHistory.pop()
+                        productInfo?.data[1]?.priceHistory.push(nowPrice)
+
+                    }
+
+                    this.setProductInfo(productInfo?.data[1])
+                } else this.startDateInBase = 'нет данных'
+
+                // this.setProductInfo(productInfo?.data)
             }
         } catch (e) {
             // this.setErrorMessage(e.response?.data?.message)

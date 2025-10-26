@@ -68,10 +68,10 @@ const ProductList = (props) => {
 
     let { query } = useParams();
 
-    function getSearchResult(query, newInfo = true, useFilters = false, filter) {
+    function getSearchResult(query, newInfo = true) {
 
         let pageCount = 1
-        productListStore.getSearchResult(query, newInfo,pageCount,  useFilters , filter).then(() => {
+        productListStore.getSearchResult(query, newInfo,pageCount).then(() => {
             setItems(productListStore.productList)
 
             if (productListStore.totalWBProductsCount === 1) navigate('/productInfo/' + query.toString())
@@ -79,6 +79,7 @@ const ProductList = (props) => {
     }
 
     useEffect(()=>{
+        setItems([])
         getSearchResult(query)
     }, [query])
 

@@ -212,6 +212,7 @@ export default class CatalogStore {
         try{
             this.setIdInfo([])
             const result = await ApiService.APIGetIDInfo(id)
+            console.log(result.data);
             if (result.data[0]?.id) this.setIdInfo(result.data)
         } catch (e) {
             this.setErrorMessage(e.response?.data?.message)

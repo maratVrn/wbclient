@@ -26,22 +26,14 @@ const ProductData = (props) => {
         // console.log('useEffect ProductData ');
 
         if (isInBase)
+            if (productStore.idInfo.productInfo?.priceHistory)
 
-        if (id>0) productStore.getProductInfo(id).then(() => {
-
-            if (productStore.productInfo) {
                 calcData(selectedDays.daysCount)
-
-
-            }
-        })
-
-
 
     }, [id, isInBase]);
 
     function calcData(daysCount){
-        const [dateArray, priceArray,  resultData] = getPriceFromHistory(productStore.productInfo, daysCount, true)
+        const [dateArray, priceArray,  resultData] = getPriceFromHistory(productStore.idInfo?.productInfo?.priceHistory, daysCount, true)
         setProductInfo(resultData)
 
         const options = {
@@ -51,19 +43,43 @@ const ProductData = (props) => {
                 pointRadius: 1,
                 legend: {
                     display: false,
+
+
                 }
             },
             scales: {
 
                 y: {
                     stacked: true,
-                    display: false,
+                    display: true,
                     // beginAtZero: true
                 },
                 x: {
+                    ticks: {
+                        display: true,
+
+                        callback: function(value, index, ticks) {
+                            let label = null
+                            try{
+                                const d_arr = dateArray[index].split('.')
+                                if (d_arr[0] === '15') {
+                                    let months = [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                                        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ];
+                                    let mId = parseInt(d_arr[1]) -1
+                                    label = months[mId]
+                                }
+                            } catch (e){}
+
+                            return label;
+                        }
+                    },
+                    grid: {
+                        display: false,
+                        // color : 'rgba(193,150,73,0.5)',
+                        drawBorder: true
+                    },
+                    beginAtZero: true,
                     stacked: true,
-                    display: false,
-                    // beginAtZero: true
                 }
             }
         };

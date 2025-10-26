@@ -4,7 +4,6 @@ import { Carousel } from 'primereact/carousel';
 import {useNavigate} from "react-router-dom";
 import 'primeicons/primeicons.css';
 import { Tooltip } from 'primereact/tooltip';
-import ApiService from "../../service/ApiService";
 
 
 
@@ -107,6 +106,7 @@ const ProductAbout = (props) => {
     return (
 
         <div>
+            {productStore.idInfo?.idInfoWB?.price? productStore.idInfo?.idInfoWB?.price : ''}
             {isInWB ?
                 <div>
                     <div className="product_name">{data.imt_name}</div>

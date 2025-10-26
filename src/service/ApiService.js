@@ -75,8 +75,14 @@ export default class ApiService {
 
             }
         )
+    }
 
-
+    static async APIUpdateIdInfo(idList = []):Promise{
+        return $api_client.post(`/updateIdInfo`,
+            {
+                idList :   idList,
+            }
+        )
     }
 
 
@@ -164,9 +170,7 @@ export default class ApiService {
 
         return  result
     }
-    static async APIGetProductPhoto(id):Promise{
-        return $api_client.get(`/getProductPhoto/${parseInt(id)}`)
-    }
+
 
     static async APIGetProductStartInfo(id):Promise{
         return $api_client.get(`/getProductStartInfo/${parseInt(id)}`)

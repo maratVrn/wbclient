@@ -32,11 +32,6 @@ const ProductInfo =observer( (props ) => {
 
     function getIdInfo(id){
         if (id > 0) {
-            catalogStore.getIdInfo(id).then(() => {
-
-                }
-            )
-            productStore.setState(id)
             if (parseInt(id) > 0) {
                 productStore.getProductStartInfo(id).then(() => {
                         setIsInWB(productStore.idInfo.isInWB)
@@ -46,6 +41,9 @@ const ProductInfo =observer( (props ) => {
                     }
                 )
             }
+
+            productStore.setState(id)
+
         }
     }
 
@@ -66,22 +64,7 @@ const ProductInfo =observer( (props ) => {
                 </div>
 
                 <ProductData id={id} isInBase={isInBase}/>
-                {/*<ProductYearData id={id} isFbo={false} isInBase={isInBase}/>*/}
 
-                {/*<div className="responsive-three-column-grid">*/}
-
-                {/*    < div className="borderOne">*/}
-                {/*        <ProductPhoto id={id} isInWB={isInWB} isInBase={isInBase}/>*/}
-                {/*    </div>*/}
-                {/*    < div className="borderOne">*/}
-                {/*        <ProductAbout id={id} isInWB={isInWB} isInBase={isInBase}/>*/}
-                {/*    </div>*/}
-
-                {/*    < div className="borderOne">*/}
-                {/*        <ProductData id={id} isInBase={isInBase}/>*/}
-                {/*    </div>*/}
-
-                {/*</div>*/}
             </div>
 
             <div style={{height: '100px'}}></div>
