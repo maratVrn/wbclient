@@ -33,7 +33,7 @@ const ProductData = (props) => {
     }, [id, isInBase]);
 
     function calcData(daysCount){
-        const [dateArray, priceArray,  resultData] = getPriceFromHistory(productStore.idInfo?.productInfo?.priceHistory, daysCount, true)
+        const [dateArray, priceArray,  resultData] = getPriceFromHistory(productStore.idInfo?.productInfo?.priceHistory, daysCount)
         setProductInfo(resultData)
 
         const options = {

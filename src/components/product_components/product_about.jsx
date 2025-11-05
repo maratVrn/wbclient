@@ -4,60 +4,47 @@ import { Carousel } from 'primereact/carousel';
 import {useNavigate} from "react-router-dom";
 import 'primeicons/primeicons.css';
 import { Tooltip } from 'primereact/tooltip';
+import {calcDiscount} from "../math";
 
 
 
 const ProductAbout = (props) => {
     const {id, isInWB} = props;
-
     const {productStore} = useContext(Context)
-    const [colors, setColors] = useState([])
-    const [data, setData] = useState([])
-    const [startDate, setStartSate] = useState('')
     const [info, setInfo] = useState([])
     const [qty, setQty] = useState([])
     const navigate = useNavigate();
-    const {catalogStore} = useContext(Context)
+
 
     useEffect(()=>{
         // console.log('useEffect ProductAbout');
         // console.log('isInWB ProductAbout '+isInWB);
 
-        setColors([])
-        setStartSate('')
-        setData([])
+
         setInfo([])
         setQty([])
         if (productStore.idInfo.isInWB)
         if (parseInt(id)>0) {
+            const result = calcDiscount(productStore.idInfo?.productInfo?.priceHistory)
+            console.log(result);
             productStore.getProductAbout(id).then(() => {
-                if (productStore.productAbout?.data) {
-
                     try {
-                        setStartSate(productStore.startDateInBase)
-                        setColors(productStore.productAbout.data.colors)
-                        setData(productStore.productAbout.data.data)
-                        setInfo(productStore.productAbout.data.info);
-
+                        setInfo(productStore.idInfo.idInfoWB);
                         // Расчитаем остатки
                         let allQty = []
-                        if (productStore.productAbout?.data?.info?.sizes)
-                            for (let k in productStore.productAbout.data.info.sizes) {
-                                let oneSize = {name: productStore.productAbout.data.info.sizes[k].name, qty: 0}
-                                for (let i in productStore.productAbout.data.info.sizes[k].stocks)
-                                    try {
-                                        oneSize.qty += productStore.productAbout.data.info.sizes[k].stocks[i].qty
-                                    } catch (e) {
-                                    }
-
-                                allQty.push(oneSize)
-                            }
-
-                        if (allQty.length > 1) setQty(allQty)
+                        const sizes =  productStore.idInfo?.idInfoWB?.sizes? productStore.idInfo?.idInfoWB?.sizes : []
+                        for (let k in sizes) {
+                            let oneSize = {name: sizes[k].name, qty: 0}
+                            for (let i in sizes[k].stocks)
+                                try {
+                                    oneSize.qty += sizes[k].stocks[i].qty
+                                } catch (e) {}
+                            allQty.push(oneSize)
+                        }
+                        if (allQty.length > 0)  if (allQty.length > 1) setQty(allQty)
                         else setQty(allQty[0].qty)
-                    } catch (e){console.log(e)}
-                }
 
+                    } catch (e){console.log(e)}
             })
         }
     },[id, isInWB])
@@ -106,26 +93,26 @@ const ProductAbout = (props) => {
     return (
 
         <div>
-            {productStore.idInfo?.idInfoWB?.price? productStore.idInfo?.idInfoWB?.price : ''}
+
             {isInWB ?
                 <div>
-                    <div className="product_name">{data.imt_name}</div>
+                    <div className="product_name">{productStore.idAddInfo.imt_name}</div>
 
                     <div className="card-price">
                         <div className="price-low " style={{marginLeft: '10px'}}>
-                            <span>{info.price > 0 ? info.price : 'Нет в наличии'}</span>
+                            <span>{info?.price > 0 ? info.price : 'Нет в наличии'}</span>
                         </div>
-                        {(info.discount !== 0) ?
+                        {(info?.discount !== 0) ?
                             <div className="price-max ">
-                                <span><del>{info.basicPrice} ₽</del></span>
+                                <span><del>{info?.basicPrice} ₽</del></span>
                             </div>
                             : <div></div>
                         }
 
-                        {(info.discount !== 0) ?
+                        {(info?.discount !== 0) ?
                             <div style={{marginLeft: '10px'}}>
                                 <div className="product_discount_wb_text ">
-                                    <span> {info.discount} % Скидка на Wildberries</span>
+                                    <span> {info?.discount? info?.discount : ''} % Скидка на WB</span>
                                 </div>
                             </div>
                             : <div></div>
@@ -151,7 +138,7 @@ const ProductAbout = (props) => {
                     {/*        </i>*/}
                     {/*    </div>*/}
                     {/*</div>*/}
-                    <span className="product-brand"> Возраст товара: {startDate}</span>
+                    <span className="product-brand"> Возраст товара: {productStore.startDateInBase}</span>
 
                     <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
                     <i className="custom-target-icon pi pi-info-circle "
@@ -160,27 +147,27 @@ const ProductAbout = (props) => {
 
                     </i>
                     <div className="card-price">
-                        <span className="product-brand"> Бренд: {info.brand} </span>
+                        <span className="product-brand"> Бренд: {info?.brand} </span>
 
                     </div>
                     <div className="card-price">
-                        <span className="product-brand"> Продавец: {info.supplier} </span>
+                        <span className="product-brand"> Продавец: {info?.supplier} </span>
                     </div>
 
 
                     <div className="card-price" style={{marginTop: '10px'}}>
                         <span className="product-rate">  </span>
-                        <span className="product-rate2"> {info.reviewRating} </span>
-                        <span className="product-rate3"> {info.feedbacks} оценок </span>
+                        <span className="product-rate2"> {info?.reviewRating} </span>
+                        <span className="product-rate3"> {info?.feedbacks} оценок </span>
                     </div>
-                    <div className="product_color">цвет : {data.nm_colors_names}</div>
+                    <div className="product_color">цвет : {productStore.idAddInfo.nm_colors_names}</div>
                     {
-                        colors.length > 1 ?
+                        productStore.colors.length > 1 ?
                             <div style={{height: '80px', paddingTop: '10px', maxWidth:'500px'}}>
 
                                 <Carousel
 
-                                    value={colors}
+                                    value={productStore.colors}
                                     responsiveOptions={responsiveOptions}
                                     numVisible={6}
                                     showIndicators={false}
@@ -200,13 +187,13 @@ const ProductAbout = (props) => {
                                             // onClick={() => console.log(color.id)}
                                         >
                                             <div style={{paddingTop: '5px'}}> {size.name}</div>
-                                            <div className="product_size_count"> {size?.qty} шт.</div>
+                                            <div className="product_size_count"> {size?.qty >59 ? '>'+ size?.qty :size?.qty} шт.</div>
                                         </div>)}
                                 </div>
                             </div>
                             :
                             <div style={{marginTop: '20px'}}>
-                                <div className="product_size_text">Остатки сейчас: {qty} шт.</div>
+                                <div className="product_size_text">Остатки сейчас: {qty >59 ? '   > '+ qty :qty} шт.</div>
 
                             </div>
                     }

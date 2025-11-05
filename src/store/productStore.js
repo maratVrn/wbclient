@@ -8,7 +8,7 @@ export default class ProductStore {
     positionsInfo = []
     priceHistory = []
     photoUrlArray = []
-    productAbout = []
+    // productAbout = []
     productColorsInfo = []
     supplierInfo = []
     supplierAbout = {}
@@ -19,6 +19,9 @@ export default class ProductStore {
 
     idInfo = {isInWB : false, isInBase : false, isFbo : false}
     startDateInBase = ''
+    colors = []
+    idAddInfo = {imt_name : '', nm_colors_names : ''}
+
     is_all_colors_Load = false          //  Чтобы не перегружать лишнюю инфу при переходе по табам
     is_supplier_info_Load = false
     is_positions_info_Load = false
@@ -33,15 +36,12 @@ export default class ProductStore {
     productYearCalcData_allColors = {} // Рассчитанные данные по продажам продукта за год по всем цветам
     allDataDoughnut = {data : [], labels : [], count : [[]], money : [[]]} // Данные для круговой диаграммы продаж
 
-    productYearCalcData_allSupplier = {} // Рассчитанные данные по продажам продукта за год по всем цветам
-    allDataDoughnut_Supplier = {data : [], labels : [], count : [[]], money : [[]]} // Данные для круговой диаграммы продаж
+
 
     constructor() {
         makeAutoObservable((this))
     }
-    setProductYearCalcData_allSupplier(productYearCalcData_allSupplier) {
-        this.productYearCalcData_allSupplier = productYearCalcData_allSupplier
-    }
+
 
     setProductYearCalcData(productYearCalcData) {
         this.productYearCalcData = productYearCalcData
@@ -133,11 +133,6 @@ export default class ProductStore {
     }
 
 
-    setProductAbout(productAbout){
-        this.productAbout = productAbout
-    }
-
-
     setPhotoUrlArray (urlArray){
         this.photoUrlArray = urlArray
     }
@@ -157,7 +152,7 @@ export default class ProductStore {
 
             // Отсортирум по продажам
             if (productList?.data) {
-                productList?.data.sort(function(a, b) {  return b.saleCount - a.saleCount; });
+                // productList?.data.sort(function(a, b) {  return b.saleCount - a.saleCount; });
                 this.setProductList(productList?.data)
             }
 
@@ -181,8 +176,7 @@ export default class ProductStore {
                 price        : data[i].productInfo?.price? data[i].productInfo?.price : 0,
                 priceHistory : data[i].productInfo?.priceHistory? data[i].productInfo?.priceHistory : 0,
                 qty          : data[i].productInfo?.totalQuantity? data[i].productInfo?.totalQuantity : 0,
-                saleCount    : data[i].productInfo?.saleCount? data[i].productInfo?.saleCount : 0,
-                saleMoney    : data[i].productInfo?.saleMoney? data[i].productInfo?.saleMoney : 0,
+                discount    : data[i].productInfo?.discount? data[i].productInfo?.discount : 0
             }
 
             result.push(oneItem)
@@ -318,7 +312,7 @@ export default class ProductStore {
 
             if (newIdInfo?.data) {
 
-                if (newIdInfo?.data?.productInfo?.priceHistory[0]?.d) this.startDateInBase = newIdInfo?.data?.productInfo?.priceHistory[0]?.d
+                if (newIdInfo?.data?.productInfo?.priceHistory.length>0) if (newIdInfo?.data?.productInfo?.priceHistory[0]?.d) this.startDateInBase = newIdInfo?.data?.productInfo?.priceHistory[0]?.d
                     else this.startDateInBase = 'нет данных'
 
                 if (newIdInfo?.data?.idInfoWB?.price) if (newIdInfo?.data?.idInfoWB?.price>0){
@@ -327,11 +321,7 @@ export default class ProductStore {
                     if (newIdInfo?.data?.productInfo?.priceHistory.at(-1).d === dt) newIdInfo?.data?.productInfo?.priceHistory.pop()
                     newIdInfo?.data?.productInfo?.priceHistory.push(nowPrice)
                 }
-
-
                 this.idInfo = newIdInfo?.data
-
-
 
             }
 
@@ -359,14 +349,13 @@ export default class ProductStore {
     async  getProductAbout(productId){
         try{
 
-            this.setProductAbout(null)
-            const productAbout = await ApiService.APIGetProductAbout(productId)
+            // this.setProductAbout(null)
+            this.colors = []
+            this.idAddInfo = {imt_name : '', nm_colors_names : ''}
+            const data = await WbService.WB_APIGetIdColors(productId)
 
-            if (productAbout?.data) {
-                this.setNowId(productId)
-                if (productAbout.data?.info?.supplierId) this.setSupplierId(productAbout.data?.info?.supplierId)
-                this.setProductAbout(productAbout)
-            }
+            if (data.colors) this.colors = data.colors
+            this.idAddInfo = {imt_name : data.imt_name? data.imt_name : '', nm_colors_names : data.nm_colors_names? data.nm_colors_names : ''}
 
         } catch (e) {
             console.log(e)

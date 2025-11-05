@@ -2,6 +2,7 @@ import ApiService from "../service/ApiService";
 import WbService from "../service/WbService";
 
 import {makeAutoObservable} from "mobx";
+import {calcDiscount} from "../components/math";
 
 
 
@@ -62,11 +63,10 @@ export default class ProductListStore {
             this.query = searchQuery
             if (newInfo) this.setStartData()
 
-            // const searchResult = await ApiService.APIGetSearchResult(searchQuery,pageCount)
+
             const searchResult = await WbService.WB_APIGetSearchResult(searchQuery,pageCount)
             const updateIdInfo = await ApiService.APIUpdateIdInfo(searchResult.data.onlyIdList)
-            // console.log(updateIdInfo);
-            // console.log(searchResult);
+
             if (newInfo) this.setStartData()
 
             if (searchResult.data?.idList){
@@ -77,17 +77,40 @@ export default class ProductListStore {
 
                         for (let j in updateIdInfo.data) if (updateIdInfo.data[j].id === searchResult.data.idList[i].id){
                             searchResult.data.idList[i].price = updateIdInfo.data[j].price
+                            searchResult.data.idList[i].totalQuantity = updateIdInfo.data[j].totalQuantity
                             searchResult.data.idList[i].photoUrl = updateIdInfo.data[j].photoUrl
+                            searchResult.data.idList[i].priceHistory =  updateIdInfo.data[j].priceHistory
+                            const result =  calcDiscount(searchResult.data.idList[i].priceHistory)
+                            searchResult.data.idList[i].isDataCalc = result.isDataCalc
+                            searchResult.data.idList[i].discount = result.discount
+                            searchResult.data.idList[i].meanPrice = result.meanPrice
 
                             break}
                     }
+
+
                 }
+
+
             }
 
-            this.productList = searchResult.data?.idList? searchResult.data?.idList : []
+            searchResult.data.idList.sort(function(a, b) {  return a.discount - b.discount; });
+            let resProductList = []
+
+
+
+
+            if (searchResult.data?.idList)
+                for (let i = searchResult.data.idList.length-1; i>=0; i-- )
+                    if (searchResult.data.idList[i].price >0 ) resProductList.push(searchResult.data.idList[i])
+
+            console.log('кол = '+resProductList.length);
+
+
+            this.productList = resProductList
             this.addQuery  = searchResult.data?.addQuery? searchResult.data?.addQuery : []
             this.totalWBProductsCount = searchResult.data?.data?.total? searchResult.data?.data.total : 0
-            if (newInfo) if (searchResult.data?.data?.filters) this.setFilters(searchResult.data?.data?.filters)
+            // if (newInfo) if (searchResult.data?.data?.filters) this.setFilters(searchResult.data?.data?.filters)
 
 
 

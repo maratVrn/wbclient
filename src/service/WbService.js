@@ -73,6 +73,70 @@ export default class WbService {
         return photoUrl
     }
 
+    static async WB_APIGetIdColors(id){
+
+        const shortId = Math.floor(id / 100000)
+        const part = Math.floor(id / 1000)
+        const basket = this.PARSER_GetBasketFromID(shortId)
+        const url = `https://basket-${basket}.wbbasket.ru/vol${shortId}/part${part}/${id}/info/ru/card.json`
+        const productData = await this.PARSER_GetIAbout(url)
+
+
+        return productData
+    }
+
+    static getLittleProductPhoto(id){
+        const shortId = Math.floor(id / 100000)
+        const part = Math.floor(id / 1000)
+        const basket = this.PARSER_GetBasketFromID(shortId)
+        return `https://basket-${basket}.wbbasket.ru/vol${shortId}/part${part}/${id}/images/tm/1.webp`
+    }
+
+
+    static async PARSER_GetIAbout(url) {
+
+        let needGetData = true
+        let aboutData = {}
+        while (needGetData) {  // Делаем в цикле т.к. вдруг вылетит частое подключение к серверу то перезапустим
+            try {
+
+                const res =  await axios.get(url).then(response => {
+                    let resData = response.data
+
+                    try {
+
+                        const colors = []
+
+                        if (resData.colors) {
+                            let sortId = []
+                            if (resData.colors) sortId = resData.colors.sort((a, b) => a - b);
+
+                            for (let i in sortId) colors.push({
+                                id: sortId[i],
+                                photoUrl: this.getLittleProductPhoto(sortId[i])
+                            })
+                        }
+
+                        const data = {
+                            imt_name        : resData.imt_name? resData.imt_name : '',
+                            nm_colors_names : resData.nm_colors_names? resData.nm_colors_names : '',
+                            colors          : colors
+
+                        }
+                        aboutData = data
+
+
+                    } catch (err) {console.log(err);                  }
+
+
+                })
+
+                needGetData = false
+
+            }  catch (err)  {needGetData = await this.view_error(err, 'PARSER_GetIAbout', 'url = '+url)}
+        }
+        return aboutData
+    }
 
     static async WB_APIGetSearchResult(searchQuery,pageCount){
         let idList = []
@@ -88,16 +152,16 @@ export default class WbService {
         let needGetNextProducts = true
 
 
-        // Получим фильтры
-        while (needGetData) {
-            let url = `https://u-search.wb.ru/exactmatch/ru/common/v18/search?dest=-1255987&query=`+ searchQuery+`&resultset=filters&spp=30&suppressSpellcheck=false`
-            // console.log(url);
-            url = encodeURI(url)
-            await axios.get(url).then(response => {
-                data = response.data?.data? response.data.data : []
-            })
-            needGetData = false
-        }
+        // // Получим фильтры
+        // while (needGetData) {
+        //     let url = `https://u-search.wb.ru/exactmatch/ru/common/v18/search?dest=-1255987&query=`+ searchQuery+`&resultset=filters&spp=30&suppressSpellcheck=false`
+        //     // console.log(url);
+        //     url = encodeURI(url)
+        //     await axios.get(url).then(response => {
+        //         data = response.data?.data? response.data.data : []
+        //     })
+        //     needGetData = false
+        // }
 
         // // TODO: Если не находит по ИД один товар то можно пробовать проверять через баскет информацию
         // needGetData = true
@@ -114,19 +178,19 @@ export default class WbService {
 
 
         // Получим доп ссылки
-        needGetData = true
-        while (needGetData) {
-            let url = `https://u-search-tags.wb.ru/search-tags/api/v2/search/query?query=` + searchQuery
-            url = encodeURI(url)
-            try {
-                await axios.get(url).then(response => {
-                    addQuery = response.data?.query ? response.data.query : []
-                })
-                needGetData = false
-            } catch (err) {
-                needGetData = await this.view_error(err, 'LoadIdListBySearchParam', 'getAddQuery')
-            }
-        }
+        // needGetData = true
+        // while (needGetData) {
+        //     let url = `https://u-search-tags.wb.ru/search-tags/api/v2/search/query?query=` + searchQuery
+        //     url = encodeURI(url)
+        //     try {
+        //         await axios.get(url).then(response => {
+        //             addQuery = response.data?.query ? response.data.query : []
+        //         })
+        //         needGetData = false
+        //     } catch (err) {
+        //         needGetData = await this.view_error(err, 'LoadIdListBySearchParam', 'getAddQuery')
+        //     }
+        // }
         // Получим списки товаров
         needGetData = true
 
@@ -141,11 +205,17 @@ export default class WbService {
                     //     searchQuery+`&resultset=catalog&spp=30&`
 
                     let  url2 = `https://u-search.wb.ru/exactmatch/ru/common/v18/search?dest=-1255987&page=${page}&query=`+
-                        searchQuery+`&resultset=catalog&spp=30&`
-
+                        searchQuery+`&resultset=catalog`
+                    console.log('tut');
                     url2 = encodeURI(url2)
 
-                    await axios.get(url2).then(response => {
+                    await axios.get(url2, {
+                        headers: { "Content-Type": "application/json; charset=UTF-8" ,
+                            // "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:144.0) Gecko/20100101 Firefox/144.0",
+                            // "Access-Control-Allow-Origin": "*"
+                        }
+
+                    }).then(response => {
                         const products = response.data?.products? response.data?.products : []
                         if (products) {
 
@@ -267,8 +337,9 @@ export default class WbService {
         const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
         let needGetData = false
-        // console.log(err.code)
-        await delay(50);
+        console.log(funcName)
+        console.log(funcParam)
+        await delay(100);
         errorCount += 1
         if (errorCount <= maxErrorCount){
             needGetData = true

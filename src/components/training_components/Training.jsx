@@ -31,13 +31,13 @@ const Training = observer(  () => {
     const [updateAll, setUpdateAll] = useState(false);
 
     useEffect(() => {
-        // console.log('Запросили стартовое состояние')
-        // serverUpdateStore.getCurrServerInfo().then(() => {})
-        // const timer = setInterval(() => {
-        //     // console.log('Запросили промежуточное состояние')
-        //     serverUpdateStore.getCurrServerInfo().then(() => {})
-        // }, 1000);
-        // return () => clearTimeout(timer);
+        console.log('Запросили стартовое состояние')
+        serverUpdateStore.getCurrServerInfo().then(() => {})
+        const timer = setInterval(() => {
+            // console.log('Запросили промежуточное состояние')
+            serverUpdateStore.getCurrServerInfo().then(() => {})
+        }, 1000);
+        return () => clearTimeout(timer);
     }, []);
 
     async function startLoadNewProducts() {

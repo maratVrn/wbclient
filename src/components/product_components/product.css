@@ -3,7 +3,7 @@
     display: flex;
     /*align-items: center;*/
     justify-content: center;
-
+    height: 500px;
 
 }
 .main_item {
@@ -143,7 +143,7 @@ h2{
 .little_photo{
     cursor : pointer;
     /*height: 70%;*/
-    /*height: 30px;*/
+    height: 100px;
     margin-left: 5px;
     width: 90%;
     object-fit: contain;
@@ -236,7 +236,8 @@ h2{
 
 .main_photo_div
 {
-    width:85%;
+    width:75%;
+
     margin:5px;
     aspect-ratio: 3/4;
 }

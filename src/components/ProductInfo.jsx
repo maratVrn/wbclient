@@ -32,6 +32,9 @@ const ProductInfo =observer( (props ) => {
 
     function getIdInfo(id){
         if (id > 0) {
+            // console.log('getIdInfo Id = '+id);
+            setIsInWB(false)
+            setIsInBase(false)
             if (parseInt(id) > 0) {
                 productStore.getProductStartInfo(id).then(() => {
                         setIsInWB(productStore.idInfo.isInWB)

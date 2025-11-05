@@ -452,7 +452,7 @@ function getDataFromHistory (productInfo, daysCount = 30, isFbs = true, calcYear
     return [dateArray, quantityArray, saleArray, salePriceArray,addQuantityArray, returnArray, resultData]
 }
 
-function getPriceFromHistory (history = [], dayCount = 30,  calcYear = false ){
+function getPriceFromHistory (history = [], dayCount = 30 ){
 
 
     let startDateInBase = ''                        // С Какой даты товар в базе
@@ -471,6 +471,8 @@ function getPriceFromHistory (history = [], dayCount = 30,  calcYear = false ){
         crHistory = history[0]
         AllHistory.push({d:crHistory.d, sp: crHistory.sp})
     }
+
+
     for (let i =1 ; i<history.length; i++){
 
         let needNextDay = true
@@ -478,20 +480,30 @@ function getPriceFromHistory (history = [], dayCount = 30,  calcYear = false ){
         while (needNextDay){
             counter++
             crDate.setDate(crDate.getDate() + 1);
-            if (crDate.toLocaleDateString() === history[i].d){
-                crHistory = history[i]
-                AllHistory.push({d:crHistory.d, sp: crHistory.sp>0? crHistory.sp : AllHistory.at(-1).sp})
-                needNextDay = false
-            } else {
 
-                AllHistory.push({d:crDate.toLocaleDateString(), sp: crHistory.sp>0? crHistory.sp : AllHistory.at(-1).sp})
+            const s = history[i].d.split('.')
+            const nd = new Date(s[2]+'-'+s[1]+'-'+s[0]);
+
+
+            if (nd<crDate) needNextDay = false
+            else {
+                if (crDate.toLocaleDateString() === history[i].d) {
+
+                    crHistory = history[i]
+                    AllHistory.push({d: crHistory.d, sp: crHistory.sp > 0 ? crHistory.sp : AllHistory.at(-1).sp})
+                    needNextDay = false
+                } else {
+                    AllHistory.push({
+                        d: crDate.toLocaleDateString(),
+                        sp: crHistory.sp > 0 ? crHistory.sp : AllHistory.at(-1).sp
+                    })
+                }
+                if (counter > 365) needNextDay = false // Исключим случай если год не менялась цена
             }
-            if (counter>365) needNextDay = false // Исключим случай если год не менялась цена
+
+
         }
     }
-
-
-
 
     let needHistory = []
 
@@ -520,5 +532,31 @@ function getPriceFromHistory (history = [], dayCount = 30,  calcYear = false ){
     return [dateArray, priceArray,  resultData]
 }
 
+function calcDiscount (history = []){
+    const dayCalc = 90
+    const [dateArray, priceArray,  resultData] = getPriceFromHistory(history, dayCalc)
 
-export {getDataFromHistory,  formatCurrency, getDataFromHistoryYear, getPriceFromHistory}
+    let meanPrice90 = 0
+    let discount = 0
+    let isDataCalc = false
+
+    if (priceArray.length >= dayCalc) {
+
+        try {
+            for (let i in priceArray) meanPrice90 += priceArray[i]
+            meanPrice90 = Math.round(meanPrice90 / priceArray.length)
+            if (meanPrice90 > 0) {
+                discount = Math.round( 100*(meanPrice90 - priceArray.at(-1))/meanPrice90)
+                isDataCalc = true
+            }
+        } catch (e) {}
+
+
+    }
+
+    return {isDataCalc : isDataCalc, meanPrice : meanPrice90, discount : discount}
+}
+
+
+
+export {getDataFromHistory,  formatCurrency, getDataFromHistoryYear, getPriceFromHistory, calcDiscount}

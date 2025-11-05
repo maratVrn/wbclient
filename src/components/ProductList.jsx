@@ -1,8 +1,6 @@
 import React, {useContext, useEffect, useState, useRef } from 'react';
 import './page.css';
 import { OverlayPanel } from 'primereact/overlaypanel';
-import { Button } from 'primereact/button'
-import { Checkbox } from "primereact/checkbox";
 import {useNavigate, useParams} from "react-router-dom";
 import {Context} from "../index";
 import downSvg from "./images/down.svg";
@@ -70,7 +68,7 @@ const ProductList = (props) => {
 
     function getSearchResult(query, newInfo = true) {
 
-        let pageCount = 1
+        let pageCount = 5
         productListStore.getSearchResult(query, newInfo,pageCount).then(() => {
             setItems(productListStore.productList)
 
@@ -86,7 +84,6 @@ const ProductList = (props) => {
 
 
     function showProductInfo(id) {
-        // navigate('/productInfo/' + id.toString())
         window.open('/productInfo/' + id.toString())
     }
 
@@ -106,15 +103,15 @@ const ProductList = (props) => {
 
     return (
         <div className="page">
-            <div className=" flex align-items-center">
-                <h3 style={{marginLeft: '20px'}}>{query}</h3>
-                <p style={{
-                    marginTop: '10px',
-                    marginLeft: '20px',
-                    fontSize: '16px',
-                    color: '#83839a'
-                }}>{productListStore.totalWBProductsCount} товаров найдено</p>
-            </div>
+            {/*<div className=" flex align-items-center">*/}
+            {/*    <h3 style={{marginLeft: '20px'}}>{query}</h3>*/}
+            {/*    <p style={{*/}
+            {/*        marginTop: '10px',*/}
+            {/*        marginLeft: '20px',*/}
+            {/*        fontSize: '16px',*/}
+            {/*        color: '#83839a'*/}
+            {/*    }}>{productListStore.totalWBProductsCount} товаров найдено</p>*/}
+            {/*</div>*/}
 
             <div className=" flex  " style={{paddingTop: '20px'}}>
 
@@ -169,40 +166,40 @@ const ProductList = (props) => {
                     </div>
 
                 </OverlayPanel>
-                {
-                    productListStore.xsubjectFilter.items.length > 0 ?
-                        <>
-                            <button className="filter_button"
-                                    onClick={(e) => xsubjectFilter_op.current.toggle(e)}> Категория
-                                <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
-                            </button>
-                            <OverlayPanel ref={xsubjectFilter_op}>
-                                <div className="flex flex-column gap-3">
-                                    {productListStore.xsubjectFilter.items.map((filter) => {
-                                        return (
-                                            <div key={filter.key} className="flex align-items-center">
+                {/*{*/}
+                {/*    productListStore.xsubjectFilter.items.length > 0 ?*/}
+                {/*        <>*/}
+                {/*            <button className="filter_button"*/}
+                {/*                    onClick={(e) => xsubjectFilter_op.current.toggle(e)}> Категория*/}
+                {/*                <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>*/}
+                {/*            </button>*/}
+                {/*            <OverlayPanel ref={xsubjectFilter_op}>*/}
+                {/*                <div className="flex flex-column gap-3">*/}
+                {/*                    {productListStore.xsubjectFilter.items.map((filter) => {*/}
+                {/*                        return (*/}
+                {/*                            <div key={filter.key} className="flex align-items-center">*/}
 
-                                                <Checkbox inputId={filter.key} name="category" value={filter}
-                                                          onChange={onxXubjectFilterChange}
-                                                          checked={selectedXsubjectFilter.some((item) => item.key === filter.key)}/>
-                                                <label htmlFor={filter.key} className="ml-2">
-                                                    {filter.name}
-                                                </label>
-                                            </div>
-                                        );
-                                    })}
-                                    <button className="filter_button_ok" onClick={(e) => {
-                                        xsubjectFilter_op.current.toggle(e)
-                                        setNewData()
-                                    }}> Применить
-                                    </button>
-                                </div>
-                            </OverlayPanel>
-                        </>
-                        :
-                        <></>
+                {/*                                <Checkbox inputId={filter.key} name="category" value={filter}*/}
+                {/*                                          onChange={onxXubjectFilterChange}*/}
+                {/*                                          checked={selectedXsubjectFilter.some((item) => item.key === filter.key)}/>*/}
+                {/*                                <label htmlFor={filter.key} className="ml-2">*/}
+                {/*                                    {filter.name}*/}
+                {/*                                </label>*/}
+                {/*                            </div>*/}
+                {/*                        );*/}
+                {/*                    })}*/}
+                {/*                    <button className="filter_button_ok" onClick={(e) => {*/}
+                {/*                        xsubjectFilter_op.current.toggle(e)*/}
+                {/*                        setNewData()*/}
+                {/*                    }}> Применить*/}
+                {/*                    </button>*/}
+                {/*                </div>*/}
+                {/*            </OverlayPanel>*/}
+                {/*        </>*/}
+                {/*        :*/}
+                {/*        <></>*/}
 
-                }
+                {/*}*/}
                 <button className="filter_button" onClick={(e) => price_op.current.toggle(e)}> Цена
                     <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
                 </button>
@@ -232,39 +229,39 @@ const ProductList = (props) => {
                 </OverlayPanel>
 
 
-                {
-                    productListStore.fbrandFilter.items.length > 0 ?
-                        <>
-                            <button className="filter_button" onClick={(e) => fbrandFilter_op.current.toggle(e)}> Бренд
-                                <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
-                            </button>
-                            <OverlayPanel ref={fbrandFilter_op}>
-                                <div className="flex flex-column gap-3">
-                                    {productListStore.fbrandFilter.items.map((filter) => {
-                                        return (
-                                            <div key={filter.key} className="flex align-items-center">
+                {/*{*/}
+                {/*    productListStore.fbrandFilter.items.length > 0 ?*/}
+                {/*        <>*/}
+                {/*            <button className="filter_button" onClick={(e) => fbrandFilter_op.current.toggle(e)}> Бренд*/}
+                {/*                <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>*/}
+                {/*            </button>*/}
+                {/*            <OverlayPanel ref={fbrandFilter_op}>*/}
+                {/*                <div className="flex flex-column gap-3">*/}
+                {/*                    {productListStore.fbrandFilter.items.map((filter) => {*/}
+                {/*                        return (*/}
+                {/*                            <div key={filter.key} className="flex align-items-center">*/}
 
-                                                <Checkbox inputId={filter.key} name="category" value={filter}
-                                                          onChange={onFbrandFilterChange}
-                                                          checked={selectedFbrandFilter.some((item) => item.key === filter.key)}/>
-                                                <label htmlFor={filter.key} className="ml-2">
-                                                    {filter.name}
-                                                </label>
-                                            </div>
-                                        );
-                                    })}
-                                    <button className="filter_button_ok" onClick={(e) => {
-                                        fbrandFilter_op.current.toggle(e)
-                                        setNewData()
-                                    }}> Применить
-                                    </button>
-                                </div>
-                            </OverlayPanel>
-                        </>
-                        :
-                        <></>
+                {/*                                <Checkbox inputId={filter.key} name="category" value={filter}*/}
+                {/*                                          onChange={onFbrandFilterChange}*/}
+                {/*                                          checked={selectedFbrandFilter.some((item) => item.key === filter.key)}/>*/}
+                {/*                                <label htmlFor={filter.key} className="ml-2">*/}
+                {/*                                    {filter.name}*/}
+                {/*                                </label>*/}
+                {/*                            </div>*/}
+                {/*                        );*/}
+                {/*                    })}*/}
+                {/*                    <button className="filter_button_ok" onClick={(e) => {*/}
+                {/*                        fbrandFilter_op.current.toggle(e)*/}
+                {/*                        setNewData()*/}
+                {/*                    }}> Применить*/}
+                {/*                    </button>*/}
+                {/*                </div>*/}
+                {/*            </OverlayPanel>*/}
+                {/*        </>*/}
+                {/*        :*/}
+                {/*        <></>*/}
 
-                }
+                {/*}*/}
 
 
             </div>
@@ -307,7 +304,15 @@ const ProductList = (props) => {
                                 <span className="product-rate2"> {item.reviewRating} </span>
                                 <span className="product-rate3"> {item.feedbacks} оценок </span>
                             </div>
-                            <span className="product-count"> Осталось {item.totalQuantity} шт </span>
+
+                            <div className="card-price">
+                                <span className="product-name">Реальная скидка {item.discount} </span>
+                            </div>
+
+                            <span
+                                className="product-count"> Осталось {item.totalQuantity > 59 ? ' > ' + item.totalQuantity : item.totalQuantity} шт </span>
+
+
                             <div className="product-order">
                                 <a className="order">
                                     Подробнее

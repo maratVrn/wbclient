@@ -176,11 +176,6 @@ export default class ApiService {
         return $api_client.get(`/getProductStartInfo/${parseInt(id)}`)
     }
 
-    static async APIGetProductAbout(id):Promise{
-
-        return $api_client.get(`/getProductAbout/${parseInt(id)}`)
-    }
-
 };
 
 
