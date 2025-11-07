@@ -10,6 +10,7 @@ import { Paginator } from 'primereact/paginator';
 
 const ProductList = (props) => {
     const {productListStore} = useContext(Context)
+    const {productStore} = useContext(Context)
     const [items, setItems] = useState([])
 
     // Для пагинации товаров
@@ -78,7 +79,7 @@ const ProductList = (props) => {
 
     useEffect(()=>{
         setItems([])
-        getSearchResult(query)
+        // getSearchResult(query)
     }, [query])
 
 
@@ -100,6 +101,17 @@ const ProductList = (props) => {
         navigate('/productList/' + newQuery)
 
     }
+    function test(){
+        console.log('test');
+        const param = {catalogID: 10012, idCount: 500}
+        productStore.getProductList(param).then(() => {
+
+            setItems(productStore.productList)
+
+
+        })
+    }
+    // getProductList
 
     return (
         <div className="page">
@@ -115,10 +127,22 @@ const ProductList = (props) => {
 
             <div className=" flex  " style={{paddingTop: '20px'}}>
 
+                <div className="text-wrap" style={{cursor: 'pointer'}}
+                     onClick={(e) =>test()}>
 
+
+                    <a style={{
+                        marginTop: '10px',
+                        marginLeft: '2px',
+                        marginRight: '20px',
+                        fontSize: '18px',
+                        color: '#191919'
+                    }}>тест</a>
+                </div>
                 {productListStore.addQuery.map((query, idx) => {
                     return (
                         <div key={idx} className="flex">
+
 
                             <div className="text-wrap" style={{cursor: 'pointer'}}
                                  onClick={(e) => navigate('/productList/' + query)}>
@@ -149,7 +173,7 @@ const ProductList = (props) => {
                         {depth_categories.map((category) => {
                             return (
                                 <div key={category.key} className="flex align-items-center">
-                                    <RadioButton inputId={category.key} name="category" value={category}
+                                <RadioButton inputId={category.key} name="category" value={category}
                                                  onChange={(e) => {
                                                      setDepthSelectedCategory(e.value)
                                                  }}

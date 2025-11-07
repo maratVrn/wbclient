@@ -20,7 +20,7 @@ const ProductData = (props) => {
     const [daysCount, setDaysCount] = useState([
         {daysId: 0, daysName: '30 дней', daysCount : 30},{daysId: 1, daysName: '60 дней', daysCount : 60},
         {daysId: 2, daysName: '90 дней', daysCount : 90},{daysId: 3, daysName: '180 дней', daysCount : 180}, ,{daysId: 4, daysName: '360 дней', daysCount : 360}])
-    const [selectedDays, setSelectedDays] = useState({daysId: 0, daysName: '30 дней', daysCount : 30});
+    const [selectedDays, setSelectedDays] = useState({daysId: 2, daysName: '90 дней', daysCount : 90});
 
     useEffect(() => {
         // console.log('useEffect ProductData ');

@@ -62,9 +62,9 @@ export default class ApiService {
         return $api_client.get('/getLiteWBCatalog')
     }
 
-    static async APIGetProductList(catalogID):Promise{
+    static async APIGetProductList(searchParam):Promise{
 
-        return $api_client.get(`/getProductList/${parseInt(catalogID)}`)
+        return $api_client.post(`/getProductList`,searchParam)
     }
 
     static async APIGetSearchResult(searchQuery, pageCount = 1):Promise{

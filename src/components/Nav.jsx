@@ -1,6 +1,4 @@
 import React, {useContext, useState} from 'react';
-import Menu from "./Menu";
-import Menu2 from "./Menu2";
 import './Nav.css';
 
 import '/node_modules/primeflex/primeflex.css';

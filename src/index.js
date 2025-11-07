@@ -12,7 +12,6 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import CatalogStore from "./store/catalogStore";
 import ProductStore from "./store/productStore";
-import GlobalStore from "./store/globalStore";
 import ProductsDataCalcStore from "./store/productsDataCalcStore";
 import ServerUpdateStore from "./store/serverUpdateStore";
 import ProductListStore from "./store/productListStore";
@@ -21,11 +20,11 @@ import ProductListStore from "./store/productListStore";
 const catalogStore = new CatalogStore()
 const serverUpdateStore = new ServerUpdateStore()
 const productStore = new ProductStore()
-const globalStore = new GlobalStore()
+
 const productsDataCalcStore = new ProductsDataCalcStore()
 const productListStore = new ProductListStore()
 export const Context = createContext({
-    catalogStore, productStore,globalStore, productsDataCalcStore, serverUpdateStore, productListStore
+    catalogStore, productStore, productsDataCalcStore, serverUpdateStore, productListStore
 })
 
 

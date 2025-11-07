@@ -42,11 +42,11 @@ function App() {
         // };
 
 
-        // catalogStore.getLiteWBCatalog().then(() => {
-        //         console.log('Загрузили каталог');
-        //
-        //     }
-        // )
+        catalogStore.getLiteWBCatalog().then(() => {
+                console.log('Загрузили каталог');
+
+            }
+        )
 
         // console.log('Загрузка стартовых данных');
         //

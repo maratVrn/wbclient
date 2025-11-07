@@ -242,12 +242,18 @@ export default class CatalogStore {
         try{
             const response = await ApiService.APIGetLiteWBCatalog()
             // console.log(response.data);
+
+
             this.setAllWBCatalogLite(response.data)
+            for (let i in this.allWBCatalogLite){
+                try {this.allWBCatalogLite[i].img = require(`../components/images/menu/${this.allWBCatalogLite[i].id}.png`)}
+                catch (e) {this.allWBCatalogLite[i].img = require(`../components/images/menu/noImg.png`)}
+            }
             await this.setNodeTree_WBCatalogLite(response.data)
 
             if (response?.data?.length>0) {
                 this.isCatalogLoad = true
-                // console.log('isCatalogLoad = true');
+
             }
 
         } catch (e) {

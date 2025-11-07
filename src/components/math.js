@@ -531,30 +531,94 @@ function getPriceFromHistory (history = [], dayCount = 30 ){
 
     return [dateArray, priceArray,  resultData]
 }
+function getPriceFromHistoryLight (history = [], dayCount = 30 ){
+
+
+    let startDateInBase = ''                        // С Какой даты товар в базе
+    let AllHistory = []
+    let crDate = new Date()
+    crDate.setDate(crDate.getDate() - dayCount);
+
+    let needStartI = 0
+
+    for (let i =history.length-1 ; i>=0; i--){
+        const s = history[i].d.split('.')
+        const nowDate = new Date(s[2]+'-'+s[1]+'-'+s[0]);
+        if (nowDate <= crDate) {
+            needStartI = i
+            break
+        }
+    }
+
+
+
+    let crHistory = {}
+
+
+    // Сначала соберем полный массив цен с учетом пропусков
+    if (history?.length >0) {
+        startDateInBase = history[needStartI].d
+        const s = startDateInBase.split('.')
+        crDate = new Date(s[2]+'-'+s[1]+'-'+s[0]);
+        crHistory = history[needStartI]
+        AllHistory.push({d:crHistory.d, sp: crHistory.sp})
+    }
+
+
+    for (let i =needStartI+1 ; i<history.length; i++){
+
+        let needNextDay = true
+        let counter = 0
+        while (needNextDay){
+            counter++
+            crDate.setDate(crDate.getDate() + 1);
+
+            const s = history[i].d.split('.')
+            const nd = new Date(s[2]+'-'+s[1]+'-'+s[0]);
+
+
+            if (nd<crDate) needNextDay = false
+            else {
+                if (crDate.toLocaleDateString() === history[i].d) {
+                    crHistory = history[i]
+                    AllHistory.push(crHistory.sp > 0 ? crHistory.sp : AllHistory.at(-1))
+                    needNextDay = false
+                } else {
+                    AllHistory.push(crHistory.sp > 0 ? crHistory.sp : AllHistory.at(-1))
+                }
+                if (counter > 365) needNextDay = false // Исключим случай если год не менялась цена
+            }
+
+
+        }
+    }
+    let needHistory = []
+    if (AllHistory.length>dayCount) needHistory = AllHistory.slice(AllHistory.length-dayCount, AllHistory.length)
+    else needHistory = AllHistory
+
+    return  needHistory
+}
 
 function calcDiscount (history = []){
     const dayCalc = 90
-    const [dateArray, priceArray,  resultData] = getPriceFromHistory(history, dayCalc)
 
-    let meanPrice90 = 0
-    let discount = 0
+    const priceArray= getPriceFromHistoryLight(history, dayCalc)
+
     let isDataCalc = false
+    let endPrice = priceArray.at(-1)
+    let medianPrice = 0
+    let discount2 = 0
 
+
+    // Правильнее по медиане посчитать
     if (priceArray.length >= dayCalc) {
-
-        try {
-            for (let i in priceArray) meanPrice90 += priceArray[i]
-            meanPrice90 = Math.round(meanPrice90 / priceArray.length)
-            if (meanPrice90 > 0) {
-                discount = Math.round( 100*(meanPrice90 - priceArray.at(-1))/meanPrice90)
-                isDataCalc = true
-            }
-        } catch (e) {}
-
-
+        priceArray.sort(function (a, b) {return b - a;})
+        medianPrice = priceArray[Math.round(priceArray.length / 2)]
+        discount2 = Math.round(100 * (medianPrice - endPrice) / medianPrice)
+        isDataCalc = true
     }
 
-    return {isDataCalc : isDataCalc, meanPrice : meanPrice90, discount : discount}
+    return {isDataCalc : isDataCalc, meanPrice : medianPrice, discount : discount2}
 }
 
 

@@ -142,19 +142,12 @@ export default class ProductStore {
     }
 
 
-    async  getProductList(catalogID){
+    async  getProductList(param){
         try{
 
-            const productList = await ApiService.APIGetProductList(catalogID)
+            const productList = await ApiService.APIGetProductList(param)
+            if (productList?.data) this.setProductList(productList?.data)
 
-            // // Загрузим фотографии
-            // await this.getProductListLitePhoto(productList)
-
-            // Отсортирум по продажам
-            if (productList?.data) {
-                // productList?.data.sort(function(a, b) {  return b.saleCount - a.saleCount; });
-                this.setProductList(productList?.data)
-            }
 
         } catch (e) {
             // this.setErrorMessage(e.response?.data?.message)
