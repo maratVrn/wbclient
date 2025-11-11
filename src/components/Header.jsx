@@ -18,7 +18,7 @@ const Header = observer(() => {
     const handleKeyPress = (event) => {
 
         if(event.key === 'Enter'){
-            // navigate('/productList/' + productListStore.query)
+            navigate('/productList/' + productListStore.query)
             navigate('/productInfo/' + productListStore.query.toString())
 
         }

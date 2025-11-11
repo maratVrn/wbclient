@@ -5,18 +5,18 @@ import './css/wbsale.css';
 import {Context} from "../index";
 import { BreadCrumb } from 'primereact/breadcrumb';
 import {observer} from "mobx-react-lite";
+import ProductList from "./ProductList";
 
 
 const MainPage = observer( () => {
 
-    const cl = "border-round w-12rem h-14rem bg-primary font-bold flex align-items-center justify-content-center"
+
     const {catalogStore} = useContext(Context)
     const [isStartMenu, setIsStartMenu] = useState(true)
     const [isLoadPD, setIsLoadPD] = useState(false)
     const [addMenu, setAddMenu] = useState([])
-
     const [breadItems, setBreadItems] = useState([])
-
+    const [catalogId, setCatalogId] = useState('')
 
     useEffect(()=>{
 
@@ -49,16 +49,14 @@ const MainPage = observer( () => {
             }
             setAddMenu(oneData.childs);
             if (oneData.childs.length === 0){
-                getProductList(oneData.id)
+                setCatalogId(oneData.id)
                 setIsLoadPD(true)}
         }
         setBreadItems(tmpItems)
         setIsStartMenu(false)
     }
 
-    function getProductList(catalogId){
-        console.log(catalogId);
-    }
+
 
     return (
         <div className="app page">
@@ -67,7 +65,11 @@ const MainPage = observer( () => {
                 : <BreadCrumb model={breadItems} home={home} />
             }
 
-            { isLoadPD ? <>Загружаем товары</>
+            { isLoadPD ? <>
+                    <ProductList catalogId = {catalogId} />
+                </>
+
+
                 :
                 <div className="flex flex-wrap column-gap-4 row-gap-4">
                     { isStartMenu?

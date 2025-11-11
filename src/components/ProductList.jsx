@@ -9,6 +9,8 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Paginator } from 'primereact/paginator';
 
 const ProductList = (props) => {
+    const {catalogId} = props;
+
     const {productListStore} = useContext(Context)
     const {productStore} = useContext(Context)
     const [items, setItems] = useState([])
@@ -60,11 +62,6 @@ const ProductList = (props) => {
     // Параметры цены
     const price_op = useRef(null);
 
-
-
-
-
-
     let { query } = useParams();
 
     function getSearchResult(query, newInfo = true) {
@@ -79,6 +76,11 @@ const ProductList = (props) => {
 
     useEffect(()=>{
         setItems([])
+        console.log(catalogId);
+        const param = {catalogID: parseInt(catalogId), idCount: 500}
+        productStore.getProductList(param).then(() => {
+            setItems(productStore.productList)
+        })
         // getSearchResult(query)
     }, [query])
 
@@ -101,17 +103,7 @@ const ProductList = (props) => {
         navigate('/productList/' + newQuery)
 
     }
-    function test(){
-        console.log('test');
-        const param = {catalogID: 10012, idCount: 500}
-        productStore.getProductList(param).then(() => {
 
-            setItems(productStore.productList)
-
-
-        })
-    }
-    // getProductList
 
     return (
         <div className="page">
@@ -127,18 +119,6 @@ const ProductList = (props) => {
 
             <div className=" flex  " style={{paddingTop: '20px'}}>
 
-                <div className="text-wrap" style={{cursor: 'pointer'}}
-                     onClick={(e) =>test()}>
-
-
-                    <a style={{
-                        marginTop: '10px',
-                        marginLeft: '2px',
-                        marginRight: '20px',
-                        fontSize: '18px',
-                        color: '#191919'
-                    }}>тест</a>
-                </div>
                 {productListStore.addQuery.map((query, idx) => {
                     return (
                         <div key={idx} className="flex">
