@@ -106,7 +106,7 @@ const ProductList = (props) => {
 
 
     return (
-        <div className="page">
+        <div className="">
             {/*<div className=" flex align-items-center">*/}
             {/*    <h3 style={{marginLeft: '20px'}}>{query}</h3>*/}
             {/*    <p style={{*/}
