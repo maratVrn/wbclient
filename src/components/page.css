@@ -101,6 +101,28 @@
     text-overflow: ellipsis;
 }
 
+.spanGreen{
+    color: #70c573;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spanRed{
+    color: brown;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .product-name{
     color: #9d9da5;
     font-size: 14px;

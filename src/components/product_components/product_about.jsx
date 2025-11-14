@@ -12,6 +12,7 @@ const ProductAbout = (props) => {
     const {id, isInWB} = props;
     const {productStore} = useContext(Context)
     const [info, setInfo] = useState([])
+    const [discountInfo, setDiscountInfo] = useState({discount :0,  isDataCalc : false, meanPrice : 0})
     const [qty, setQty] = useState([])
     const navigate = useNavigate();
 
@@ -19,33 +20,37 @@ const ProductAbout = (props) => {
     useEffect(()=>{
         // console.log('useEffect ProductAbout');
         // console.log('isInWB ProductAbout '+isInWB);
-
+        setDiscountInfo({discount :0,  isDataCalc : false, meanPrice : 0})
 
         setInfo([])
         setQty([])
         if (productStore.idInfo.isInWB)
         if (parseInt(id)>0) {
             const result = calcDiscount(productStore.idInfo?.productInfo?.priceHistory)
-            console.log(result);
-            productStore.getProductAbout(id).then(() => {
-                    try {
-                        setInfo(productStore.idInfo.idInfoWB);
-                        // Расчитаем остатки
-                        let allQty = []
-                        const sizes =  productStore.idInfo?.idInfoWB?.sizes? productStore.idInfo?.idInfoWB?.sizes : []
-                        for (let k in sizes) {
-                            let oneSize = {name: sizes[k].name, qty: 0}
-                            for (let i in sizes[k].stocks)
-                                try {
-                                    oneSize.qty += sizes[k].stocks[i].qty
-                                } catch (e) {}
-                            allQty.push(oneSize)
-                        }
-                        if (allQty.length > 0)  if (allQty.length > 1) setQty(allQty)
-                        else setQty(allQty[0].qty)
+            setDiscountInfo(result);
+            try {
+                setInfo(productStore.idInfo.idInfoWB);
+                // Расчитаем остатки
+                let allQty = []
+                const sizes =  productStore.idInfo?.idInfoWB?.sizes? productStore.idInfo?.idInfoWB?.sizes : []
+                for (let k in sizes) {
+                    let oneSize = {name: sizes[k].name, qty: 0}
+                    for (let i in sizes[k].stocks)
+                        try {
+                            oneSize.qty += sizes[k].stocks[i].qty
+                        } catch (e) {}
+                    allQty.push(oneSize)
+                }
+                if (allQty.length > 0)  if (allQty.length > 1) setQty(allQty)
+                else setQty(allQty[0].qty)
 
-                    } catch (e){console.log(e)}
-            })
+            } catch (e){console.log(e)}
+
+            // Использовали чтобы получить другие цвета и карусель цветов но отказался чтобы уменьшить нагрузку
+
+            // productStore.getProductAbout(id).then(() => {
+            //
+            // })
         }
     },[id, isInWB])
 
@@ -100,45 +105,45 @@ const ProductAbout = (props) => {
 
                     <div className="card-price">
                         <div className="price-low " style={{marginLeft: '10px'}}>
-                            <span>{info?.price > 0 ? info.price : 'Нет в наличии'}</span>
+                            <span>{info?.price > 0 ? info.price : 'Нет в наличии'} ₽ </span>
+                            <span className="product-brand"> цена на WB сейчас без учета wb-кошелька </span>
                         </div>
-                        {(info?.discount !== 0) ?
-                            <div className="price-max ">
-                                <span><del>{info?.basicPrice} ₽</del></span>
-                            </div>
-                            : <div></div>
-                        }
 
-                        {(info?.discount !== 0) ?
-                            <div style={{marginLeft: '10px'}}>
-                                <div className="product_discount_wb_text ">
-                                    <span> {info?.discount? info?.discount : ''} % Скидка на WB</span>
-                                </div>
-                            </div>
-                            : <div></div>
-                        }
 
                     </div>
-                    {/*<div>*/}
-                    {/*    <div>*/}
-                    {/*        <span className="product-brand"> Реальная скидка: {productStore.realDiscount+ ' %'}</span>*/}
 
 
-                    {/*        <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>*/}
-                    {/*        <i className="custom-target-icon pi pi-info-circle "*/}
-                    {/*           data-pr-tooltip="Скидка на товар расчитанная исходя из медианной цены и данных по продажам что в итоге показывает реальную скидку "*/}
-                    {/*           style={{*/}
-                    {/*               fontSize: '1.2rem',*/}
-                    {/*               cursor: 'pointer',*/}
-                    {/*               marginLeft: '10px',*/}
-                    {/*               color: 'tan',*/}
-                    {/*               marginTop: '10px'*/}
-                    {/*           }}>*/}
+                    {
+                        discountInfo.isDataCalc ?
+                            <>
+                                <div className="card-price">
+                                    <span
+                                        className="product-brand"> Средняя цена за 90 дней: </span>
+                                    <span
+                                        className="spanGreen" > {discountInfo.meanPrice}  ₽</span>
+                                </div>
+                                <div className="card-price">
+                                    {
+                                        discountInfo.discount > 0 ?
+                                            <>
+                                                <span
+                                                    className="product-brand"> Реальная скидка : </span>
+                                                <span
+                                                    className="spanGreen"> {discountInfo.discount} %   ( {discountInfo.meanPrice - info?.price}  ₽)</span>
+                                            </>
+                                            :
+                                            <span
+                                                className="spanRed"> Цена Завышена на: {-1 * discountInfo.discount} %  (наценка {info?.price - discountInfo.meanPrice }  ₽) </span>
+                                    }
+                                </div>
 
-                    {/*        </i>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                            </>
+                            :
+                            <span className="product-brand"> Данные о скидке не расчитаы </span>
+
+                    }
                     <span className="product-brand"> Возраст товара: {productStore.startDateInBase}</span>
+
 
                     <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
                     <i className="custom-target-icon pi pi-info-circle "
@@ -160,22 +165,22 @@ const ProductAbout = (props) => {
                         <span className="product-rate2"> {info?.reviewRating} </span>
                         <span className="product-rate3"> {info?.feedbacks} оценок </span>
                     </div>
-                    <div className="product_color">цвет : {productStore.idAddInfo.nm_colors_names}</div>
-                    {
-                        productStore.colors.length > 1 ?
-                            <div style={{height: '80px', paddingTop: '10px', maxWidth:'500px'}}>
+                    {/*<div className="product_color">цвет : {productStore.idAddInfo.nm_colors_names}</div>*/}
+                    {/*{*/}
+                    {/*    productStore.colors.length > 1 ?*/}
+                    {/*        <div style={{height: '80px', paddingTop: '10px', maxWidth: '500px'}}>*/}
 
-                                <Carousel
+                    {/*            <Carousel*/}
 
-                                    value={productStore.colors}
-                                    responsiveOptions={responsiveOptions}
-                                    numVisible={6}
-                                    showIndicators={false}
-                                    itemTemplate={productTemplate}/>
-                            </div>
-                            :
-                            <div></div>
-                    }
+                    {/*                value={productStore.colors}*/}
+                    {/*                responsiveOptions={responsiveOptions}*/}
+                    {/*                numVisible={6}*/}
+                    {/*                showIndicators={false}*/}
+                    {/*                itemTemplate={productTemplate}/>*/}
+                    {/*        </div>*/}
+                    {/*        :*/}
+                    {/*        <div></div>*/}
+                    {/*}*/}
 
                     {
                         qty.length > 1 ?
@@ -187,13 +192,17 @@ const ProductAbout = (props) => {
                                             // onClick={() => console.log(color.id)}
                                         >
                                             <div style={{paddingTop: '5px'}}> {size.name}</div>
-                                            <div className="product_size_count"> {size?.qty >59 ? '>'+ size?.qty :size?.qty} шт.</div>
+                                            <div
+                                                className="product_size_count"> {size?.qty > 59 ? '>' + size?.qty : size?.qty} шт.
+                                            </div>
                                         </div>)}
                                 </div>
                             </div>
                             :
                             <div style={{marginTop: '20px'}}>
-                                <div className="product_size_text">Остатки сейчас: {qty >59 ? '   > '+ qty :qty} шт.</div>
+                                <div className="product_size_text">Остатки
+                                    сейчас: {qty > 59 ? '   > ' + qty : qty} шт.
+                                </div>
 
                             </div>
                     }

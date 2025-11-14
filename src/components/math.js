@@ -561,7 +561,7 @@ function getPriceFromHistoryLight (history = [], dayCount = 30 ){
         const s = startDateInBase.split('.')
         crDate = new Date(s[2]+'-'+s[1]+'-'+s[0]);
         crHistory = history[needStartI]
-        AllHistory.push({d:crHistory.d, sp: crHistory.sp})
+        AllHistory.push(crHistory.sp)
     }
 
 
@@ -601,17 +601,13 @@ function getPriceFromHistoryLight (history = [], dayCount = 30 ){
 
 function calcDiscount (history = []){
     const dayCalc = 90
-
     const priceArray= getPriceFromHistoryLight(history, dayCalc)
-
     let isDataCalc = false
     let endPrice = priceArray.at(-1)
     let medianPrice = 0
     let discount2 = 0
-
-
     // Правильнее по медиане посчитать
-    if (priceArray.length >= dayCalc) {
+    if (priceArray.length >= dayCalc/2) {
         priceArray.sort(function (a, b) {return b - a;})
         medianPrice = priceArray[Math.round(priceArray.length / 2)]
         discount2 = Math.round(100 * (medianPrice - endPrice) / medianPrice)

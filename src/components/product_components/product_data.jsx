@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
 import './product.css';
 import { Chart } from 'primereact/chart';
-import {getPriceFromHistory, formatCurrency} from "../math";
+import {getPriceFromHistory, formatCurrency, calcDiscount} from "../math";
 import {InputSwitch} from "primereact/inputswitch";
 import {RadioButton} from "primereact/radiobutton";
 
@@ -34,6 +34,11 @@ const ProductData = (props) => {
 
     function calcData(daysCount){
         const [dateArray, priceArray,  resultData] = getPriceFromHistory(productStore.idInfo?.productInfo?.priceHistory, daysCount)
+        const discountData = calcDiscount(productStore.idInfo?.productInfo?.priceHistory)
+        let priceArray2 = []
+        if (discountData.isDataCalc) for (let i in priceArray) priceArray2.push(discountData.meanPrice)
+        // console.log(priceArray2);
+
         setProductInfo(resultData)
 
         const options = {
@@ -42,7 +47,7 @@ const ProductData = (props) => {
             plugins: {
                 pointRadius: 1,
                 legend: {
-                    display: false,
+                    display: true,
 
 
                 }
@@ -50,7 +55,7 @@ const ProductData = (props) => {
             scales: {
 
                 y: {
-                    stacked: true,
+                    // stacked: true,
                     display: true,
                     // beginAtZero: true
                 },
@@ -83,10 +88,41 @@ const ProductData = (props) => {
                 }
             }
         };
+
+        // const options = {
+        //     maintainAspectRatio: false,
+        //     aspectRatio: 0.6,
+        //     plugins: {
+        //         legend: {
+        //             labels: {
+        //                 color: 'rgba(193,150,73,0.5)'
+        //             }
+        //         }
+        //     },
+        //     scales: {
+        //         x: {
+        //             ticks: {
+        //                 color: 'rgba(193,150,73,0.5)'
+        //             },
+        //             grid: {
+        //                 color: 'rgba(193,150,73,0.5)'
+        //             }
+        //         },
+        //         y: {
+        //             ticks: {
+        //                 color: 'rgba(193,150,73,0.5)'
+        //             },
+        //             grid: {
+        //                 color: 'rgba(193,150,73,0.5)'
+        //             }
+        //         }
+        //     }
+        // };
         setChartOptions(options);
         const priceData3 = {
             labels: dateArray,
             datasets: [
+
                 {
                     label: 'Цена ',
                     data: priceArray,
@@ -99,7 +135,20 @@ const ProductData = (props) => {
                     pointHitRadius: 5,
                     hoverBackgroundColor: 'rgba(38,197,255,0.5)',
 
-                }
+                },
+                {
+                    label: 'Средняя цена',
+                    data: priceArray2,
+                    // fill: true,
+                    // tension: 1,
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(200,245,251,0.5)',
+                    borderColor: 'rgba(110,255,38,0.5)',
+                    pointBorderWidth: 0,
+                    pointHitRadius: 5,
+                    hoverBackgroundColor: 'rgba(38,197,255,0.5)',
+
+                },
             ]
         };
         setChartPriceData(priceData3);

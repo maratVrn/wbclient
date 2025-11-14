@@ -7,12 +7,12 @@ import downSvg from "./images/down.svg";
 import { RadioButton } from "primereact/radiobutton";
 import { InputNumber } from 'primereact/inputnumber';
 import { Paginator } from 'primereact/paginator';
+import { Checkbox } from 'primereact/checkbox';
 
 const ProductList = (props) => {
     const {catalogId} = props;
 
     const {productListStore} = useContext(Context)
-    const {productStore} = useContext(Context)
     const [items, setItems] = useState([])
 
     // Для пагинации товаров
@@ -59,9 +59,11 @@ const ProductList = (props) => {
         else  _selectedCategories = _selectedCategories.filter(category => category.key !== e.value.key);
         setSelectedXsubjectFilter(_selectedCategories);
     }
-    // Параметры цены
-    const price_op = useRef(null);
+    // Фильтр цены цены
 
+    const price_op = useRef(null);
+    const [usePriceMin, setUsePriceMin] = useState(false);
+    const [usePriceMax, setUsePriceMax] = useState(false);
     let { query } = useParams();
 
     function getSearchResult(query, newInfo = true) {
@@ -76,10 +78,15 @@ const ProductList = (props) => {
 
     useEffect(()=>{
         setItems([])
-        console.log(catalogId);
-        const param = {catalogID: parseInt(catalogId), idCount: 500}
-        productStore.getProductList(param).then(() => {
-            setItems(productStore.productList)
+        setUsePriceMin(false)
+        setUsePriceMax(false)
+        let idCount = 100
+        try {idCount = parseInt(depthSelectedCategory.key)*100} catch (e) {idCount = 100}
+        const param = {catalogID: parseInt(catalogId), idCount: idCount,
+            filters : {isXsubjectFilterChecked : false, XsubjectIdArray : []}
+        }
+        productListStore.getProductList(param).then(() => {
+            setItems(productListStore.productList)
         })
         // getSearchResult(query)
     }, [query])
@@ -91,31 +98,53 @@ const ProductList = (props) => {
     }
 
     function setNewData() {
-        let newQuery = query
-        for (let i in selectedXsubjectFilter){
-            newQuery = selectedXsubjectFilter[i].name.toString()
-            break
-        }
-        for (let i in selectedFbrandFilter){
-            newQuery += ' '+selectedFbrandFilter[i].name.toString()
+        setItems([])
+
+        let isXsubjectFilterChecked = false
+        let xSubjectIdArray = []
+        for (let i in selectedXsubjectFilter) {
+            isXsubjectFilterChecked = true
+            xSubjectIdArray.push(selectedXsubjectFilter[i].key)
         }
 
-        navigate('/productList/' + newQuery)
+        let idCount = 0
+        try {idCount = parseInt(depthSelectedCategory.key)*100} catch (e) {idCount = 100}
+
+        const param = {catalogID: parseInt(catalogId), idCount: idCount,
+            filters : {isXsubjectFilterChecked : isXsubjectFilterChecked, xSubjectIdArray : xSubjectIdArray,
+                usePriceMin : usePriceMin, priceMin : productListStore.priceUFilter.min,
+                usePriceMax : usePriceMax, priceMax : productListStore.priceUFilter.max,}
+        }
+        productListStore.getProductList(param).then(() => {
+            setItems(productListStore.productList)
+        })
+
+
+        // let newQuery = query
+        // for (let i in selectedXsubjectFilter){
+        //     newQuery = selectedXsubjectFilter[i].name.toString()
+        //     break
+        // }
+        // for (let i in selectedFbrandFilter){
+        //     newQuery += ' '+selectedFbrandFilter[i].name.toString()
+        // }
+        //
+        // navigate('/productList/' + newQuery)
 
     }
 
 
     return (
         <div className="">
-            {/*<div className=" flex align-items-center">*/}
-            {/*    <h3 style={{marginLeft: '20px'}}>{query}</h3>*/}
-            {/*    <p style={{*/}
-            {/*        marginTop: '10px',*/}
-            {/*        marginLeft: '20px',*/}
-            {/*        fontSize: '16px',*/}
-            {/*        color: '#83839a'*/}
-            {/*    }}>{productListStore.totalWBProductsCount} товаров найдено</p>*/}
-            {/*</div>*/}
+            <div className=" flex align-items-center">
+                <h3 style={{marginLeft: '20px'}}>{query}</h3>
+                <p style={{
+                    marginTop: '10px',
+                    marginLeft: '20px',
+                    fontSize: '16px',
+                    color: '#83839a'
+                }}>{productListStore.productList.length} товаров со скидками найдено</p>
+            </div>
 
             <div className=" flex  " style={{paddingTop: '20px'}}>
 
@@ -170,54 +199,63 @@ const ProductList = (props) => {
                     </div>
 
                 </OverlayPanel>
-                {/*{*/}
-                {/*    productListStore.xsubjectFilter.items.length > 0 ?*/}
-                {/*        <>*/}
-                {/*            <button className="filter_button"*/}
-                {/*                    onClick={(e) => xsubjectFilter_op.current.toggle(e)}> Категория*/}
-                {/*                <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>*/}
-                {/*            </button>*/}
-                {/*            <OverlayPanel ref={xsubjectFilter_op}>*/}
-                {/*                <div className="flex flex-column gap-3">*/}
-                {/*                    {productListStore.xsubjectFilter.items.map((filter) => {*/}
-                {/*                        return (*/}
-                {/*                            <div key={filter.key} className="flex align-items-center">*/}
+                {
+                    productListStore.xsubjectFilter.items.length > 0 ?
+                        <>
+                            <button className="filter_button"
+                                    onClick={(e) => xsubjectFilter_op.current.toggle(e)}> Категория
+                                <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
+                            </button>
+                            <OverlayPanel ref={xsubjectFilter_op}>
+                                <div className="flex flex-column gap-3">
+                                    {productListStore.xsubjectFilter.items.map((filter) => {
+                                        return (
+                                            <div key={filter.key} className="flex align-items-center">
 
-                {/*                                <Checkbox inputId={filter.key} name="category" value={filter}*/}
-                {/*                                          onChange={onxXubjectFilterChange}*/}
-                {/*                                          checked={selectedXsubjectFilter.some((item) => item.key === filter.key)}/>*/}
-                {/*                                <label htmlFor={filter.key} className="ml-2">*/}
-                {/*                                    {filter.name}*/}
-                {/*                                </label>*/}
-                {/*                            </div>*/}
-                {/*                        );*/}
-                {/*                    })}*/}
-                {/*                    <button className="filter_button_ok" onClick={(e) => {*/}
-                {/*                        xsubjectFilter_op.current.toggle(e)*/}
-                {/*                        setNewData()*/}
-                {/*                    }}> Применить*/}
-                {/*                    </button>*/}
-                {/*                </div>*/}
-                {/*            </OverlayPanel>*/}
-                {/*        </>*/}
-                {/*        :*/}
-                {/*        <></>*/}
+                                                <Checkbox inputId={filter.key} name="category" value={filter}
+                                                          onChange={onxXubjectFilterChange}
+                                                          checked={selectedXsubjectFilter.some((item) => item.key === filter.key)}/>
 
-                {/*}*/}
+                                                <label htmlFor={filter.key} className="ml-2">
+                                                    {filter.name}
+                                                </label>
+                                            </div>
+                                        );
+                                    })}
+                                    <button className="filter_button_ok" onClick={(e) => {
+                                        xsubjectFilter_op.current.toggle(e)
+                                        setNewData()
+                                    }}> Применить
+                                    </button>
+                                </div>
+                            </OverlayPanel>
+                        </>
+                        :
+                        <></>
+
+                }
                 <button className="filter_button" onClick={(e) => price_op.current.toggle(e)}> Цена
                     <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
                 </button>
                 <OverlayPanel ref={price_op}>
                     <div className="flex flex-column gap-3">
                         <div className="flex">
-                            <p>От</p>
+                            <Checkbox
+                                onChange={e => setUsePriceMin(e.checked)} checked={usePriceMin}
+                            />
+
+                            <p style={{paddingLeft:'10px'}}> От</p>
                             <InputNumber
                                 style={{marginLeft: '10px', width: '150px', marginRight: '20px', height: '25px'}}
                                 inputId="withoutgrouping" value={productListStore.priceUFilter.min}
                                 onValueChange={(e) => productListStore.priceUFilter.min = e.value} useGrouping={false}/>
                         </div>
                         <div className="flex">
-                            <p>До</p>
+                            <Checkbox
+                                onChange={e => setUsePriceMax(e.checked)} checked={usePriceMax}
+                            />
+
+                            <p style={{paddingLeft:'10px'}}> До</p>
                             <InputNumber
                                 style={{marginLeft: '10px', width: '150px', marginRight: '20px', height: '25px'}}
                                 inputId="withoutgrouping" value={productListStore.priceUFilter.max}
@@ -311,6 +349,10 @@ const ProductList = (props) => {
 
                             <div className="card-price">
                                 <span className="product-name">Реальная скидка {item.discount} </span>
+                            </div>
+
+                            <div className="card-price">
+                                <span className="product-name">SubjectID {item.subjectId} </span>
                             </div>
 
                             <span

@@ -41,8 +41,9 @@ const MainPage = observer( () => {
         tmpItems.push({ label: oneData.name,  template: () => <a onClick={()=> setMenuOne(oneData)} className="cursor-pointer ">{oneData.name}</a>})
         if (oneData.childs) {
             for (let i in oneData.childs) {
+
                 try {
-                    oneData.childs[i].img = require(`.//images/menu/${oneData.childs[i].id}.png`)
+                    oneData.childs[i].img = require(`.//images/menu/cat/${oneData.childs[i].id}.webp`)
                 } catch (e) {
                     oneData.childs[i].img = require(`.//images/menu/noImg.png`)
                 }
@@ -75,15 +76,17 @@ const MainPage = observer( () => {
                     { isStartMenu?
 
                         catalogStore.allWBCatalogLite.map((oneData) =>
-                            <div key={oneData.id} className={" w-12rem h-14rem  cursor-pointer"}
+                            <div key={oneData.id} className={" w-10rem h-12 rem  cursor-pointer"}
+                                 // style={{padding:'20px'}}
                                  onClick={() => setMenuOne(oneData)}>
-                                <div key={oneData.id} className={"w-12rem h-12rem "}>
+                                <div key={oneData.id} className={"w-10rem h-10rem "}>
                                     <img style={{maxWidth:'100%', maxHeight:'100%'}}
                                         src={oneData.img}  alt="logo" loading="lazy"/>
 
                                 </div>
                                 <div style={{textAlign: 'center'}}>
-                                    {oneData.name} {oneData.id}
+                                    {oneData.name}
+                                    {/*{oneData.id}*/}
                                 </div>
 
 

@@ -1,9 +1,13 @@
 import ApiService from "../service/ApiService";
 import {makeAutoObservable} from "mobx";
 import WbService from "../service/WbService";
+import {calcDiscount} from "../components/math";
 
 export default class ProductStore {
     productList = []
+    subjects = []
+
+
     productInfo = []
     positionsInfo = []
     priceHistory = []
@@ -114,11 +118,6 @@ export default class ProductStore {
 
 
 
-
-
-    setProductList (productList){
-        this.productList = productList
-    }
     setPositionsInfo(positionsInfo){
         this.positionsInfo = positionsInfo
     }
@@ -142,18 +141,7 @@ export default class ProductStore {
     }
 
 
-    async  getProductList(param){
-        try{
 
-            const productList = await ApiService.APIGetProductList(param)
-            if (productList?.data) this.setProductList(productList?.data)
-
-
-        } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
 
     setProductInfoData(data){
         let result =[]
@@ -342,7 +330,7 @@ export default class ProductStore {
     async  getProductAbout(productId){
         try{
 
-            // this.setProductAbout(null)
+            this.setProductAbout(null)
             this.colors = []
             this.idAddInfo = {imt_name : '', nm_colors_names : ''}
             const data = await WbService.WB_APIGetIdColors(productId)

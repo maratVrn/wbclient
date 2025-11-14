@@ -28,7 +28,7 @@ export default class ProductListStore {
         this.productInfo = []
         this.fbrandFilter = { key : 'fbrand', items : [] }
         this.xsubjectFilter = { key : 'xsubject', items : [] }
-        this.priceUFilter = { key: 'priceU', min:1, max:1_000_000}
+        // this.priceUFilter = { key: 'priceU', min:1, max:1_000_000}
     }
 
     constructor() {
@@ -54,6 +54,38 @@ export default class ProductListStore {
 
         }
 
+    }
+
+    async  getProductList(param){
+        try{
+            this.setStartData()
+            const productList = await ApiService.APIGetProductList(param)
+            let productListAdd = productList?.data[0]? productList?.data[0] : []
+            let itogProductListAdd = []
+            for (let i in  productListAdd) {
+
+                const discountData = calcDiscount(productListAdd[i].priceHistory)
+                if (discountData.isDataCalc)
+                    if (discountData.discount >0 ) {
+                        productListAdd[i].discount = discountData.discount
+                        productListAdd[i].meanPrice = discountData.meanPrice
+                        // TODO: Хардкор чтобы малопокупаемые товары не показывались
+                        if (productListAdd[i].feedbacks>5) itogProductListAdd.push(productListAdd[i])
+                    }
+            }
+            itogProductListAdd.sort((a, b) => b.discount - a.discount)
+            // itogProductListAdd.sort((a, b) => a.price - b.price)
+            this.setStartData()
+            if (productList?.data) this.productList = itogProductListAdd
+
+
+            if (productList?.data[1].subjects)
+                for (let j in productList?.data[1].subjects) this.xsubjectFilter.items.push({name: productList?.data[1].subjects[j].name, key:productList?.data[1].subjects[j].id})
+
+        } catch (e) {
+            // this.setErrorMessage(e.response?.data?.message)
+            console.log(e)
+        }
     }
 
     async  getSearchResult(searchQuery, newInfo = true, pageCount = 1){
