@@ -39,7 +39,7 @@
     /*border: 1px solid silver;*/
     margin: 10px 15px 10px 15px ;
     cursor : pointer;
-    height: 450px;
+    height: 460px;
     width: 220px;
 }
 
@@ -68,7 +68,7 @@
 .price-low {
     font-weight: 700;
     margin-right: 10px;
-    margin-left: 10px;
+    margin-left: 5px;
     color: brown;
 }
 
@@ -95,7 +95,7 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
-    margin-left: 10px;
+    margin-left: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -106,7 +106,7 @@
     font-size: 16px;
     font-weight: 600;
     line-height: 20px;
-    margin-left: 10px;
+    margin-left: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -129,6 +129,7 @@
     font-weight: 400;
     line-height: 20px;
     margin-left: 5px;
+    margin-top: 3px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -164,7 +165,7 @@ a.wb-go {
     background-position: 50%;
     background-repeat: no-repeat;
     margin-top: 2px;
-    margin-left: 8px;
+    margin-left: 3px;
     width: 14px;
     height: 14px;
     background-size: contain;
@@ -181,8 +182,8 @@ a.wb-go {
 }
 .product-count{
     color: #242424;
-    font-size: 12px;
-    margin-left: 8px;
+    font-size: 14px;
+    margin-left: 3px;
 }
 .product-rate3{
     font-size: 14px;

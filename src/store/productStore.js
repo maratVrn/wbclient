@@ -4,7 +4,7 @@ import WbService from "../service/WbService";
 import {calcDiscount} from "../components/math";
 
 export default class ProductStore {
-    productList = []
+
     subjects = []
 
 

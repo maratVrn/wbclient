@@ -309,33 +309,21 @@ const ProductList = (props) => {
             </div>
 
             {/*Список на выдачу*/}
-            <div className="grid">
+            <div className="grid" style={{paddingBottom:'30px'}}>
                 {items.slice(first, first + rows).map((item) =>
                     <div key={item.id} className=" item " onClick={() => showProductInfo(item.id)}>
                         <img src={item.photoUrl} alt="..."/>
                         <div className="card-body">
                             <div className="card-price">
                                 <div className="price-low ">
-                                    <span>{item.price}</span>
+                                    <span>{item.price} ₽</span>
                                 </div>
-                                {(item.discount !== 0) ?
-                                    <div className="price-max ">
-                                        <span><del>{item.basicPrice} ₽</del></span>
-                                    </div>
-                                    : <div></div>
-                                }
-
-                                {(item.wb_discoun !== 0) ?
-                                    <div className="price-sale ">
-                                        <span>- {item.wb_discount} %</span>
-                                    </div>
-                                    : <div></div>
-                                }
+                                <span className="product-name">Цена без кошелька </span>
 
                             </div>
 
                             <div className="card-price">
-                                <span className="product-brand">{item.brand} </span>
+                            <span className="product-brand">{item.brand} </span>
 
                             </div>
                             <div className="card-price">
@@ -348,22 +336,15 @@ const ProductList = (props) => {
                             </div>
 
                             <div className="card-price">
-                                <span className="product-name">Реальная скидка {item.discount} </span>
+                                <span className="spanGreen">Реальная скидка {item.discount} % </span>
                             </div>
 
-                            <div className="card-price">
-                                <span className="product-name">SubjectID {item.subjectId} </span>
-                            </div>
 
                             <span
                                 className="product-count"> Осталось {item.totalQuantity > 59 ? ' > ' + item.totalQuantity : item.totalQuantity} шт </span>
 
 
-                            <div className="product-order">
-                                <a className="order">
-                                    Подробнее
-                                </a>
-                            </div>
+
                         </div>
                     </div>)
                 }

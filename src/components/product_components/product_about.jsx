@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
-import { Carousel } from 'primereact/carousel';
+
 import {useNavigate} from "react-router-dom";
 import 'primeicons/primeicons.css';
 import { Tooltip } from 'primereact/tooltip';
@@ -24,11 +24,15 @@ const ProductAbout = (props) => {
 
         setInfo([])
         setQty([])
+
         if (productStore.idInfo.isInWB)
         if (parseInt(id)>0) {
+
+
             const result = calcDiscount(productStore.idInfo?.productInfo?.priceHistory)
             setDiscountInfo(result);
             try {
+                // console.log(productStore);
                 setInfo(productStore.idInfo.idInfoWB);
                 // Расчитаем остатки
                 let allQty = []
@@ -101,7 +105,9 @@ const ProductAbout = (props) => {
 
             {isInWB ?
                 <div>
-                    <div className="product_name">{productStore.idAddInfo.imt_name}</div>
+                    {/*<div className="product_name">catalogId {productStore.idInfo.idInfo.catalogId}</div>*/}
+
+                    <div className="product_name">{productStore.idInfo?.idInfoWB?.name}</div>
 
                     <div className="card-price">
                         <div className="price-low " style={{marginLeft: '10px'}}>

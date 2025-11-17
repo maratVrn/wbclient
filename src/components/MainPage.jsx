@@ -26,6 +26,7 @@ const MainPage = observer( () => {
     },[])
 
 
+
     const home = { label : 'Главная', template: () => <a onClick={()=> setMainMenu()} className="cursor-pointer ">Главная</a> }
 
     function setMainMenu(){
@@ -86,7 +87,7 @@ const MainPage = observer( () => {
                                 </div>
                                 <div style={{textAlign: 'center'}}>
                                     {oneData.name}
-                                    {/*{oneData.id}*/}
+
                                 </div>
 
 
@@ -101,7 +102,7 @@ const MainPage = observer( () => {
                                          src={oneData.img} alt="logo" loading="lazy"/>
                                 </div>
                                 <div style={{textAlign: 'center'}}>
-                                    {oneData.name} {oneData.id}
+                                    {oneData.name}
                                 </div>
 
 

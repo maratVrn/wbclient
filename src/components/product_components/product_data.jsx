@@ -164,12 +164,12 @@ const ProductData = (props) => {
     }
 
     return (
-        <div>
+        <div style={{paddingTop:'70px', alignItems:'center', textAlign:'center', paddingBottom:'50px'}}>
             {isInBase ?
                 <div>
 
                     <h2>График изменения цены за {selectedDays.daysName}  </h2>
-                    <div className="flex flex-wrap gap-3 dataTable" style={{padding: '10px'}}>
+                    <div className="flex flex-wrap gap-3 dataTable" style={{paddingTop: '30px', paddingBottom:'30px', paddingLeft:'20px'}}>
 
 
                         {daysCount.map((m1) => {

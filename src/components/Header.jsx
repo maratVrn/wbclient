@@ -17,8 +17,9 @@ const Header = observer(() => {
 
     const handleKeyPress = (event) => {
 
+        // TODO: сейчас реализован поиск только по ИД нрмально потом разбить на ид и запрос
         if(event.key === 'Enter'){
-            navigate('/productList/' + productListStore.query)
+
             navigate('/productInfo/' + productListStore.query.toString())
 
         }
@@ -30,13 +31,23 @@ const Header = observer(() => {
 
     }, [productListStore.query])
 
+    function getSearchResult(query, newInfo = true) {
 
+        let pageCount = 5
+        productListStore.getSearchResult(query).then(() => {
+            // setItems(productListStore.productList)
+
+
+        })
+    }
     return (
 
-        <header className='header ' style={{background: "linear-gradient(to right, #a0cbec, #61b662)",
-        backgroundColor:'#a0cbec'}}>
+        <header className='header ' style={{
+            background: "linear-gradient(to right, #a0cbec, #61b662)",
+            backgroundColor: '#a0cbec'
+        }}>
 
-
+            <button onClick={() => getSearchResult('блузка')}> test</button>
             <div className="header-desktop container-fluid" style={{paddingLeft: '60px'}}>
 
 
@@ -46,14 +57,15 @@ const Header = observer(() => {
                          alt="logo" loading="lazy"/>
                 </a>
 
+
                 <div style={{width: '100%', height: '120px'}}>
 
-                        <InputText style={{width: '100%', height: '50px', marginTop:'35px'}}  placeholder="найти на wb.sale"
-                            value={productListStore.query}
+                    <InputText style={{width: '100%', height: '50px', marginTop: '35px'}} placeholder="найти на wb.sale"
+                               value={productListStore.query}
 
-                                   onKeyPress={handleKeyPress} //useGrouping={false}
-                                   onChange={(e) => productListStore.setQuery(e.target.value)}
-                        />
+                               onKeyPress={handleKeyPress} //useGrouping={false}
+                               onChange={(e) => productListStore.setQuery(e.target.value)}
+                    />
 
                 </div>
 
@@ -70,11 +82,11 @@ const Header = observer(() => {
 
 
             <div className="header-mobile">
-            {/*    <a className="header-logo" href="/">*/}
-            {/*        <img className="logo-image" src={logoSvg} width="160" height="37" alt="logo"*/}
-            {/*    loading="lazy"/>*/}
-            {/*</a>*/}
-                <InputText style={{width: '100%', height: '50px', marginTop:'5px'}}  placeholder="найти на wb.sale"
+                {/*    <a className="header-logo" href="/">*/}
+                {/*        <img className="logo-image" src={logoSvg} width="160" height="37" alt="logo"*/}
+                {/*    loading="lazy"/>*/}
+                {/*</a>*/}
+                <InputText style={{width: '100%', height: '50px', marginTop: '5px'}} placeholder="найти на wb.sale"
                            value={productListStore.query}
                            onKeyPress={handleKeyPress} //useGrouping={false}
                            onChange={(e) => productListStore.setQuery(e.target.value)}
@@ -82,7 +94,8 @@ const Header = observer(() => {
 
                 <a className="header-control" href="/user/">
                     <i className="svg-icon nam-anam is-36 pi pi-user" style={{
-                        cursor: 'pointer',   fontSize: '1.5rem'}} ></i>
+                        cursor: 'pointer', fontSize: '1.5rem'
+                    }}></i>
 
                 </a>
 
