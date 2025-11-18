@@ -19,8 +19,12 @@ const Header = observer(() => {
 
         // TODO: сейчас реализован поиск только по ИД нрмально потом разбить на ид и запрос
         if(event.key === 'Enter'){
+            const query = productListStore.query.toString()
+            let res = !isNaN(productListStore.query.toString())
 
-            navigate('/productInfo/' + productListStore.query.toString())
+            console.log(query);
+            console.log(res);
+            // navigate('/productInfo/' + productListStore.query.toString())
 
         }
     };

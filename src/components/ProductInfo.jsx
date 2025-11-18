@@ -5,15 +5,9 @@ import {observer} from "mobx-react-lite";
 import './product_components/product.css';
 import ProductPhoto from "./product_components/product_photo";
 import ProductData from "./product_components/product_data";
-import ProductYearData from "./product_components/productYear_data";
 import ProductAbout from "./product_components/product_about";
-import ProductsSupplierInfo from "./product_components/products_supplier_Info";
-import ProductAllColors from "./product_components/product_all_colors";
-import Footer from "./footer";
-import PositionsInfo from "./product_components/positions_info";
-import CompetitorInfo from "./product_components/competitor_info";
-import {InputNumber} from "primereact/inputnumber";
-import { Button } from 'primereact/button';
+
+
 
 const ProductInfo =observer( (props ) => {
     const {productStore} = useContext(Context)
