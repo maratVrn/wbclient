@@ -54,6 +54,56 @@ export default class ApiService {
     static async APIUploadTest():Promise{
         return $api_serv_load.post(`/uploadNewWordStatisticData`)
     }
+    //  ************** Упралвение разделами каталога и предметами
+    static async APIGetCatalogInfo():Promise{
+        return $api_serv_load.get('/getCatalogInfo')
+    }
+
+
+
+
+    static async APIAddSubjectsInCatalog(id, newSubjects):Promise{
+        return $api_serv_load.post(`/addSubjectsInCatalog`,
+            {
+                id :   id,
+                newSubjects       :   newSubjects
+            }
+        )
+    }
+
+    static async APISaveAllSubjectsToFile():Promise{
+        return $api_serv_load.get('/saveAllSubjectsToFile')
+    }
+
+
+    static async APILoadAllSubjectsFromFile():Promise{
+        return $api_serv_load.get('/loadAllSubjectsFromFile')
+    }
+
+
+
+    static async APISaveSearchDataToFile():Promise{
+        return $api_serv_load.get('/saveSearchDataToFile')
+    }
+
+
+    static async APILoadSearchDataFromFile():Promise{
+        return $api_serv_load.get('/loadSearchDataFromFile')
+    }
+
+
+    static async APIGetCatalogIdInfo(id, needDelete, deleteIdList):Promise{
+        return $api_serv_load.post(`/getCatalogIdInfo`,
+            {
+                id :   id,
+                needDelete       :   needDelete,
+                deleteIdList : deleteIdList
+            }
+        )
+    }
+
+
+
     //************************  ******************** *******************************
 
 
@@ -62,34 +112,24 @@ export default class ApiService {
         return $api_client.get('/getLiteWBCatalog')
     }
 
+
+
     static async APIGetProductList(searchParam):Promise{
 
         return $api_client.post(`/getProductList`,searchParam)
     }
 
-    static async APIGetSearchResult(searchQuery, pageCount = 1):Promise{
+    static async APIGetSearchResult(searchQuery, param):Promise{
         return $api_client.post(`/getSearchResult`,
             {
                 searchQuery :   searchQuery,
-                pageCount   :   pageCount,
+                param       :   param,
 
             }
         )
     }
 
-    static async APIUpdateIdInfo(idList = []):Promise{
-        return $api_client.post(`/updateIdInfo`,
-            {
-                idList :   idList,
-            }
-        )
-    }
 
-
-
-    static async APIGetProductColorsInfo(id):Promise{
-        return $api_client.get(`/getProductColorsInfo/${parseInt(id)}`)
-    }
 
     static async APIGetCompetitorSeeAlsoInfo(id):Promise{
         return $api_client.get(`/getCompetitorSeeAlsoInfo/${parseInt(id)}`)
@@ -118,9 +158,6 @@ export default class ApiService {
     }
 
 
-    static async APIGetSupplierInfo(supplierId):Promise{
-        return $api_client.get(`/getSupplierInfo/${parseInt(supplierId)}`)
-    }
 
     static async APIGetPositionsInfo(id, searchArray):Promise{
         return $api_client.post(`/getPositionsInfo`,
@@ -131,13 +168,6 @@ export default class ApiService {
         )
     }
 
-    static async APIGetIDInfo(id):Promise{
-        return $api_client.get(`/getIdInfo/${parseInt(id)}`)
-    }
-
-    static async APISearchTest():Promise{
-        return $api_client.get(`/searchTest`)
-    }
 
     static async APIClientTest():Promise{
         return $api_client.get(`/wbServerTest`)
@@ -155,21 +185,6 @@ export default class ApiService {
         return $api_client.get(`/getProductInfo/${parseInt(id)}`)
     }
 
-    // Универсальный запрос если надо обраьатывать ошибку пока не использую
-    static async ApiClientGet(url){
-        let result = null
-        result = await $api_client.get(url)
-            .then(response => {
-                result = response
-                // do stuff
-            })
-            .catch(err => {
-                result = null
-                console.log(err.code);
-            })
-
-        return  result
-    }
 
 
     static async APIGetProductStartInfo(id):Promise{

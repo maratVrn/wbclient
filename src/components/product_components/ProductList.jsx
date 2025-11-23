@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState, useRef } from 'react';
-import './page.css';
+import '../page.css';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import {useNavigate, useParams} from "react-router-dom";
-import {Context} from "../index";
-import downSvg from "./images/down.svg";
+import {Context} from "../../index";
+import downSvg from "../images/down.svg";
 import { RadioButton } from "primereact/radiobutton";
 import { InputNumber } from 'primereact/inputnumber';
 import { Paginator } from 'primereact/paginator';
@@ -41,15 +41,15 @@ const ProductList = (props) => {
     ];
     const [depthSelectedCategory, setDepthSelectedCategory] = useState(depth_categories[0]);
 
-    // Фильтр брендов
-    const fbrandFilter_op = useRef(null);
-    const [selectedFbrandFilter, setSelectedFbrandFilter] = useState([]);
-    function onFbrandFilterChange  (e) {
-        let _selectedCategories = [...selectedFbrandFilter];
-        if (e.checked)  _selectedCategories.push(e.value)
-        else  _selectedCategories = _selectedCategories.filter(category => category.key !== e.value.key);
-        setSelectedFbrandFilter(_selectedCategories);
-    }
+    // // Фильтр брендов
+    // const fbrandFilter_op = useRef(null);
+    // const [selectedFbrandFilter, setSelectedFbrandFilter] = useState([]);
+    // function onFbrandFilterChange  (e) {
+    //     let _selectedCategories = [...selectedFbrandFilter];
+    //     if (e.checked)  _selectedCategories.push(e.value)
+    //     else  _selectedCategories = _selectedCategories.filter(category => category.key !== e.value.key);
+    //     setSelectedFbrandFilter(_selectedCategories);
+    // }
     // Фильтр категорий
     const xsubjectFilter_op = useRef(null);
     const [selectedXsubjectFilter, setSelectedXsubjectFilter] = useState([]);
@@ -66,29 +66,43 @@ const ProductList = (props) => {
     const [usePriceMax, setUsePriceMax] = useState(false);
     let { query } = useParams();
 
-    function getSearchResult(query, newInfo = true) {
 
-        let pageCount = 5
-        productListStore.getSearchResult(query, newInfo,pageCount).then(() => {
-            setItems(productListStore.productList)
-
-            if (productListStore.totalWBProductsCount === 1) navigate('/productInfo/' + query.toString())
-        })
-    }
 
     useEffect(()=>{
+
+        console.log('useEffectProductList');
+        // console.log('catalogId '+ catalogId);
+        // console.log('query '+ query);
         setItems([])
         setUsePriceMin(false)
         setUsePriceMax(false)
+        productListStore.setStartData()
+
         let idCount = 100
         try {idCount = parseInt(depthSelectedCategory.key)*100} catch (e) {idCount = 100}
-        const param = {catalogID: parseInt(catalogId), idCount: idCount,
-            filters : {isXsubjectFilterChecked : false, XsubjectIdArray : []}
+        if (catalogId){
+            const param = {catalogIdList :[ parseInt(catalogId)], idCount: idCount,
+                filters : {isXsubjectFilterChecked : false, XsubjectIdArray : []}
+            }
+            productListStore.getProductList(param).then(() => {
+                setItems(productListStore.productList)
+            })
         }
-        productListStore.getProductList(param).then(() => {
-            setItems(productListStore.productList)
-        })
-        // getSearchResult(query)
+            else if (query){
+            const param = {idCount: idCount,
+                filters : {isXsubjectFilterChecked : false, XsubjectIdArray : []}
+            }
+
+            console.log('поиск по query');
+            productListStore.getSearchResult(query, param).then(() => {
+                setItems(productListStore.productList)
+            })
+        }
+
+
+
+
+
     }, [query])
 
 
@@ -110,26 +124,34 @@ const ProductList = (props) => {
         let idCount = 0
         try {idCount = parseInt(depthSelectedCategory.key)*100} catch (e) {idCount = 100}
 
-        const param = {catalogID: parseInt(catalogId), idCount: idCount,
-            filters : {isXsubjectFilterChecked : isXsubjectFilterChecked, xSubjectIdArray : xSubjectIdArray,
-                usePriceMin : usePriceMin, priceMin : productListStore.priceUFilter.min,
-                usePriceMax : usePriceMax, priceMax : productListStore.priceUFilter.max,}
+
+
+        if (catalogId){
+            const param = {catalogIdList :[ parseInt(catalogId)], idCount: idCount,
+                filters : {isXsubjectFilterChecked : isXsubjectFilterChecked, xSubjectIdArray : xSubjectIdArray,
+                    usePriceMin : usePriceMin, priceMin : productListStore.priceUFilter.min,
+                    usePriceMax : usePriceMax, priceMax : productListStore.priceUFilter.max,}
+            }
+
+            productListStore.getProductList(param).then(() => {
+                setItems(productListStore.productList)
+            })
         }
-        productListStore.getProductList(param).then(() => {
-            setItems(productListStore.productList)
-        })
+        else if (query){
+            const param = {idCount: idCount,
+                filters : {isXsubjectFilterChecked : isXsubjectFilterChecked, xSubjectIdArray : xSubjectIdArray,
+                    usePriceMin : usePriceMin, priceMin : productListStore.priceUFilter.min,
+                    usePriceMax : usePriceMax, priceMax : productListStore.priceUFilter.max,}
+            }
 
 
-        // let newQuery = query
-        // for (let i in selectedXsubjectFilter){
-        //     newQuery = selectedXsubjectFilter[i].name.toString()
-        //     break
-        // }
-        // for (let i in selectedFbrandFilter){
-        //     newQuery += ' '+selectedFbrandFilter[i].name.toString()
-        // }
-        //
-        // navigate('/productList/' + newQuery)
+            productListStore.getSearchResult(query, param).then(() => {
+                setItems(productListStore.productList)
+            })
+        }
+
+
+
 
     }
 

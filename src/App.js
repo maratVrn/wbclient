@@ -2,18 +2,18 @@ import React, {useContext, useEffect, useState} from 'react';
 import './App.css';
 import {Context} from "./index";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProductList from "./components/ProductList";
+import ProductList from "./components/product_components/ProductList";
 import MainPage from "./components/MainPage";
-import User from "./components/user";
-import ProductInfo from "./components/ProductInfo";
-import NoProduct from "./components/NoProduct";
+import User from "./components/user_components/user";
+import ProductInfo from "./components/product_components/ProductInfo";
+import NoProduct from "./components/product_components/NoProduct";
 import Training from "./components/training_components/Training";
-import Test from "./components/test";
 import Header from "./components/Header";
 import Contacts from "./components/Contacts";
 import Footer from "./components/footer";
 import Oferta from "./components/oferta";
 import ConfPolicy from "./components/confPolicy";
+import Subjects from "./components/training_components/subjects";
 
 
 function App() {
@@ -61,24 +61,23 @@ function App() {
 
         <BrowserRouter>
             <Header/>
-            {/*<Test/>*/}
+
             <Routes>
 
                 <Route path="/" element={<MainPage/>}/>
 
                 <Route path="/productInfo/:id" element={<ProductInfo/>}/>
                 <Route path="/productList/:query" element={<ProductList/>}/>
-                {/*<Route path="/productSupplierInfo/:id" element={<ProductsSupplierInfo/>}/>*/}
-                {/*<Route path="/competitorInfo/:id" element={<CompetitorInfo/>}/>*/}
 
-                <Route path="/noProduct/" element={<NoProduct/>}/>
-                <Route path="/test/" element={<Test/>}/>
+                <Route path="/noProduct/:query" element={<NoProduct/>}/>
+
                 <Route path="/user/" element={<User/>}/>
                 <Route path="/oferta/" element={<Oferta/>}/>
                 <Route path="/confPolicy/" element={<ConfPolicy/>}/>
 
                 <Route path="/contacts/" element={<Contacts/>}/>
                 <Route path="/training/:st" element={<Training/>}/>
+                <Route path="/subjects/" element={<Subjects/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>

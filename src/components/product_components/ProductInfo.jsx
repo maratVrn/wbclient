@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import {Context} from "../index";
+import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
-import './product_components/product.css';
-import ProductPhoto from "./product_components/product_photo";
-import ProductData from "./product_components/product_data";
-import ProductAbout from "./product_components/product_about";
+import './product.css';
+import ProductPhoto from "./product_photo";
+import ProductData from "./product_data";
+import ProductAbout from "./product_about";
 
 
 
@@ -33,6 +33,8 @@ const ProductInfo =observer( (props ) => {
                 productStore.getProductStartInfo(id).then(() => {
                         setIsInWB(productStore.idInfo.isInWB)
                         setIsInBase(productStore.idInfo.isInBase)
+
+                    if ((!productStore.idInfo.isInWB) && (!productStore.idInfo.isInBase))  navigate('/noProduct/'+id)
 
 
                     }

@@ -215,35 +215,6 @@ export default class ProductStore {
         }
     }
 
-    async  getProductColorsInfo(id){
-        try{
-           if (!this.is_all_colors_Load) {
-               // console.log('грузим');
-               const productColorsInfo = await ApiService.APIGetProductColorsInfo(id)
-                if (productColorsInfo?.data) this.setProductColorsInfo(productColorsInfo?.data)
-
-               this.set_is_all_colors_Load(true)
-            } //else console.log('НЕ грузим');
-
-        } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
-
-
-    async  getSupplierInfo(supplierId){
-        try{
-
-            if (!this.is_supplier_info_Load) {
-                const productSupplierInfo = await ApiService.APIGetSupplierInfo(supplierId)
-                console.log(productSupplierInfo.data);
-                if (productSupplierInfo?.data[0]) this.setSupplierInfo(productSupplierInfo?.data[0], productSupplierInfo?.data[1])
-                this.set_is_supplier_info_Load(true)
-            }
-
-        } catch (e) {console.log(e) }
-    }
 
     getSearchWords(){
         let searchWords = []

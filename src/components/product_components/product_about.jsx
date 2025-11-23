@@ -18,8 +18,7 @@ const ProductAbout = (props) => {
 
 
     useEffect(()=>{
-        // console.log('useEffect ProductAbout');
-        // console.log('isInWB ProductAbout '+isInWB);
+
         setDiscountInfo({discount :0,  isDataCalc : false, meanPrice : 0})
 
         setInfo([])
@@ -58,47 +57,7 @@ const ProductAbout = (props) => {
         }
     },[id, isInWB])
 
-    function getIdInfo(id) {
-        navigate('/productInfo/' + id.toString())
 
-
-    }
-
-    const productTemplate = (product) => {
-        return (
-            <div style={{height:'80px', textAlign:'center'}}>
-
-            <img style={{height:'80px', width:'60px'}}
-                 className={product.id == id? "little_photo little_photo_border" : "little_photo"}
-                 src={product.photoUrl}
-                 onClick={() => getIdInfo(product.id)}
-                 alt="..."/>
-
-            </div>
-        );
-    };
-    const responsiveOptions = [
-        {
-            breakpoint: '1400px',
-            numVisible: 5,
-            numScroll: 1
-        },
-        {
-            breakpoint: '1199px',
-            numVisible: 4,
-            numScroll: 1
-        },
-        {
-            breakpoint: '767px',
-            numVisible: 3,
-            numScroll: 1
-        },
-        {
-            breakpoint: '575px',
-            numVisible: 2,
-            numScroll: 1
-        }
-    ];
     return (
 
         <div>
@@ -112,7 +71,7 @@ const ProductAbout = (props) => {
                     <div className="card-price">
                         <div className="price-low " style={{marginLeft: '10px'}}>
                             <span>{info?.price > 0 ? info.price : 'Нет в наличии'} ₽ </span>
-                            <span className="product-brand"> цена на WB сейчас без учета wb-кошелька </span>
+                            <span className="product-brand"> {info?.price > 0 ? 'цена на WB сейчас без учета wb-кошелька' : ''} </span>
                         </div>
 
 
@@ -122,12 +81,15 @@ const ProductAbout = (props) => {
                     {
                         discountInfo.isDataCalc ?
                             <>
-                                <div className="card-price">
-                                    <span
-                                        className="product-brand"> Средняя цена за 90 дней: </span>
-                                    <span
-                                        className="spanGreen" > {discountInfo.meanPrice}  ₽</span>
-                                </div>
+                                {info?.price > 0 ?
+                                    <div className="card-price">
+                                        <span
+                                            className="product-brand"> Средняя цена за 90 дней: </span>
+                                        <span
+                                            className="spanGreen" > {discountInfo.meanPrice}  ₽</span>
+                                    </div>
+                                    : <></>
+                                }
                                 <div className="card-price">
                                     {
                                         discountInfo.discount > 0 ?
@@ -145,7 +107,9 @@ const ProductAbout = (props) => {
 
                             </>
                             :
-                            <span className="product-brand"> Данные о скидке не расчитаы </span>
+                            <div>
+                                <span className="product-brand"> Данные о скидке не расчитаны </span>
+                            </div>
 
                     }
                     <span className="product-brand"> Возраст товара: {productStore.startDateInBase}</span>
@@ -171,22 +135,7 @@ const ProductAbout = (props) => {
                         <span className="product-rate2"> {info?.reviewRating} </span>
                         <span className="product-rate3"> {info?.feedbacks} оценок </span>
                     </div>
-                    {/*<div className="product_color">цвет : {productStore.idAddInfo.nm_colors_names}</div>*/}
-                    {/*{*/}
-                    {/*    productStore.colors.length > 1 ?*/}
-                    {/*        <div style={{height: '80px', paddingTop: '10px', maxWidth: '500px'}}>*/}
 
-                    {/*            <Carousel*/}
-
-                    {/*                value={productStore.colors}*/}
-                    {/*                responsiveOptions={responsiveOptions}*/}
-                    {/*                numVisible={6}*/}
-                    {/*                showIndicators={false}*/}
-                    {/*                itemTemplate={productTemplate}/>*/}
-                    {/*        </div>*/}
-                    {/*        :*/}
-                    {/*        <div></div>*/}
-                    {/*}*/}
 
                     {
                         qty.length > 1 ?
@@ -219,11 +168,7 @@ const ProductAbout = (props) => {
                         >
                             Перейти на Wildberries
                         </a>
-                        {/*<button onClick={() => {*/}
-                        {/*    // const result = await ApiService.APIGetIDInfo(id)*/}
-                        {/*    productStore.getMathData(id).then(() =>{})*/}
-                        {/*}}>Расчет с ВБ*/}
-                        {/*</button>*/}
+
                     </div>
                 </div>
                 :

@@ -4,7 +4,6 @@ import { InputText } from 'primereact/inputtext';
 import './css/form.css';
 import './css/wbsale.css';
 import {useNavigate} from "react-router-dom";
-import productList from "./ProductList";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 
@@ -14,36 +13,28 @@ const Header = observer(() => {
     const navigate = useNavigate();
 
 
-
     const handleKeyPress = (event) => {
-
-        // TODO: сейчас реализован поиск только по ИД нрмально потом разбить на ид и запрос
         if(event.key === 'Enter'){
             const query = productListStore.query.toString()
-            let res = !isNaN(productListStore.query.toString())
-
-            console.log(query);
-            console.log(res);
-            // navigate('/productInfo/' + productListStore.query.toString())
-
-        }
+            let isOnlyCount = !isNaN(productListStore.query.toString())
+            let needSearchQuery = true
+            if (isOnlyCount) if (parseInt(query)>10_000) {
+                navigate('/productInfo/' + productListStore.query.toString())
+                needSearchQuery = false
+            }
+            if (needSearchQuery) {
+                navigate('/productList/'+query)
+            }
+            productListStore.setQuery('')
+                    }
     };
+    //
+    // useEffect(()=>{
+    //     console.log('Header useEffect');
+    //
+    //
+    // }, [])
 
-    useEffect(()=>{
-        console.log('Header useEffect');
-
-
-    }, [productListStore.query])
-
-    function getSearchResult(query, newInfo = true) {
-
-        let pageCount = 5
-        productListStore.getSearchResult(query).then(() => {
-            // setItems(productListStore.productList)
-
-
-        })
-    }
     return (
 
         <header className='header ' style={{
@@ -51,7 +42,7 @@ const Header = observer(() => {
             backgroundColor: '#a0cbec'
         }}>
 
-            <button onClick={() => getSearchResult('блузка')}> test</button>
+
             <div className="header-desktop container-fluid" style={{paddingLeft: '60px'}}>
 
 

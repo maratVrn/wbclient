@@ -5,7 +5,7 @@ import './css/wbsale.css';
 import {Context} from "../index";
 import { BreadCrumb } from 'primereact/breadcrumb';
 import {observer} from "mobx-react-lite";
-import ProductList from "./ProductList";
+import ProductList from "./product_components/ProductList";
 
 
 const MainPage = observer( () => {

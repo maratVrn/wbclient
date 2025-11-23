@@ -604,15 +604,17 @@ function calcDiscount (history = []){
     const priceArray= getPriceFromHistoryLight(history, dayCalc)
     let isDataCalc = false
     let endPrice = priceArray.at(-1)
+
     let medianPrice = 0
     let discount2 = 0
     // Правильнее по медиане посчитать
-    if (priceArray.length >= dayCalc/2) {
-        priceArray.sort(function (a, b) {return b - a;})
-        medianPrice = priceArray[Math.round(priceArray.length / 2)]
-        discount2 = Math.round(100 * (medianPrice - endPrice) / medianPrice)
-        isDataCalc = true
-    }
+    if (endPrice>0)
+        if (priceArray.length >= dayCalc/2) {
+            priceArray.sort(function (a, b) {return b - a;})
+            medianPrice = priceArray[Math.round(priceArray.length / 2)]
+            discount2 = Math.round(100 * (medianPrice - endPrice) / medianPrice)
+            isDataCalc = true
+        }
 
     return {isDataCalc : isDataCalc, meanPrice : medianPrice, discount : discount2}
 }

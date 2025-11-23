@@ -127,9 +127,11 @@ const Training = observer(  () => {
                                 style={{height: '28px', fontSize: '12px', marginBottom: '10px', marginTop: '5px'}}
                                 onClick={() => loadAndShowAllTask(true)}/>
                         <div style={{width: '100%', height: '100%', 'overflow': 'auto', paddingTop: '10px'}}>
-                            <DataTable style={{fontSize: '14px'}} value={serverUpdateStore.allTask} size={'small'}
+                            <DataTable style={{fontSize: '14px'}}
+                                       value={serverUpdateStore.allTask} size={'small'}
                                        className="dataTable"
                                        selection={selectedTask}
+                                       // selectionMode="single"
                                        onSelectionChange={(e) => setSelectedTask(e.value)}
                             >
 

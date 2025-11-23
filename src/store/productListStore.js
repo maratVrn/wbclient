@@ -1,6 +1,4 @@
 import ApiService from "../service/ApiService";
-import WbService from "../service/WbService";
-
 import {makeAutoObservable} from "mobx";
 import {calcDiscount} from "../components/math";
 
@@ -28,7 +26,7 @@ export default class ProductListStore {
         this.productInfo = []
         this.fbrandFilter = { key : 'fbrand', items : [] }
         this.xsubjectFilter = { key : 'xsubject', items : [] }
-        // this.priceUFilter = { key: 'priceU', min:1, max:1_000_000}
+
     }
 
     constructor() {
@@ -37,64 +35,57 @@ export default class ProductListStore {
 
 
 
-    setFilters(filters){
 
-        for (let i in filters){
+    setProductListResult(productList){
+        let productListAdd = productList?.data[0]? productList?.data[0] : []
+        let itogProductListAdd = []
+        for (let i in  productListAdd) {
 
-            if (filters[i].key === 'fbrand') for (let j in filters[i].items) this.fbrandFilter.items.push({name: filters[i].items[j].name, key:filters[i].items[j].id})
-            if (filters[i].key === 'xsubject') for (let j in filters[i].items) this.xsubjectFilter.items.push({name: filters[i].items[j].name, key:filters[i].items[j].id})
-            if (filters[i].key === 'priceU') {
-                try {
-                    this.priceUFilter.min = filters[i].minPriceU / 100
-                    this.priceUFilter.max = filters[i].maxPriceU / 100
-                } catch {
-                    this.priceUFilter = {key: 'priceU', min: 1, max: 1_000_000}
+            const discountData = calcDiscount(productListAdd[i].priceHistory)
+            if (discountData.isDataCalc)
+                if (discountData.discount >0 ) {
+                    productListAdd[i].discount = discountData.discount
+                    productListAdd[i].meanPrice = discountData.meanPrice
+                    // TODO: Хардкор чтобы малопокупаемые товары не показывались
+                    if (productListAdd[i].feedbacks>5) {
+                        let needAdd = true
+                        // проверим вдру товар уже есть чтобы не задвоился
+                        for (let k in itogProductListAdd)
+                            if (itogProductListAdd[k].id === productListAdd[i].id){
+                                needAdd = false
+                                break
+                            }
+                        if (needAdd) itogProductListAdd.push(productListAdd[i])
+                    }
+
                 }
-            }
-
         }
+        itogProductListAdd.sort((a, b) => b.discount - a.discount)
+        this.setStartData()
+        if (productList?.data) this.productList = itogProductListAdd
+
+        if (productList?.data[1].subjects)
+            for (let j in productList?.data[1].subjects) this.xsubjectFilter.items.push({name: productList?.data[1].subjects[j].name, key:productList?.data[1].subjects[j].id})
 
     }
-
     async  getProductList(param){
         try{
-            this.setStartData()
+            // this.setStartData()
             const productList = await ApiService.APIGetProductList(param)
-            let productListAdd = productList?.data[0]? productList?.data[0] : []
-            let itogProductListAdd = []
-            for (let i in  productListAdd) {
-
-                const discountData = calcDiscount(productListAdd[i].priceHistory)
-                if (discountData.isDataCalc)
-                    if (discountData.discount >0 ) {
-                        productListAdd[i].discount = discountData.discount
-                        productListAdd[i].meanPrice = discountData.meanPrice
-                        // TODO: Хардкор чтобы малопокупаемые товары не показывались
-                        if (productListAdd[i].feedbacks>5) itogProductListAdd.push(productListAdd[i])
-                    }
-            }
-            itogProductListAdd.sort((a, b) => b.discount - a.discount)
-            // itogProductListAdd.sort((a, b) => a.price - b.price)
-            this.setStartData()
-            if (productList?.data) this.productList = itogProductListAdd
-
-
-            if (productList?.data[1].subjects)
-                for (let j in productList?.data[1].subjects) this.xsubjectFilter.items.push({name: productList?.data[1].subjects[j].name, key:productList?.data[1].subjects[j].id})
-
+            this.setProductListResult(productList)
         } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
             console.log(e)
         }
     }
 
-    async  getSearchResult(searchQuery, newInfo = true, pageCount = 1){
+    async  getSearchResult(searchQuery, param){
 
         try{
 
             this.query = searchQuery
-            const result = await ApiService.APIGetSearchResult(searchQuery)
-            console.log(result);
+            const productList = await ApiService.APIGetSearchResult(searchQuery, param)
+            this.setProductListResult(productList)
+
 
         } catch (e) {
 
