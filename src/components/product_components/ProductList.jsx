@@ -8,16 +8,19 @@ import { RadioButton } from "primereact/radiobutton";
 import { InputNumber } from 'primereact/inputnumber';
 import { Paginator } from 'primereact/paginator';
 import { Checkbox } from 'primereact/checkbox';
+import {ProgressSpinner} from "primereact/progressspinner";
 
 const ProductList = (props) => {
-    const {catalogId} = props;
 
+    const [loading, setLoading] = useState(false);
+
+    const {catalogId} = props;
     const {productListStore} = useContext(Context)
     const [items, setItems] = useState([])
 
     // Для пагинации товаров
     const [first, setFirst] = useState(0);
-    const [rows, setRows] = useState(20);
+    const [rows, setRows] = useState(50);
     const onPageChange = (event) => {
         window.scrollTo(0, 0)
         setFirst(event.first);
@@ -28,9 +31,6 @@ const ProductList = (props) => {
 
     const navigate = useNavigate();
 
-
-
-
     // Параметры глубины аналитики
     const depth_op = useRef(null);
     const depth_categories = [
@@ -40,6 +40,18 @@ const ProductList = (props) => {
 
     ];
     const [depthSelectedCategory, setDepthSelectedCategory] = useState(depth_categories[0]);
+
+    // Параметры сортировки
+    const sort_op = useRef(null);
+    const sort_categories = [
+        { name: 'Лучшая скидка', key: '1' },
+        { name: 'Сначала дешевле', key: '2' },
+        { name: 'Сначала дороже', key: '3' },
+        { name: 'По рейтингу', key: '4' },
+        { name: 'По колличеству оценок', key: '5' },
+
+    ];
+    const [sortSelectedCategory, setSortSelectedCategory] = useState(depth_categories[0]);
 
     // // Фильтр брендов
     // const fbrandFilter_op = useRef(null);
@@ -81,20 +93,23 @@ const ProductList = (props) => {
         let idCount = 100
         try {idCount = parseInt(depthSelectedCategory.key)*100} catch (e) {idCount = 100}
         if (catalogId){
+            setLoading(true);
             const param = {catalogIdList :[ parseInt(catalogId)], idCount: idCount,
-                filters : {isXsubjectFilterChecked : false, XsubjectIdArray : []}
+                filters : {isXsubjectFilterChecked : false, xSubjectIdArray : []}
             }
             productListStore.getProductList(param).then(() => {
+                setLoading(false);
                 setItems(productListStore.productList)
             })
         }
             else if (query){
             const param = {idCount: idCount,
-                filters : {isXsubjectFilterChecked : false, XsubjectIdArray : []}
+                filters : {isXsubjectFilterChecked : false, xSubjectIdArray : []}
             }
 
-            console.log('поиск по query');
+            setLoading(true);
             productListStore.getSearchResult(query, param).then(() => {
+                setLoading(false);
                 setItems(productListStore.productList)
             })
         }
@@ -127,6 +142,7 @@ const ProductList = (props) => {
 
 
         if (catalogId){
+            setLoading(true);
             const param = {catalogIdList :[ parseInt(catalogId)], idCount: idCount,
                 filters : {isXsubjectFilterChecked : isXsubjectFilterChecked, xSubjectIdArray : xSubjectIdArray,
                     usePriceMin : usePriceMin, priceMin : productListStore.priceUFilter.min,
@@ -134,7 +150,9 @@ const ProductList = (props) => {
             }
 
             productListStore.getProductList(param).then(() => {
-                setItems(productListStore.productList)
+                setLoading(false);
+                // setItems(productListStore.productList)
+                sortData()
             })
         }
         else if (query){
@@ -144,9 +162,11 @@ const ProductList = (props) => {
                     usePriceMax : usePriceMax, priceMax : productListStore.priceUFilter.max,}
             }
 
-
+            setLoading(true);
             productListStore.getSearchResult(query, param).then(() => {
-                setItems(productListStore.productList)
+                // setItems(productListStore.productList)
+                sortData()
+                setLoading(false);
             })
         }
 
@@ -155,18 +175,39 @@ const ProductList = (props) => {
 
     }
 
+    function sortData() {
+        setItems([])
+        let sortKey = sortSelectedCategory?.key? parseInt(sortSelectedCategory?.key) : 1
+        productListStore.sortProducts(sortKey).then(() => {
+            setItems(productListStore.productList)
+        })
+
+    }
+
 
     return (
         <div className="">
-            <div className=" flex align-items-center">
-                <h3 style={{marginLeft: '20px'}}>{query}</h3>
-                <p style={{
-                    marginTop: '10px',
-                    marginLeft: '20px',
-                    fontSize: '16px',
-                    color: '#83839a'
-                }}>{productListStore.productList.length} товаров со скидками найдено</p>
-            </div>
+            {loading ?
+                <div>
+                    <div style={{paddingTop: '20px', paddingLeft: '40px', textAlign:'center'}} >
+                        <ProgressSpinner style={{width: '100px', height: '100px'}} strokeWidth="4"
+                                         fill="var(--surface-ground)" animationDuration=".9s"/>
+                        <p>Загружаем товары</p>
+                    </div>
+
+                </div>
+                :
+                <div className=" flex align-items-center">
+                    <h3 style={{marginLeft: '20px'}}>{query}</h3>
+                    <p style={{
+                        marginTop: '10px',
+                        marginLeft: '20px',
+                        fontSize: '16px',
+                        color: '#83839a'
+                    }}>{productListStore.productList.length} товаров со скидками найдено</p>
+                </div>
+
+            }
 
             <div className=" flex  " style={{paddingTop: '20px'}}>
 
@@ -196,6 +237,8 @@ const ProductList = (props) => {
 
             {/*Фильтры*/}
             <div className=" flex" style={{marginTop: '20px', marginBottom: '20px'}}>
+
+                {/*Глубина аналитики*/}
                 <button className="filter_button" onClick={(e) => depth_op.current.toggle(e)}> Глубина аналитики
                     <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
                 </button>
@@ -221,6 +264,8 @@ const ProductList = (props) => {
                     </div>
 
                 </OverlayPanel>
+
+                {/*Категории*/}
                 {
                     productListStore.xsubjectFilter.items.length > 0 ?
                         <>
@@ -256,6 +301,8 @@ const ProductList = (props) => {
                         <></>
 
                 }
+
+                {/*Цена */}
                 <button className="filter_button" onClick={(e) => price_op.current.toggle(e)}> Цена
                     <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
                 </button>
@@ -290,6 +337,33 @@ const ProductList = (props) => {
                         }}> Применить
                         </button>
                     </div>
+                </OverlayPanel>
+
+                {/*Сортировка*/}
+                <button className="filter_button" onClick={(e) => sort_op.current.toggle(e)}> Сортировка
+                    <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
+                </button>
+                <OverlayPanel ref={sort_op}>
+                    <div className="flex flex-column gap-3">
+                        {sort_categories.map((category) => {
+                            return (
+                                <div key={category.key} className="flex align-items-center">
+                                    <RadioButton inputId={category.key} name="category" value={category}
+                                                 onChange={(e) => {
+                                                     setSortSelectedCategory(e.value)
+                                                 }}
+                                                 checked={sortSelectedCategory.key === category.key}/>
+                                    <label htmlFor={category.key} className="ml-2">{category.name}</label>
+                                </div>
+                            );
+                        })}
+                        <button className="filter_button_ok" onClick={(e) => {
+                            sort_op.current.toggle(e)
+                            sortData()
+                        }}> Применить
+                        </button>
+                    </div>
+
                 </OverlayPanel>
 
 
@@ -329,6 +403,7 @@ const ProductList = (props) => {
 
 
             </div>
+
 
             {/*Список на выдачу*/}
             <div className="grid" style={{paddingBottom:'30px'}}>
@@ -374,7 +449,7 @@ const ProductList = (props) => {
 
             </div>
             <div className="card">
-                <Paginator first={first} rows={rows} totalRecords={items.length} rowsPerPageOptions={[20, 35, 50]}
+                <Paginator first={first} rows={rows} totalRecords={items.length} rowsPerPageOptions={[50, 100]}
                            onPageChange={onPageChange}/>
             </div>
         </div>

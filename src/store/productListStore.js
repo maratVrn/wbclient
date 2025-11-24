@@ -93,6 +93,27 @@ export default class ProductListStore {
         }
     }
 
+    async  sortProducts(sortKey = 1){
+
+        try{
+            if (sortKey === 1) this.productList.sort((a, b) => b.discount - a.discount)
+            if (sortKey === 2) this.productList.sort((a, b) => a.price - b.price)
+            if (sortKey === 3) this.productList.sort((a, b) => b.price - a.price)
+            if (sortKey === 4) this.productList.sort((a, b) => b.reviewRating - a.reviewRating)
+            if (sortKey === 5) this.productList.sort((a, b) => b.feedbacks - a.feedbacks)
+
+
+
+            // if (sortKey === 4) this.productList.sort((a, b) => b.price - a.price)
+
+
+
+        } catch (e) {
+
+            console.log(e)
+        }
+    }
+
 
 
 
