@@ -443,7 +443,8 @@ const ProductList = (props) => {
 
 
                         </div>
-                    </div>)
+                    </div>
+                )
                 }
 
 

@@ -1,0 +1,14 @@
+<svg width="160" height="37" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="162" height="39" id="canvas_background" fill="none"/>
+ </g>
+
+ <g>
+  <title>Layer 1</title>
+  <text fill="#ffffff" stroke-width="0" x="8.58935" y="18.74011" id="svg_11" font-size="28" font-family="Oswald, sans-serif" text-anchor="start" xml:space="preserve" transform="matrix(1.4732267801745433,0,0,1.5266196727752683,-11.98266623147277,4.127194595881576) " stroke="#af5050" font-style="normal" font-weight="bold" stroke-opacity="0">wb</text>
+  <text fill="none" stroke-width="0" x="85.79096" y="12.80791" id="svg_12" font-size="28" font-family="'League Gothic', sans-serif" text-anchor="start" xml:space="preserve" transform="matrix(3.6698334217071533,0,0,1.6491026878356934,-229.04755784412555,8.61377248415829) "/>
+  <text fill="#ffffff" stroke-width="0" x="68.55932" y="17.87536" id="svg_13" font-size="28" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve" transform="rotate(0.444988876581192 110.04994964599598,17.320722579954975) matrix(1.6552494032666887,0,0,1.5473597631179832,-48.53454179985536,4.586533249346232) " stroke="null" font-style="normal" font-weight="bold">sale</text>
+  <text fill="#ffffff" stroke-width="0" stroke-opacity="null" x="53.58757" y="25.23728" id="svg_14" font-size="28" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve" transform="matrix(1.7261518239974976,0,0,1.3063995838165283,-38.9127173774732,0.03363853883306511) " stroke="null">.</text>
+ </g>
+</svg>

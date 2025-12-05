@@ -2,14 +2,20 @@
 
     width: 100%;
     height: 100%;
-    top:120px;
     left: 0;
     background-color: #ffffff;
-    padding: 50px 10% 20px 10% ;
-    overflow-y: scroll;
+    padding-left: 5%;
+    padding-right: 5%;
+
+
 }
 
 
+@media (max-width: 1060px) {
+    .page{
+        padding-top: 120px;
+    }
+}
 
 
 .text-wrap {
@@ -43,6 +49,19 @@
     width: 220px;
 }
 
+.itemCarousel {
+    /*border: 1px solid silver;*/
+    /*margin: 5px;*/
+    cursor : pointer;
+    height: 460px;
+    width: 220px;
+}
+.itemCarousel img {
+    border-radius: 10px;
+    height: auto;
+    width: 100%;
+
+}
 
 
 .card-price{
@@ -254,3 +273,113 @@ a.wb-go {
     margin-top:4px;
 
 }
+
+.infoLine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height : 45px;
+    border: 1px solid silver;
+    border-radius: 15px;
+    background: #485f98;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 20px;
+
+}
+.allStartProducts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height : 45px;
+    border: 1px solid silver;
+    border-radius: 15px;
+    background: #485f98;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 20px;
+
+}
+
+.container {
+    display: flex;
+    justify-content: space-between; /* Распределяет пространство между блоками */
+    align-items: stretch; /* Выравнивает блоки по высоте */
+    width: 100%;
+    gap: 10px; /* Добавляет отступы между блоками */
+    box-sizing: border-box;
+    padding-top: 10px;
+}
+
+.startSidebar {
+    /* Эти блоки гибкие. Они займут все доступное место,
+       которое не занял центральный блок, и могут сжиматься */
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 50px; /* Минимальная ширина для боковых блоков (можно убрать, если они должны исчезать полностью) */
+    /*padding: 15px;*/
+    padding-bottom: 7px;
+    text-align: center;
+    overflow: hidden; /* Важно: скрывает части изображения, выходящие за пределы контейнера */
+}
+
+.mainRightImg {
+    /* Изображение занимает 100% ширины и высоты родительского div */
+    width: 100%;
+    height: 100%;
+    /* object-fit: cover гарантирует, что изображение покроет всю область контейнера, сохраняя пропорции, и при необходимости обрежется. */
+    object-fit: cover;
+    /* object-position: right гарантирует, что видимая часть изображения всегда будет привязана к правому краю контейнера. */
+    object-position: left;
+}
+
+.mainLeftImg {
+    /* Изображение занимает 100% ширины и высоты родительского div */
+    width: 100%;
+    height: 100%;
+    /* object-fit: cover гарантирует, что изображение покроет всю область контейнера, сохраняя пропорции, и при необходимости обрежется. */
+    object-fit: cover;
+    /* object-position: right гарантирует, что видимая часть изображения всегда будет привязана к правому краю контейнера. */
+    object-position: right;
+}
+
+.main-content {
+    /* Этот блок не будет расти, но его ширина фиксирована */
+    flex-grow: 0;
+    flex-shrink: 0; /* Важно: запрещаем ему сжиматься */
+    width: 1000px; /* Заданная фиксированная ширина */
+    min-width: 1000px; /* Гарантирует, что он всегда будет минимум 600px */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+@media (max-width:1200px) {
+    /*.startSidebar {*/
+    /*    display: none*/
+    /*}*/
+    .main-content{
+        width: 600px; /* Заданная фиксированная ширина */
+        min-width: 600px; /* Гарантирует, что он всегда будет минимум 600px */
+    }
+    /*.container{*/
+    /*    justify-content: center; !* Распределяет пространство между блоками *!*/
+    /*}*/
+
+}
+
+@media (max-width:768px) {
+    .startSidebar {
+        display: none
+    }
+    .main-content{
+        width: 400px; /* Заданная фиксированная ширина */
+        min-width: 400px; /* Гарантирует, что он всегда будет минимум 600px */
+    }
+    .container{
+        justify-content: center; /* Распределяет пространство между блоками */
+    }
+
+}
+

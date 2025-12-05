@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './App.css';
 import {Context} from "./index";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {BrowserRouter, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import ProductList from "./components/product_components/ProductList";
 import MainPage from "./components/MainPage";
 import User from "./components/user_components/user";
@@ -19,31 +19,25 @@ import Subjects from "./components/training_components/subjects";
 function App() {
     const {catalogStore} = useContext(Context)
     const {serverUpdateStore} = useContext(Context)
-
-
+    const [startData, setStartData] = useState('startData')
+    const [wbCatalog, setWbCatalog] = useState([1,2])
+    const {productStore} = useContext(Context)
 
     useEffect(()=>{
-
-        // console.log('Главный useEffect');
-
-        // serverUpdateStore.getCurrServerInfo().then(() => {})
-        // const timer = setInterval(() => {
-        //     // console.log('Запросили промежуточное состояние')
-        //     serverUpdateStore.getCurrServerInfo().then(() => {})
-        // }, 1000);
-        // return () => clearTimeout(timer);
-
-
-        // return () => {
-        //     eventSource.close();
-        // };
-
+        setStartData('notStartData')
 
         catalogStore.getLiteWBCatalog().then(() => {
                 console.log('Загрузили каталог');
+                // setWbCatalog(catalogStore.allWBCatalogLite)
+                // setWbCatalog(JSON.stringify(catalogStore.someData).slice(0,50))
+
 
             }
         )
+        // console.log('Главный useEffect');
+
+
+
 
         // console.log('Загрузка стартовых данных');
         //
@@ -64,7 +58,8 @@ function App() {
 
             <Routes>
 
-                <Route path="/" element={<MainPage/>}/>
+                <Route path="/"  element={<MainPage data = {startData} />}/>
+
 
                 <Route path="/productInfo/:id" element={<ProductInfo/>}/>
                 <Route path="/productList/:query" element={<ProductList/>}/>

@@ -1,8 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
-import logoSvg from "./logo-dark.svg";
+import logoSvg from "./logo-light.svg";
 import { InputText } from 'primereact/inputtext';
-import './css/form.css';
-import './css/wbsale.css';
 import {useNavigate} from "react-router-dom";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
@@ -35,11 +33,14 @@ const Header = observer(() => {
     //
     // }, [])
 
+
     return (
 
         <header className='header ' style={{
-            background: "linear-gradient(to right, #a0cbec, #61b662)",
-            backgroundColor: '#a0cbec'
+            background: "linear-gradient(to right, " +
+                "#26282AFF, " +
+                "#4A85BFFF)",
+            backgroundColor: '#4a85bf'
         }}>
 
 
@@ -64,11 +65,11 @@ const Header = observer(() => {
 
                 </div>
 
-                <div className="space-xs menu-controls" style={{paddingLeft: '150px', paddingRight: '40px'}}>
+                <div className="space-xs menu-controls" style={{paddingLeft: '110px', paddingRight: '40px'}}>
 
                     <a className="header-control" href="/user/">
-                        <i className="svg-icon nam-anam is-36 pi pi-user" style={{
-                            cursor: 'pointer', fontSize: '1.5rem'
+                        <i className=" pi pi-user" style={{
+                            cursor: 'pointer', fontSize: '1.8rem', color: 'white'
                         }}></i>
 
                     </a>
@@ -87,10 +88,10 @@ const Header = observer(() => {
                            onChange={(e) => productListStore.setQuery(e.target.value)}
                 />
 
-                <a className="header-control" href="/user/">
-                    <i className="svg-icon nam-anam is-36 pi pi-user" style={{
-                        cursor: 'pointer', fontSize: '1.5rem'
-                    }}></i>
+                <a className="header-control" href="/user/" style={{textDecoration:'none'}}>
+                    <i className=" pi pi-user" style={{
+                        cursor: 'pointer', fontSize: '1.5rem', color: 'white'}}></i>
+
 
                 </a>
 

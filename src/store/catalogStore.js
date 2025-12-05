@@ -11,6 +11,8 @@ export default class CatalogStore {
     idInfo = []
 
 
+    someData = [0]
+
 
 
     constructor() {
@@ -20,8 +22,10 @@ export default class CatalogStore {
 
 
     setAllWBCatalogLite(allWBCatalogLite){
-        this.allWBCatalogLite = allWBCatalogLite
-
+        let addCatalog = []
+        const notAddIdList = [62057, 131286]
+        for (let i in allWBCatalogLite) if (!notAddIdList.includes(allWBCatalogLite[i].id)) addCatalog.push(allWBCatalogLite[i])
+        this.allWBCatalogLite = addCatalog
     }
 
     setErrorMessage(errorMessage){
@@ -57,9 +61,11 @@ export default class CatalogStore {
     // Загружаем с базы данных каталог ВБ лайт версию и перефрматируем ее для отображения
     async  getLiteWBCatalog(){
         try{
+            this.someData = 'isOk1'
             const response = await ApiService.APIGetLiteWBCatalog()
 
-
+            // this.someData = response
+            this.someData = 'isOk2'
 
             this.setAllWBCatalogLite(response.data)
             for (let i in this.allWBCatalogLite){
@@ -74,6 +80,8 @@ export default class CatalogStore {
             }
 
         } catch (e) {
+            // this.someData = e
+            // this.someData = 'false'
             this.setErrorMessage(e.response?.data?.message)
             console.log(e)
         }

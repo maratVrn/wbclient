@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
-import '../css/wbsale.css';
 import Footer from "../footer";
 
 const User = observer(() => {
@@ -111,8 +110,6 @@ const User = observer(() => {
 
 
             </div>
-
-            <Footer/>
         </div>
     );
 });

@@ -1,28 +1,37 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import './page.css';
-import './css/form.css';
-import './css/wbsale.css';
 import {Context} from "../index";
 import { BreadCrumb } from 'primereact/breadcrumb';
 import {observer} from "mobx-react-lite";
 import ProductList from "./product_components/ProductList";
 
+import mainImg from "./images/mainimg1200.jpg";
+import leftImg from "./images/leftimg.jpg";
+import rightImg from "./images/rightimg.jpg";
+import { Carousel } from 'primereact/carousel';
+import { Tag } from 'primereact/tag';
+import ApiService from "../service/ApiService";
 
 const MainPage = observer( () => {
 
-
+    const {productListStore} = useContext(Context)
     const {catalogStore} = useContext(Context)
     const [isStartMenu, setIsStartMenu] = useState(true)
     const [isLoadPD, setIsLoadPD] = useState(false)
     const [addMenu, setAddMenu] = useState([])
     const [breadItems, setBreadItems] = useState([])
     const [catalogId, setCatalogId] = useState('')
+    const [startProducts, setStartProducts] = useState([])
+    const [wbCatalog, setWbCatalog] = useState([])
+
 
     useEffect(()=>{
-
         console.log('useEffect MainPage');
-        setMainMenu()
 
+        productListStore.getStartProductList().then(()=>{
+             setStartProducts(productListStore.startProductList)
+        })
+        setMainMenu()
     },[])
 
 
@@ -36,6 +45,8 @@ const MainPage = observer( () => {
     }
 
     function setMenuOne(oneData){
+
+        window.scrollTo(0, 0)
         setIsLoadPD(false)
         let tmpItems = []
         for (let i in breadItems) tmpItems.push(breadItems[i])
@@ -58,50 +69,172 @@ const MainPage = observer( () => {
         setIsStartMenu(false)
     }
 
+    const productTemplate = (product) => {
+        return (
+            <div className="">
+                <div className=" itemCarousel "
+                     // onClick={() => showProductInfo(item.id)}
+                     onClick={() =>  window.open('/productInfo/' + product.id.toString())}
+                >
+                    <img src={product.photoUrl} alt="..."/>
+                    <div className="card-body">
+                        <div className="card-price">
+                            <div className="price-low ">
+                                <span>{product.price} ₽</span>
+                            </div>
+                            <span className="product-name">Цена без кошелька </span>
 
+                        </div>
+
+                        <div className="card-price">
+                            <span className="product-brand">{product.brand} </span>
+
+                        </div>
+                        <div className="card-price">
+                            <span className="product-name">{product.name} </span>
+                        </div>
+                        <div className="card-price">
+                            <span className="product-rate">  </span>
+                            <span className="product-rate2"> {product.reviewRating} </span>
+                            <span className="product-rate3"> {product.feedbacks} оценок </span>
+                        </div>
+
+                        <div className="card-price">
+                            <span className="spanGreen">Реальная скидка {product.discount} % </span>
+                        </div>
+
+
+                        <span
+                            className="product-count"> Осталось {product.totalQuantity > 59 ? ' > ' + product.totalQuantity : product.totalQuantity} шт </span>
+
+
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const responsiveOptions = [
+        {
+            breakpoint: '1800px',
+            numVisible: 6,
+            numScroll: 6
+        },
+        {
+            breakpoint: '1560px',
+            numVisible: 5,
+            numScroll: 5
+        },
+        {
+            breakpoint: '1340px',
+            numVisible: 4,
+            numScroll: 4
+        },
+        {
+            breakpoint: '1120px',
+            numVisible: 3,
+            numScroll: 3
+        },
+        {
+            breakpoint: '860px',
+            numVisible: 2,
+            numScroll: 2
+        },
+        {
+            breakpoint: '620px',
+            numVisible: 1,
+            numScroll: 1
+        }
+    ];
 
     return (
-        <div className="app page">
+        <div className="page ">
 
-            { isStartMenu? <></>
-                : <BreadCrumb model={breadItems} home={home} />
+
+            {isStartMenu ? <>
+
+                    <div className="container" style={{paddingTop: '30px', paddingBottom: '30px'}}>
+                        <div className="startSidebar ">
+                            <img className="mainLeftImg"
+                                 src={leftImg} style={{borderRadius: '20px'}}
+                                 width="100px"
+                                 loading="lazy"/>
+                        </div>
+
+                        <div className="main-content">
+                            <img
+                                src={mainImg} style={{borderRadius: '20px'}}
+                                width="100%"
+                                loading="lazy"/>
+                        </div>
+                        <div className="startSidebar ">
+                            <img
+                                className="mainRightImg"
+                                src={rightImg} style={{borderRadius: '20px'}}
+                                width="100px"
+                                loading="lazy"/>
+                        </div>
+                    </div>
+
+                    <div className="infoLine"> Интересные товары</div>
+
+                    <div className="" style={{paddingTop: '30px', paddingBottom: '30px'}}>
+                        <Carousel value={startProducts} numVisible={6} numScroll={6} responsiveOptions={responsiveOptions}
+                                  className="custom-carousel" circular
+                            autoplayInterval={4000}
+                                  itemTemplate={productTemplate}/>
+                    </div>
+
+                    {/*<div className="allStartProducts"> Все товары</div>*/}
+                </>
+                : <BreadCrumb model={breadItems} home={home}/>
             }
-
-            { isLoadPD ? <>
-                    <ProductList catalogId = {catalogId} />
+            <div className="infoLine">
+                Каталог
+            </div>
+            {isLoadPD ? <>
+                    <ProductList catalogId={catalogId}/>
                 </>
 
 
                 :
-                <div className="flex flex-wrap column-gap-4 row-gap-4">
-                    { isStartMenu?
+                <div className="flex flex-wrap column-gap-4 row-gap-4"
+                     style={{paddingTop: '30px', paddingBottom: '50px'}}>
+
+                    {/*{isStartMenu ? <>да*/}
+                    {/*/!*{catalogStore.allWBCatalogLite}*!/*/}
+                    {/*{wbCatalog}*/}
+                    {/*    </>*/}
+                    {/*    :*/}
+                    {/*    <>нет </>*/}
+                    {/*}*/}
+                    {isStartMenu ?
+
 
                         catalogStore.allWBCatalogLite.map((oneData) =>
-                            <div key={oneData.id} className={" w-10rem h-12 rem  cursor-pointer"}
-                                 // style={{padding:'20px'}}
+                            <div key={oneData.id} className={"w-9rem h-12 rem  cursor-pointer"}
+                                 style={{padding: '10px'}}
                                  onClick={() => setMenuOne(oneData)}>
-                                <div key={oneData.id} className={"w-10rem h-10rem "}>
-                                    <img style={{maxWidth:'100%', maxHeight:'100%'}}
-                                        src={oneData.img}  alt="logo" loading="lazy"/>
-
-                                </div>
-                                <div style={{textAlign: 'center'}}>
+                                <div key={oneData.id} className={"w-8rem h-10rem "}
+                                     style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
+                                    <img style={{maxWidth: '100%', maxHeight: '100%'}}
+                                         src={oneData.img} alt="logo" loading="lazy"/>
                                     {oneData.name}
-
                                 </div>
-
 
                             </div>
                         )
+
                         :
                         addMenu.map((oneData) =>
-                            <div key={oneData.id} className={" w-12rem h-14rem  cursor-pointer"}
-                                 onClick={() => setMenuOne(oneData)}>
-                                <div key={oneData.id} className={"w-12rem h-12rem "}>
+                            <div key={oneData.id} className={" w-9rem h-14rem  cursor-pointer"}
+                                 onClick={() => setMenuOne(oneData)}
+                                 style={{padding: '10px'}}>
+
+                                <div key={oneData.id} className={"w-8rem h-12rem "}
+                                     style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
                                     <img style={{maxWidth: '100%', maxHeight: '100%'}}
                                          src={oneData.img} alt="logo" loading="lazy"/>
-                                </div>
-                                <div style={{textAlign: 'center'}}>
                                     {oneData.name}
                                 </div>
 
