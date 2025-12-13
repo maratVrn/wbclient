@@ -16,6 +16,7 @@ const ProductData = (props) => {
     const [productInfo, setProductInfo] = useState([]);
     const [chartPriceData, setChartPriceData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
+    const [similarProducts, setSimilarProducts] = useState([]);
 
     const [daysCount, setDaysCount] = useState([
         {daysId: 0, daysName: '30 дней', daysCount : 30},{daysId: 1, daysName: '60 дней', daysCount : 60},
@@ -24,12 +25,21 @@ const ProductData = (props) => {
 
     useEffect(() => {
         // console.log('useEffect ProductData ');
+        setSimilarProducts([])
 
-        if (isInBase)
+
+
+        if (isInBase) {
             if (productStore.idInfo.productInfo?.priceHistory)
-
                 calcData(selectedDays.daysCount)
+            productStore.getSimilarProducts(id).then(() => {
 
+                setSimilarProducts(productStore.similarProducts)
+
+                }
+            )
+
+        }
     }, [id, isInBase]);
 
     function calcData(daysCount){
@@ -89,35 +99,7 @@ const ProductData = (props) => {
             }
         };
 
-        // const options = {
-        //     maintainAspectRatio: false,
-        //     aspectRatio: 0.6,
-        //     plugins: {
-        //         legend: {
-        //             labels: {
-        //                 color: 'rgba(193,150,73,0.5)'
-        //             }
-        //         }
-        //     },
-        //     scales: {
-        //         x: {
-        //             ticks: {
-        //                 color: 'rgba(193,150,73,0.5)'
-        //             },
-        //             grid: {
-        //                 color: 'rgba(193,150,73,0.5)'
-        //             }
-        //         },
-        //         y: {
-        //             ticks: {
-        //                 color: 'rgba(193,150,73,0.5)'
-        //             },
-        //             grid: {
-        //                 color: 'rgba(193,150,73,0.5)'
-        //             }
-        //         }
-        //     }
-        // };
+
         setChartOptions(options);
         const priceData3 = {
             labels: dateArray,
@@ -156,20 +138,23 @@ const ProductData = (props) => {
     }
 
     function onDaysChange(value){
-        // console.log(value);
         if (value) {
             setSelectedDays(value)
             if (value.daysId >= 0) calcData(value.daysCount)
         }
     }
-
+    function showProductInfo(id) {
+        window.open('/productInfo/' + id.toString())
+    }
     return (
         <div style={{paddingTop:'70px', alignItems:'center', textAlign:'center', paddingBottom:'50px'}}>
             {isInBase ?
                 <div>
 
-                    <h2>График изменения цены за {selectedDays.daysName}  </h2>
-                    <div className="flex flex-wrap gap-3 dataTable" style={{paddingTop: '30px', paddingBottom:'30px', paddingLeft:'20px'}}>
+                    <div className="infoLine"> График изменения цены за {selectedDays.daysName}  </div>
+
+                    <div className="flex flex-wrap gap-3 dataTable"
+                         style={{paddingTop: '30px', paddingBottom: '30px', paddingLeft: '20px'}}>
 
 
                         {daysCount.map((m1) => {
@@ -188,18 +173,62 @@ const ProductData = (props) => {
 
                     </div>
 
-                    {/*    <div className="chart_info">*/}
-                    {/*<span className="chart_info_text">Цена <span className="bold">{productInfo?.price + '  '} </span>*/}
-                    {/*    мин. <span className="bold"> {productInfo?.minPrice + ' '}</span>*/}
-                    {/*    макс. <span className="bold">{productInfo?.maxPrice} </span>*/}
-                    {/*    сред. <span className="bold"> {productInfo?.meanPrice} </span></span>*/}
-                    {/*    </div>*/}
                     <div className="item_data">
 
                         <div className="chart_item">
                             <Chart className="all_div" type="line" data={chartPriceData} options={chartOptions}/>
                         </div>
                     </div>
+
+                    <div style={{marginTop: '130px'}} className="infoLine">Похожие товары со скидками</div>
+
+
+                    <div className="grid" style={{ paddingTop:'30px'}}>
+                        {similarProducts.map((item) =>
+
+
+                            <div key={item.id} className=" item ">
+
+                                <img src={item.photoUrl} onClick={() => showProductInfo(item.id)} alt="..."/>
+                                <div className="card-body" onClick={() => showProductInfo(item.id)}>
+                                    <div className="card-price">
+                                        <div className="price-low ">
+                                            <span>{item.price} ₽</span>
+                                        </div>
+                                        <span className="product-name">Цена без кошелька </span>
+
+                                    </div>
+
+                                    <div className="card-price">
+                                        <span className="product-brand">{item.brand} </span>
+
+                                    </div>
+                                    <div className="card-price">
+                                        <span className="product-name">{item.name} </span>
+                                    </div>
+                                    <div className="card-price">
+                                        <span className="product-rate">  </span>
+                                        <span className="product-rate2"> {item.reviewRating} </span>
+                                        <span className="product-rate3"> {item.feedbacks} оценок </span>
+                                    </div>
+
+                                    <div className="card-price">
+                                        <span className="spanGreen">Реальная скидка {item.discount} % </span>
+                                    </div>
+
+                                    <div className="card-price">
+                                    <span
+                                        className="product-count"> Осталось {item.totalQuantity > 59 ? ' > ' + item.totalQuantity : item.totalQuantity} шт </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        )
+                        }
+
+
+                    </div>
+
                 </div>
                 :
                 <div>товара нет в базе</div>

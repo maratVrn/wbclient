@@ -50,7 +50,7 @@ export default class ProductListStore {
                     // TODO: Хардкор чтобы малопокупаемые товары не показывались
                     if (productListAdd[i].feedbacks>5) {
                         let needAdd = true
-                        // проверим вдру товар уже есть чтобы не задвоился
+                        // проверим вдруг товар уже есть чтобы не задвоился
                         for (let k in itogProductListAdd)
                             if (itogProductListAdd[k].id === productListAdd[i].id){
                                 needAdd = false

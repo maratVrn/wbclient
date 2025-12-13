@@ -6,7 +6,7 @@ import {calcDiscount} from "../components/math";
 export default class ProductStore {
 
     subjects = []
-
+    similarProducts = []
 
     productInfo = []
     positionsInfo = []
@@ -281,7 +281,38 @@ export default class ProductStore {
                         console.log(e)
         }
     }
+    // Получаем список похожик товаров
+    async  getSimilarProducts(productId){
+        this.similarProducts = []
+        try{
 
+            const similarProducts = await ApiService.APIGetSimilarProducts(productId)
+
+            let ItSimilarProducts = []
+            let someProducts = similarProducts?.data? similarProducts.data : []
+            for (let i in  someProducts) {
+
+                const discountData = calcDiscount(someProducts[i].priceHistory)
+                if (discountData.isDataCalc)
+                    if (discountData.discount >10 ) {
+                        someProducts[i].discount = discountData.discount
+                        someProducts[i].meanPrice = discountData.meanPrice
+                        // TODO: Хардкор чтобы малопокупаемые товары не показывались
+                        if (someProducts[i].feedbacks>2) {
+                            ItSimilarProducts.push(someProducts[i])
+                        }
+
+                    }
+            }
+            ItSimilarProducts.sort((a, b) => b.discount - a.discount)
+
+
+            this.similarProducts = ItSimilarProducts
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
 
     async  getProductPhoto(productId){
         try{

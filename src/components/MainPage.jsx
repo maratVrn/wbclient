@@ -4,17 +4,14 @@ import {Context} from "../index";
 import { BreadCrumb } from 'primereact/breadcrumb';
 import {observer} from "mobx-react-lite";
 import ProductList from "./product_components/ProductList";
-
 import mainImg from "./images/mainimg1200.jpg";
 import leftImg from "./images/leftimg.jpg";
 import rightImg from "./images/rightimg.jpg";
 import { Carousel } from 'primereact/carousel';
-import { Tag } from 'primereact/tag';
-import ApiService from "../service/ApiService";
 
 const MainPage = observer( () => {
 
-    const {productListStore} = useContext(Context)
+    const {startProductsStore} = useContext(Context)
     const {catalogStore} = useContext(Context)
     const [isStartMenu, setIsStartMenu] = useState(true)
     const [isLoadPD, setIsLoadPD] = useState(false)
@@ -22,14 +19,26 @@ const MainPage = observer( () => {
     const [breadItems, setBreadItems] = useState([])
     const [catalogId, setCatalogId] = useState('')
     const [startProducts, setStartProducts] = useState([])
-    const [wbCatalog, setWbCatalog] = useState([])
+    const [isCatalogLoad, setIsCatalogLoad] = useState(false)
 
 
     useEffect(()=>{
-        console.log('useEffect MainPage');
+        if (!isCatalogLoad) {
 
-        productListStore.getStartProductList().then(()=>{
-             setStartProducts(productListStore.startProductList)
+            catalogStore.getLiteWBCatalog().then(() => {
+
+                }
+            )
+            setIsCatalogLoad(true)
+        }
+        console.log('useEffect MainPage');
+        setStartProducts([])
+        startProductsStore.loadAllStartProducts().then(() => {
+
+            let showProducts = []
+            for (let i in startProductsStore.allStartProducts) if (startProductsStore.allStartProducts[i].price>0) showProducts.push(startProductsStore.allStartProducts[i])
+
+            setStartProducts(showProducts.sort(() => Math.random() - 0.5))
         })
         setMainMenu()
     },[])

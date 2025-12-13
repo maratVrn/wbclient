@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import {Context} from "../../index";
-import ApiService from "../../service/ApiService";
 import {Button} from "primereact/button";
 import {Dialog} from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";

@@ -19,7 +19,10 @@ const ProductInfo =observer( (props ) => {
 
     let { id } = useParams();
     useEffect(()=>{
-        // console.log('useEffect ProductInfo Id = '+id);
+
+
+
+        console.log('useEffect ProductInfo Id = '+id);
         if (parseInt(id) > 0) getIdInfo(id)
 
     },[id])

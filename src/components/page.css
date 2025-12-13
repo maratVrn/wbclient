@@ -203,6 +203,7 @@ a.wb-go {
     color: #242424;
     font-size: 14px;
     margin-left: 3px;
+    text-align: left;
 }
 .product-rate3{
     font-size: 14px;
@@ -279,7 +280,7 @@ a.wb-go {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height : 45px;
+    height : 55px;
     border: 1px solid silver;
     border-radius: 15px;
     background: #485f98;

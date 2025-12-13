@@ -16,6 +16,7 @@ const ProductList = (props) => {
 
     const {catalogId} = props;
     const {productListStore} = useContext(Context)
+    const {startProductsStore} = useContext(Context)
     const [items, setItems] = useState([])
 
     // Для пагинации товаров
@@ -53,15 +54,6 @@ const ProductList = (props) => {
     ];
     const [sortSelectedCategory, setSortSelectedCategory] = useState(depth_categories[0]);
 
-    // // Фильтр брендов
-    // const fbrandFilter_op = useRef(null);
-    // const [selectedFbrandFilter, setSelectedFbrandFilter] = useState([]);
-    // function onFbrandFilterChange  (e) {
-    //     let _selectedCategories = [...selectedFbrandFilter];
-    //     if (e.checked)  _selectedCategories.push(e.value)
-    //     else  _selectedCategories = _selectedCategories.filter(category => category.key !== e.value.key);
-    //     setSelectedFbrandFilter(_selectedCategories);
-    // }
     // Фильтр категорий
     const xsubjectFilter_op = useRef(null);
     const [selectedXsubjectFilter, setSelectedXsubjectFilter] = useState([]);
@@ -83,8 +75,7 @@ const ProductList = (props) => {
     useEffect(()=>{
 
         console.log('useEffectProductList');
-        // console.log('catalogId '+ catalogId);
-        // console.log('query '+ query);
+
         setItems([])
         setUsePriceMin(false)
         setUsePriceMax(false)
@@ -124,6 +115,16 @@ const ProductList = (props) => {
 
     function showProductInfo(id) {
         window.open('/productInfo/' + id.toString())
+    }
+
+    async function addStartProduct(id, startDiscount, startQty, startPrice) {
+        console.log('startQty ' +startQty);
+        await startProductsStore.addStartProduct(id, startDiscount, startQty, startPrice).then(() => {
+
+            console.log('Добавили id '+id);
+
+        })
+
     }
 
     function setNewData() {
@@ -408,42 +409,46 @@ const ProductList = (props) => {
             {/*Список на выдачу*/}
             <div className="grid" style={{paddingBottom:'30px'}}>
                 {items.slice(first, first + rows).map((item) =>
-                    <div key={item.id} className=" item " onClick={() => showProductInfo(item.id)}>
-                        <img src={item.photoUrl} alt="..."/>
-                        <div className="card-body">
-                            <div className="card-price">
-                                <div className="price-low ">
-                                    <span>{item.price} ₽</span>
+
+
+                        <div key={item.id} className=" item ">
+
+                            <img src={item.photoUrl} onClick={() => showProductInfo(item.id)}  alt="..."/>
+                            <div className="card-body" onClick={() => showProductInfo(item.id)}>
+                                <div className="card-price">
+                                    <div className="price-low ">
+                                        <span>{item.price} ₽</span>
+                                    </div>
+                                    <span className="product-name">Цена без кошелька </span>
+
                                 </div>
-                                <span className="product-name">Цена без кошелька </span>
+
+                                <div className="card-price">
+                                    <span className="product-brand">{item.brand} </span>
+
+                                </div>
+                                <div className="card-price">
+                                    <span className="product-name">{item.name} </span>
+                                </div>
+                                <div className="card-price">
+                                    <span className="product-rate">  </span>
+                                    <span className="product-rate2"> {item.reviewRating} </span>
+                                    <span className="product-rate3"> {item.feedbacks} оценок </span>
+                                </div>
+
+                                <div className="card-price">
+                                    <span className="spanGreen">Реальная скидка {item.discount} % </span>
+                                </div>
+
+
+                                <span
+                                    className="product-count"> Осталось {item.totalQuantity > 59 ? ' > ' + item.totalQuantity : item.totalQuantity} шт </span>
+
 
                             </div>
-
-                            <div className="card-price">
-                            <span className="product-brand">{item.brand} </span>
-
-                            </div>
-                            <div className="card-price">
-                                <span className="product-name">{item.name} </span>
-                            </div>
-                            <div className="card-price">
-                                <span className="product-rate">  </span>
-                                <span className="product-rate2"> {item.reviewRating} </span>
-                                <span className="product-rate3"> {item.feedbacks} оценок </span>
-                            </div>
-
-                            <div className="card-price">
-                                <span className="spanGreen">Реальная скидка {item.discount} % </span>
-                            </div>
-
-
-                            <span
-                                className="product-count"> Осталось {item.totalQuantity > 59 ? ' > ' + item.totalQuantity : item.totalQuantity} шт </span>
-
-
-
                         </div>
-                    </div>
+
+
                 )
                 }
 

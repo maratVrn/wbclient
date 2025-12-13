@@ -14,9 +14,11 @@ const Header = observer(() => {
     const handleKeyPress = (event) => {
         if(event.key === 'Enter'){
             const query = productListStore.query.toString()
+
             let isOnlyCount = !isNaN(productListStore.query.toString())
             let needSearchQuery = true
             if (isOnlyCount) if (parseInt(query)>10_000) {
+
                 navigate('/productInfo/' + productListStore.query.toString())
                 needSearchQuery = false
             }
@@ -47,10 +49,12 @@ const Header = observer(() => {
             <div className="header-desktop container-fluid" style={{paddingLeft: '60px'}}>
 
 
-                <a className="header-logo" href="/">
+                <a className="header-logo">
 
                     <img className="logo-image" src={logoSvg} width="160" height="37"
-                         alt="logo" loading="lazy"/>
+                         alt="logo" loading="lazy"
+                         onClick={(e) => navigate('/')}
+                    />
                 </a>
 
 

@@ -54,13 +54,33 @@ export default class ApiService {
     static async APIUploadTest():Promise{
         return $api_serv_load.post(`/uploadNewWordStatisticData`)
     }
-    //  ************** Упралвение разделами каталога и предметами
+
+//  **************            Упралвение стартовыми товарами                *****************************
+    static async APIGetLoadStartProducts( needDelete, deleteIdList):Promise{
+           return $api_client.post(`/loadStartProducts`,
+            {
+                needDelete       :   needDelete,
+                deleteIdList : deleteIdList
+            }
+        )
+
+    }
+
+    static async APIAddStartProduct(id, startDiscount, startQty, startPrice):Promise{
+        return $api_client.post(`/addStartProduct`,
+            {
+                id :   id,
+                startDiscount       :   startDiscount,
+                startQty : startQty,
+                startPrice :  startPrice
+            }
+        )
+    }
+
+//  **************            Упралвение разделами каталога и предметами                *****************************
     static async APIGetCatalogInfo():Promise{
         return $api_serv_load.get('/getCatalogInfo')
     }
-
-
-
 
     static async APIAddSubjectsInCatalog(id, newSubjects):Promise{
         return $api_serv_load.post(`/addSubjectsInCatalog`,
@@ -189,6 +209,10 @@ export default class ApiService {
 
     static async APIGetProductStartInfo(id):Promise{
         return $api_client.get(`/getProductStartInfo/${parseInt(id)}`)
+    }
+
+    static async APIGetSimilarProducts(id):Promise{
+        return $api_client.get(`/getSimilarProducts/${parseInt(id)}`)
     }
 
 };

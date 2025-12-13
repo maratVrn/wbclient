@@ -16,14 +16,15 @@ const Footer = () => {
             <footer className="footer">
                 <div className="container-fluid">
                     <div className="footer-container">
-                        <a className="footer-logo" href="/">
+                        <a className="footer-logo" >
                             <img className="logo-image" src={logoSvg} width="160" height="37"
+                                 onClick={(e) => navigate('/')}
                                  alt="logo" loading="lazy"/>
                         </a>
 
 
                         <p className="footer-text">
-                            Все логотипы и товарные знаки Wildberries TM,отображаемые в этом приложении, являются собственностью Wildberries.
+                            Все логотипы и товарные знаки Wildberries TM, изображения и фото товаров ,отображаемые в этом приложении, являются собственностью Wildberries.
 
                         </p>
 
