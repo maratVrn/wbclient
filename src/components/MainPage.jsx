@@ -8,6 +8,7 @@ import mainImg from "./images/mainimg1200.jpg";
 import leftImg from "./images/leftimg.jpg";
 import rightImg from "./images/rightimg.jpg";
 import { Carousel } from 'primereact/carousel';
+import {useNavigate} from "react-router-dom";
 
 const MainPage = observer( () => {
 
@@ -20,7 +21,17 @@ const MainPage = observer( () => {
     const [catalogId, setCatalogId] = useState('')
     const [startProducts, setStartProducts] = useState([])
     const [isCatalogLoad, setIsCatalogLoad] = useState(false)
+    const sectionRefCatalog = useRef(null);
+    const navigate = useNavigate();
 
+    const scrollToRef = (ref) => {
+        if (ref && ref.current) {
+            ref.current.scrollIntoView({
+                // behavior: 'smooth', // Делает прокрутку плавной
+                // block: 'start',      // Прокручивает к началу элемента
+            });
+        }
+    }
 
     useEffect(()=>{
         if (!isCatalogLoad) {
@@ -32,22 +43,28 @@ const MainPage = observer( () => {
             setIsCatalogLoad(true)
         }
         console.log('useEffect MainPage');
+
         setStartProducts([])
         startProductsStore.loadAllStartProducts().then(() => {
 
             let showProducts = []
-            for (let i in startProductsStore.allStartProducts) if (startProductsStore.allStartProducts[i].price>0) showProducts.push(startProductsStore.allStartProducts[i])
+            for (let i in startProductsStore.allStartProducts)
+                if ((startProductsStore.allStartProducts[i].price>0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
 
             setStartProducts(showProducts.sort(() => Math.random() - 0.5))
         })
         setMainMenu()
+        window.scrollTo(0, 0)
     },[])
 
 
 
-    const home = { label : 'Главная', template: () => <a onClick={()=> setMainMenu()} className="cursor-pointer ">Главная</a> }
+    const home = { label : 'Каталог', template: () => <a onClick={()=> setMainMenu()} className="cursor-pointer ">Каталог</a> }
 
     function setMainMenu(){
+        // console.log('setMainMenu');
+        // window.scrollTo(0, 200)
+        scrollToRef(sectionRefCatalog)
         setIsLoadPD(false)
         setIsStartMenu(true)
         setBreadItems([])
@@ -56,6 +73,7 @@ const MainPage = observer( () => {
     function setMenuOne(oneData){
 
         window.scrollTo(0, 0)
+        // console.log('setMenuOne');
         setIsLoadPD(false)
         let tmpItems = []
         for (let i in breadItems) tmpItems.push(breadItems[i])
@@ -83,7 +101,10 @@ const MainPage = observer( () => {
             <div className="">
                 <div className=" itemCarousel "
                      // onClick={() => showProductInfo(item.id)}
-                     onClick={() =>  window.open('/productInfo/' + product.id.toString())}
+                     // onClick={() =>  window.open('/productInfo/' + product.id.toString())}
+                     onClick={() =>  navigate('/productInfo/' + product.id.toString())}
+
+
                 >
                     <img src={product.photoUrl} alt="..."/>
                     <div className="card-body">
@@ -190,17 +211,22 @@ const MainPage = observer( () => {
                     <div className="" style={{paddingTop: '30px', paddingBottom: '30px'}}>
                         <Carousel value={startProducts} numVisible={6} numScroll={6} responsiveOptions={responsiveOptions}
                                   className="custom-carousel" circular
-                            autoplayInterval={4000}
+                                  autoplayInterval={4000}
                                   itemTemplate={productTemplate}/>
                     </div>
 
-                    {/*<div className="allStartProducts"> Все товары</div>*/}
+
                 </>
                 : <BreadCrumb model={breadItems} home={home}/>
             }
-            <div className="infoLine">
-                Каталог
-            </div>
+
+
+            <section ref={sectionRefCatalog}>
+                <div className="infoLine">
+                    Каталог
+                </div>
+            </section>
+
             {isLoadPD ? <>
                     <ProductList catalogId={catalogId}/>
                 </>
@@ -210,13 +236,6 @@ const MainPage = observer( () => {
                 <div className="flex flex-wrap column-gap-4 row-gap-4"
                      style={{paddingTop: '30px', paddingBottom: '50px'}}>
 
-                    {/*{isStartMenu ? <>да*/}
-                    {/*/!*{catalogStore.allWBCatalogLite}*!/*/}
-                    {/*{wbCatalog}*/}
-                    {/*    </>*/}
-                    {/*    :*/}
-                    {/*    <>нет </>*/}
-                    {/*}*/}
                     {isStartMenu ?
 
 
@@ -254,6 +273,7 @@ const MainPage = observer( () => {
                     }
                 </div>
             }
+
         </div>
     );
 });

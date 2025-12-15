@@ -5,6 +5,7 @@ import { Chart } from 'primereact/chart';
 import {getPriceFromHistory, formatCurrency, calcDiscount} from "../math";
 import {InputSwitch} from "primereact/inputswitch";
 import {RadioButton} from "primereact/radiobutton";
+import {useNavigate} from "react-router-dom";
 
 
 
@@ -17,6 +18,7 @@ const ProductData = (props) => {
     const [chartPriceData, setChartPriceData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
     const [similarProducts, setSimilarProducts] = useState([]);
+    const navigate = useNavigate();
 
     const [daysCount, setDaysCount] = useState([
         {daysId: 0, daysName: '30 дней', daysCount : 30},{daysId: 1, daysName: '60 дней', daysCount : 60},
@@ -144,7 +146,7 @@ const ProductData = (props) => {
         }
     }
     function showProductInfo(id) {
-        window.open('/productInfo/' + id.toString())
+        navigate('/productInfo/' + id.toString())
     }
     return (
         <div style={{paddingTop:'70px', alignItems:'center', textAlign:'center', paddingBottom:'50px'}}>

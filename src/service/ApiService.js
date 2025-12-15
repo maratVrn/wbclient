@@ -150,19 +150,6 @@ export default class ApiService {
     }
 
 
-
-    static async APIGetCompetitorSeeAlsoInfo(id):Promise{
-        return $api_client.get(`/getCompetitorSeeAlsoInfo/${parseInt(id)}`)
-    }
-    static async APIGetCompetitorSeeFindInfo(id, findText):Promise{
-        return $api_client.post(`/getCompetitorSeeFindInfo`,
-            {
-                id:id,
-                findText : findText
-            }
-        )
-    }
-
     static async APIDuplicateTest(id, cat1, cat2):Promise{
         return $api_client.post(`/duplicateTest`,
             {
@@ -173,20 +160,6 @@ export default class ApiService {
         )
     }
 
-    static async APIGetCompetitorSeePhotoInfo(id):Promise{
-        return $api_client.get(`/getCompetitorSeePhotoInfo/${parseInt(id)}`)
-    }
-
-
-
-    static async APIGetPositionsInfo(id, searchArray):Promise{
-        return $api_client.post(`/getPositionsInfo`,
-            {
-                 id:id,
-                 searchArray : searchArray
-            }
-        )
-    }
 
 
     static async APIClientTest():Promise{
@@ -194,16 +167,10 @@ export default class ApiService {
     }
 
 
-
-    static async APISearchWordUpload():Promise{
-        return $api_client.post(`/searchWordsUpload`)
-    }
-
-
     static async APIGetProductInfo(id):Promise{
-
         return $api_client.get(`/getProductInfo/${parseInt(id)}`)
     }
+
 
 
 
@@ -214,6 +181,23 @@ export default class ApiService {
     static async APIGetSimilarProducts(id):Promise{
         return $api_client.get(`/getSimilarProducts/${parseInt(id)}`)
     }
+
+    //  **************            Упралвение статистикой поведения изверей              *****************************
+    static async APIUserGoToWB():Promise{
+        return $api_client.get(`/userGoToWB`)
+    }
+
+
+    static async APILoadAllUserStat( needDelete, deleteIdList):Promise{
+        return $api_client.post(`/loadAllUserStat`,
+            {
+                needDelete       :   needDelete,
+                deleteIdList : deleteIdList
+            }
+        )
+
+    }
+
 
 };
 

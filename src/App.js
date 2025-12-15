@@ -15,26 +15,12 @@ import Footer from "./components/footer";
 import Oferta from "./components/oferta";
 import ConfPolicy from "./components/confPolicy";
 import Subjects from "./components/training_components/subjects";
+import UserStat from "./components/training_components/userStat";
 
 
 function App() {
-    const {catalogStore} = useContext(Context)
-    const {serverUpdateStore} = useContext(Context)
-    const {productStore} = useContext(Context)
-    const [isCatalogLoad, setIsCatalogLoad] = useState(false)
 
     useEffect(()=>{
-        // if (!isCatalogLoad) {
-        //
-        //     catalogStore.getLiteWBCatalog().then(() => {
-        //
-        //         }
-        //     )
-        //     setIsCatalogLoad(true)
-        // }
-
-
-
 
         // console.log('Загрузка стартовых данных');
         //
@@ -73,6 +59,7 @@ function App() {
                 <Route path="/training/" element={<Training/>}/>
                 <Route path="/subjects/" element={<Subjects/>}/>
                 <Route path="/startProducts/" element={<StartProducts/>}/>
+                <Route path="/userStat/" element={<UserStat/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>

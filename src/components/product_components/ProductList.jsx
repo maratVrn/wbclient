@@ -114,7 +114,7 @@ const ProductList = (props) => {
 
 
     function showProductInfo(id) {
-        window.open('/productInfo/' + id.toString())
+        navigate('/productInfo/' + id.toString())
     }
 
     async function addStartProduct(id, startDiscount, startQty, startPrice) {

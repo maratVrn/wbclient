@@ -11,7 +11,6 @@ import ProductAbout from "./product_about";
 
 const ProductInfo =observer( (props ) => {
     const {productStore} = useContext(Context)
-    const {catalogStore} = useContext(Context)
     const [isInWB, setIsInWB] = useState(false)
     const [isInBase, setIsInBase] = useState(false)
 
@@ -19,9 +18,6 @@ const ProductInfo =observer( (props ) => {
 
     let { id } = useParams();
     useEffect(()=>{
-
-
-
         console.log('useEffect ProductInfo Id = '+id);
         if (parseInt(id) > 0) getIdInfo(id)
 
@@ -54,6 +50,9 @@ const ProductInfo =observer( (props ) => {
 
 
         <div className="page">
+            <div className="back-ghost" style={{}} onClick={() =>navigate(-1)}>
+                ← Назад
+            </div>
             <div>
                 <div className="responsive-two-column-grid" style={{alignItems: 'center'}}>
                     <div className="borderOne">

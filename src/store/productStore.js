@@ -169,92 +169,7 @@ export default class ProductStore {
 
         return result
     }
-    async  loadCompetitorSeeFindInfo(id, findText){
-        try{
-            console.log('tut');
-            this.competitorSeeFindInfo = []
-            const productInfo = await ApiService.APIGetCompetitorSeeFindInfo(id, findText)
-            // console.log(productInfo?.data);
-            if (productInfo?.data) this.competitorSeeFindInfo = this.setProductInfoData(productInfo.data)
-            this.is_competitorSeeFindInfo = true
-        } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
 
-    async  loadCompetitorSeeAlsoInfo(id){
-        try{
-
-            if (!this.is_competitorSeeAlsoInfo) {
-                this.competitorSeeAlsoInfo = []
-                const productInfo = await ApiService.APIGetCompetitorSeeAlsoInfo(id)
-                if (productInfo?.data) this.competitorSeeAlsoInfo = this.setProductInfoData(productInfo.data)
-                this.is_competitorSeeAlsoInfo = true
-            }
-
-        } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
-    async  loadCompetitorSeePhotoInfo(id){
-        try{
-            console.log('tut');
-            if (!this.is_competitorSeePhotoInfo) {
-                console.log('tut2');
-                this.competitorSeePhotoInfo = []
-                const productInfo = await ApiService.APIGetCompetitorSeePhotoInfo(id)
-                if (productInfo?.data) this.competitorSeePhotoInfo = this.setProductInfoData(productInfo.data)
-                this.is_competitorSeePhotoInfo = true
-            }
-
-        } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
-            console.log(e)
-        }
-    }
-
-
-    getSearchWords(){
-        let searchWords = []
-        if (this.productAbout.data.data.imt_name){
-            try {
-                let arr = this.productAbout.data.data.imt_name.split(/[\s,]+/)
-
-                let crWord = ''
-                for (let i in arr){
-
-                    crWord += arr[i]+' '
-                    if (arr[i].length >= 3) {
-                        searchWords.push(crWord)
-                        if (i < 4)
-                            if (this.productAbout.data.data.nm_colors_names) searchWords.push(crWord + ' ' + this.productAbout.data.data.nm_colors_names)
-                    }
-                }
-            }   catch (e) { console.log(e);}
-        }
-        return searchWords
-    }
-
-    async addPositionsInfo(id,newSearchText){
-        try{
-            if (this.is_positions_info_Load) {
-                const positionsInfo = await ApiService.APIGetPositionsInfo(id, [newSearchText])
-                if (positionsInfo?.data) this.setPositionsInfo([...positionsInfo?.data, ...this.positionsInfo])
-            }
-        } catch (e) { console.log(e) }
-    }
-    async  getPositionsInfo(id){
-        try{
-            if (!this.is_positions_info_Load) {
-                const searchWords = this.getSearchWords()
-                const positionsInfo = await ApiService.APIGetPositionsInfo(id, searchWords)
-                if (positionsInfo?.data) this.setPositionsInfo(positionsInfo?.data)
-                this.set_is_positions_info_Load(true)
-            }
-        } catch (e) { console.log(e) }
-    }
 
     // Получаем информацию про ИД - 1. есть ли он на вб 2. Есть ли он в нашей базе
     async  getProductStartInfo(productId){
@@ -376,7 +291,15 @@ export default class ProductStore {
         }
     }
 
-
+    // Отследим переход на вб для статы
+    async  userGoToBW(){
+        try{
+            const result = await ApiService.APIUserGoToWB()
+        } catch (e) {
+            // this.setErrorMessage(e.response?.data?.message)
+            console.log(e)
+        }
+    }
 
 
 

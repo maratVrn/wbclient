@@ -16,6 +16,7 @@ import ProductsDataCalcStore from "./store/productsDataCalcStore";
 import ServerUpdateStore from "./store/serverUpdateStore";
 import ProductListStore from "./store/productListStore";
 import StartProductsStore from "./store/startProductsStore";
+import UserStore from "./store/userStore";
 
 // Создаем контекст - классы сданными с которыми работаем внутри сессии
 const catalogStore = new CatalogStore()
@@ -25,8 +26,9 @@ const productStore = new ProductStore()
 const productsDataCalcStore = new ProductsDataCalcStore()
 const productListStore = new ProductListStore()
 const startProductsStore = new StartProductsStore()
+const userStore = new UserStore()
 export const Context = createContext({
-    catalogStore, productStore, productsDataCalcStore, serverUpdateStore, productListStore,startProductsStore
+    catalogStore, productStore, productsDataCalcStore, serverUpdateStore, productListStore,startProductsStore, userStore
 })
 
 

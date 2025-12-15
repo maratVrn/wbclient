@@ -154,21 +154,6 @@
     text-overflow: ellipsis;
 }
 
-a.wb-go {
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    color: #fff;
-    padding: 5px;
-    background-color: #a73afd;
-
-    border-radius: 10px;
-    width: 94%;
-    margin-top: -5px;
-    font-weight: 400;
-    margin-left: 3%;
-}
-
 
 .a-tab {
 
@@ -228,6 +213,19 @@ a.wb-go {
 
 .product-order {
     margin-top: 15px;
+    cursor : pointer;
+
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    padding: 5px;
+    background-color: #a73afd;
+
+    border-radius: 10px;
+    width: 94%;
+    font-weight: 400;
+    /*margin-left: 3%;*/
 }
 
 .filter_button{
@@ -384,3 +382,23 @@ a.wb-go {
 
 }
 
+
+.back-ghost {
+    display: inline-block;
+    margin-top : 20px;
+    margin-left : 50px;
+    padding: 6px 15px;
+    color: #133f71;
+    background-color: transparent;
+    /*border: 2px solid #007bff; !* Синяя рамка *!*/
+    border-radius: 20px; /* Сильно скругленные углы (овал) */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.back-ghost:hover {
+    background-color: #0c4f9c;
+    color: white;
+}

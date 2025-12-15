@@ -46,17 +46,15 @@ const ProductAbout = (props) => {
                 }
                 if (allQty.length > 0)  if (allQty.length > 1) setQty(allQty)
                 else setQty(allQty[0].qty)
-
             } catch (e){console.log(e)}
 
-            // Использовали чтобы получить другие цвета и карусель цветов но отказался чтобы уменьшить нагрузку
-
-            // productStore.getProductAbout(id).then(() => {
-            //
-            // })
         }
     },[id, isInWB])
 
+    function onWbClick(){
+        productStore.userGoToBW().then()
+        window.open(` https://www.wildberries.ru/catalog/${id}/detail.aspx`, '_blank');
+    }
 
     return (
 
@@ -161,14 +159,8 @@ const ProductAbout = (props) => {
 
                             </div>
                     }
-                    <div className="product-order">
-                        <a className="wb-go" style={{width: '70%', marginTop: '10px'}}
-                           href={` https://www.wildberries.ru/catalog/${id}/detail.aspx`} target="_blank"
-                           rel="noopener noreferrer"
-                        >
+                    <div className="product-order" onClick={()=>onWbClick()}>
                             Перейти на Wildberries
-                        </a>
-
                     </div>
                 </div>
                 :
