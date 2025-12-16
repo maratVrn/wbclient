@@ -10,7 +10,6 @@ export default class CatalogStore {
     isCatalogLoad = false
     idInfo = []
 
-
     someData = [0]
 
 

@@ -53,7 +53,9 @@ const Header = observer(() => {
 
                     <img className="logo-image" src={logoSvg} width="160" height="37"
                          alt="logo" loading="lazy"
-                         onClick={(e) => navigate('/')}
+                         onClick={(e) => {navigate('/')
+                             productListStore.onShowProduct = false
+                         }}
                     />
                 </a>
 

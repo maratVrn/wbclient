@@ -9,12 +9,14 @@ import leftImg from "./images/leftimg.jpg";
 import rightImg from "./images/rightimg.jpg";
 import { Carousel } from 'primereact/carousel';
 import {useNavigate} from "react-router-dom";
+import productList from "./product_components/ProductList";
 
 const MainPage = observer( () => {
 
     const {startProductsStore} = useContext(Context)
     const {catalogStore} = useContext(Context)
     const [isStartMenu, setIsStartMenu] = useState(true)
+    const {productListStore} = useContext(Context)
     const [isLoadPD, setIsLoadPD] = useState(false)
     const [addMenu, setAddMenu] = useState([])
     const [breadItems, setBreadItems] = useState([])
@@ -34,6 +36,8 @@ const MainPage = observer( () => {
     }
 
     useEffect(()=>{
+
+
         if (!isCatalogLoad) {
 
             catalogStore.getLiteWBCatalog().then(() => {
@@ -42,18 +46,32 @@ const MainPage = observer( () => {
             )
             setIsCatalogLoad(true)
         }
-        console.log('useEffect MainPage');
 
         setStartProducts([])
-        startProductsStore.loadAllStartProducts().then(() => {
+        if (startProductsStore.allStartProducts.length === 0) {
+            startProductsStore.loadAllStartProducts().then(() => {
 
+                let showProducts = []
+                for (let i in startProductsStore.allStartProducts)
+                    if ((startProductsStore.allStartProducts[i].price > 0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
+
+                setStartProducts(showProducts.sort(() => Math.random() - 0.5))
+            })
+        } else  {
             let showProducts = []
             for (let i in startProductsStore.allStartProducts)
-                if ((startProductsStore.allStartProducts[i].price>0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
-
+                if ((startProductsStore.allStartProducts[i].price > 0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
             setStartProducts(showProducts.sort(() => Math.random() - 0.5))
-        })
-        setMainMenu()
+        }
+
+        if (productListStore.onShowProduct) {
+            // try { setBreadItems(productListStore.onShowBreadItems) } catch (e) {}
+            // try { setBreadItems(productListStore.onShowBreadItems) } catch (e) {}
+            setIsLoadPD(true)
+            setIsStartMenu(false)
+        }  else setMainMenu()
+
+
         window.scrollTo(0, 0)
     },[])
 
@@ -62,9 +80,7 @@ const MainPage = observer( () => {
     const home = { label : 'Каталог', template: () => <a onClick={()=> setMainMenu()} className="cursor-pointer ">Каталог</a> }
 
     function setMainMenu(){
-        // console.log('setMainMenu');
-        // window.scrollTo(0, 200)
-        scrollToRef(sectionRefCatalog)
+            scrollToRef(sectionRefCatalog)
         setIsLoadPD(false)
         setIsStartMenu(true)
         setBreadItems([])
@@ -77,7 +93,9 @@ const MainPage = observer( () => {
         setIsLoadPD(false)
         let tmpItems = []
         for (let i in breadItems) tmpItems.push(breadItems[i])
+
         tmpItems.push({ label: oneData.name,  template: () => <a onClick={()=> setMenuOne(oneData)} className="cursor-pointer ">{oneData.name}</a>})
+
         if (oneData.childs) {
             for (let i in oneData.childs) {
 
@@ -90,9 +108,12 @@ const MainPage = observer( () => {
             setAddMenu(oneData.childs);
             if (oneData.childs.length === 0){
                 setCatalogId(oneData.id)
+
                 setIsLoadPD(true)}
         }
         setBreadItems(tmpItems)
+        productListStore.onShowBreadItems = tmpItems
+
         setIsStartMenu(false)
     }
 
@@ -100,8 +121,6 @@ const MainPage = observer( () => {
         return (
             <div className="">
                 <div className=" itemCarousel "
-                     // onClick={() => showProductInfo(item.id)}
-                     // onClick={() =>  window.open('/productInfo/' + product.id.toString())}
                      onClick={() =>  navigate('/productInfo/' + product.id.toString())}
 
 
@@ -220,58 +239,66 @@ const MainPage = observer( () => {
                 : <BreadCrumb model={breadItems} home={home}/>
             }
 
-
             <section ref={sectionRefCatalog}>
-                <div className="infoLine">
-                    Каталог
-                </div>
+                    <></>
+                    <div className="line" >
+                        .
+                    </div>
             </section>
 
-            {isLoadPD ? <>
+            {isLoadPD ?
+                <>
                     <ProductList catalogId={catalogId}/>
+
                 </>
 
 
                 :
-                <div className="flex flex-wrap column-gap-4 row-gap-4"
-                     style={{paddingTop: '30px', paddingBottom: '50px'}}>
+                <>
+                    <div className="infoLine">
+                        Каталог
+                    </div>
 
-                    {isStartMenu ?
+                    <div className="flex flex-wrap column-gap-4 row-gap-4"
+                    style={{paddingTop: '30px', paddingBottom: '50px'}}>
 
-
-                        catalogStore.allWBCatalogLite.map((oneData) =>
-                            <div key={oneData.id} className={"w-9rem h-12 rem  cursor-pointer"}
-                                 style={{padding: '10px'}}
-                                 onClick={() => setMenuOne(oneData)}>
-                                <div key={oneData.id} className={"w-8rem h-10rem "}
-                                     style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
-                                    <img style={{maxWidth: '100%', maxHeight: '100%'}}
-                                         src={oneData.img} alt="logo" loading="lazy"/>
-                                    {oneData.name}
-                                </div>
-
-                            </div>
-                        )
-
-                        :
-                        addMenu.map((oneData) =>
-                            <div key={oneData.id} className={" w-9rem h-14rem  cursor-pointer"}
-                                 onClick={() => setMenuOne(oneData)}
-                                 style={{padding: '10px'}}>
-
-                                <div key={oneData.id} className={"w-8rem h-12rem "}
-                                     style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
-                                    <img style={{maxWidth: '100%', maxHeight: '100%'}}
-                                         src={oneData.img} alt="logo" loading="lazy"/>
-                                    {oneData.name}
-                                </div>
+                            {isStartMenu ?
 
 
-                            </div>
-                        )
+                                catalogStore.allWBCatalogLite.map((oneData) =>
+                                    <div key={oneData.id} className={"w-9rem h-12 rem  cursor-pointer"}
+                                         style={{padding: '10px'}}
+                                         onClick={() => setMenuOne(oneData)}>
+                                        <div key={oneData.id} className={"w-8rem h-10rem "}
+                                             style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
+                                            <img style={{maxWidth: '100%', maxHeight: '100%'}}
+                                                 src={oneData.img} alt="logo" loading="lazy"/>
+                                            {oneData.name}
+                                        </div>
 
-                    }
-                </div>
+                                    </div>
+                                )
+
+                                :
+                                addMenu.map((oneData) =>
+                                    <div key={oneData.id} className={" w-9rem h-14rem  cursor-pointer"}
+                                         onClick={() => setMenuOne(oneData)}
+                                         style={{padding: '10px'}}>
+
+                                        <div key={oneData.id} className={"w-8rem h-12rem "}
+                                             style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
+                                            <img style={{maxWidth: '100%', maxHeight: '100%'}}
+                                                 src={oneData.img} alt="logo" loading="lazy"/>
+                                            {oneData.name}
+                                        </div>
+
+
+                                    </div>
+                                )
+
+                            }
+                        </div>
+                </>
             }
 
         </div>

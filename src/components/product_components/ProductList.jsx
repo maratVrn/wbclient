@@ -52,7 +52,7 @@ const ProductList = (props) => {
         { name: 'По колличеству оценок', key: '5' },
 
     ];
-    const [sortSelectedCategory, setSortSelectedCategory] = useState(depth_categories[0]);
+    const [sortSelectedCategory, setSortSelectedCategory] = useState(sort_categories[0]);
 
     // Фильтр категорий
     const xsubjectFilter_op = useRef(null);
@@ -74,37 +74,53 @@ const ProductList = (props) => {
 
     useEffect(()=>{
 
-        console.log('useEffectProductList');
-
-        setItems([])
-        setUsePriceMin(false)
-        setUsePriceMax(false)
-        productListStore.setStartData()
-
-        let idCount = 100
-        try {idCount = parseInt(depthSelectedCategory.key)*100} catch (e) {idCount = 100}
-        if (catalogId){
-            setLoading(true);
-            const param = {catalogIdList :[ parseInt(catalogId)], idCount: idCount,
-                filters : {isXsubjectFilterChecked : false, xSubjectIdArray : []}
-            }
-            productListStore.getProductList(param).then(() => {
-                setLoading(false);
-                setItems(productListStore.productList)
-            })
+        console.log('useEffectProductList productList Count '+ productListStore.productList.length);
+        console.log('productListStore.onShowProducts ' + productListStore.onShowProduct);
+        // Если был возврат на страницу поиска то отображаем старые данные
+        if (productListStore.onShowProduct){
+            productListStore.onShowProduct = false
+            setItems(productListStore.productList)
+            try {setDepthSelectedCategory(productListStore.onShowProductParam.depthSelectedCategory) } catch (e) { setDepthSelectedCategory(depth_categories[0]);}
+            try {setSortSelectedCategory(productListStore.onShowProductParam.sortSelectedCategory) } catch (e) { setSortSelectedCategory(sort_categories[0]);}
+            try {setUsePriceMin(productListStore.onShowProductParam.usePriceMin) } catch (e) { setUsePriceMin(false);}
+            try {setUsePriceMax(productListStore.onShowProductParam.usePriceMax) } catch (e) { setUsePriceMax(false);}
+            try {setSelectedXsubjectFilter(productListStore.onShowProductParam.selectedXsubjectFilter) } catch (e) { selectedXsubjectFilter([]);}
         }
-            else if (query){
-            const param = {idCount: idCount,
-                filters : {isXsubjectFilterChecked : false, xSubjectIdArray : []}
+            else {
+            setItems([])
+            setUsePriceMin(false)
+            setUsePriceMax(false)
+            productListStore.setStartData()
+
+            let idCount = 100
+            try {
+                idCount = parseInt(depthSelectedCategory.key) * 100
+            } catch (e) {
+                idCount = 100
             }
+            if (catalogId) {
+                setLoading(true);
+                const param = {
+                    catalogIdList: [parseInt(catalogId)], idCount: idCount,
+                    filters: {isXsubjectFilterChecked: false, xSubjectIdArray: []}
+                }
+                productListStore.getProductList(param).then(() => {
+                    setLoading(false);
+                    setItems(productListStore.productList)
+                })
+            } else if (query) {
+                const param = {
+                    idCount: idCount,
+                    filters: {isXsubjectFilterChecked: false, xSubjectIdArray: []}
+                }
 
-            setLoading(true);
-            productListStore.getSearchResult(query, param).then(() => {
-                setLoading(false);
-                setItems(productListStore.productList)
-            })
+                setLoading(true);
+                productListStore.getSearchResult(query, param).then(() => {
+                    setLoading(false);
+                    setItems(productListStore.productList)
+                })
+            }
         }
-
 
 
 
@@ -114,6 +130,12 @@ const ProductList = (props) => {
 
 
     function showProductInfo(id) {
+        productListStore.onShowProduct = true
+
+        productListStore.onShowProductParam = {depthSelectedCategory : depthSelectedCategory, sortSelectedCategory : sortSelectedCategory,
+            usePriceMin:usePriceMin, usePriceMax : usePriceMax , selectedXsubjectFilter : selectedXsubjectFilter, windowScrollY :window.scrollY}
+
+
         navigate('/productInfo/' + id.toString())
     }
 
@@ -366,41 +388,6 @@ const ProductList = (props) => {
                     </div>
 
                 </OverlayPanel>
-
-
-                {/*{*/}
-                {/*    productListStore.fbrandFilter.items.length > 0 ?*/}
-                {/*        <>*/}
-                {/*            <button className="filter_button" onClick={(e) => fbrandFilter_op.current.toggle(e)}> Бренд*/}
-                {/*                <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>*/}
-                {/*            </button>*/}
-                {/*            <OverlayPanel ref={fbrandFilter_op}>*/}
-                {/*                <div className="flex flex-column gap-3">*/}
-                {/*                    {productListStore.fbrandFilter.items.map((filter) => {*/}
-                {/*                        return (*/}
-                {/*                            <div key={filter.key} className="flex align-items-center">*/}
-
-                {/*                                <Checkbox inputId={filter.key} name="category" value={filter}*/}
-                {/*                                          onChange={onFbrandFilterChange}*/}
-                {/*                                          checked={selectedFbrandFilter.some((item) => item.key === filter.key)}/>*/}
-                {/*                                <label htmlFor={filter.key} className="ml-2">*/}
-                {/*                                    {filter.name}*/}
-                {/*                                </label>*/}
-                {/*                            </div>*/}
-                {/*                        );*/}
-                {/*                    })}*/}
-                {/*                    <button className="filter_button_ok" onClick={(e) => {*/}
-                {/*                        fbrandFilter_op.current.toggle(e)*/}
-                {/*                        setNewData()*/}
-                {/*                    }}> Применить*/}
-                {/*                    </button>*/}
-                {/*                </div>*/}
-                {/*            </OverlayPanel>*/}
-                {/*        </>*/}
-                {/*        :*/}
-                {/*        <></>*/}
-
-                {/*}*/}
 
 
             </div>

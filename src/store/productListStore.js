@@ -12,10 +12,16 @@ export default class ProductListStore {
     query = []
     addQuery = []
 
+    onShowProduct = false           // Используем этот коюч если был переход на страницу товара а потом возврат обратно
+    onShowProductParam = {}     // Запоминаем настройки филтров и сортировки
+    onShowBreadItems = []
+
     // Фильтры ВБ
     fbrandFilter = {key : 'fbrand', items : []}
     xsubjectFilter = { key : 'xsubject', items : [] }
     priceUFilter = {key: 'priceU', min:1, max:1_000_000}
+
+
 
     setQuery(query){
         this.query = query

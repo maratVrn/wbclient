@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useNavigate} from "react-router-dom";
 import logoSvg from "./logo-light.svg";
+import {Context} from "../index";
 
 const Footer = () => {
     const navigate = useNavigate();
+
+    const {productListStore} = useContext(Context)
     return (
         <footer className=' ' style={{
             background: "linear-gradient(to right, " +
@@ -18,7 +21,9 @@ const Footer = () => {
                     <div className="footer-container">
                         <a className="footer-logo" >
                             <img className="logo-image" src={logoSvg} width="160" height="37"
-                                 onClick={(e) => navigate('/')}
+                                 onClick={(e) => {navigate('/')
+                                     productListStore.onShowProduct = false
+                                 }}
                                  alt="logo" loading="lazy"/>
                         </a>
 
