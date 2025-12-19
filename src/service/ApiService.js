@@ -198,6 +198,34 @@ export default class ApiService {
 
     }
 
+    //  **************            Регистрация/Логин пользователей              *****************************
+    static async APIUserRegistration(formData):Promise{
+        return $api_client.post(`/registration`,
+            {
+                formData       :   formData,
+            }
+        )
+
+    }
+    static async APIUserTokenTest(token):Promise{
+        return $api_client.post(`/tokenTest`,
+            {
+                token  :   token,
+            }
+        )
+
+    }
+
+
+
+    static async APIUserLogin(formData):Promise{
+        return $api_client.post(`/login`,
+            {
+                formData       :   formData,
+            }
+        )
+
+    }
 
 };
 

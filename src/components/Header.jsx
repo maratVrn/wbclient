@@ -8,6 +8,7 @@ import {observer} from "mobx-react-lite";
 const Header = observer(() => {
 
     const {productListStore} = useContext(Context)
+    const {userStore} = useContext(Context)
     const navigate = useNavigate();
 
 
@@ -28,12 +29,16 @@ const Header = observer(() => {
             productListStore.setQuery('')
                     }
     };
-    //
-    // useEffect(()=>{
-    //     console.log('Header useEffect');
-    //
-    //
-    // }, [])
+
+    useEffect(()=>{
+        if (userStore.startIn){
+            userStore.userTokenTest().then()
+
+
+        }
+
+
+    }, [])
 
 
     return (
@@ -73,33 +78,51 @@ const Header = observer(() => {
 
                 <div className="space-xs menu-controls" style={{paddingLeft: '110px', paddingRight: '40px'}}>
 
-                    <a className="header-control" href="/user/">
-                        <i className=" pi pi-user" style={{
-                            cursor: 'pointer', fontSize: '1.8rem', color: 'white'
-                        }}></i>
+                    {userStore.isLogin ?
+                        <a className="header-control"  onClick={()=>navigate('/user/')}>
+                            <i className=" pi pi-user-edit" style={{
+                                cursor: 'pointer', fontSize: '1.8rem', color: 'white'
+                            }}></i>
 
-                    </a>
+                        </a>
+                        :
+                        <a className="header-control" onClick={()=>navigate('/login/')}>
+                            <i className=" pi pi-user" style={{
+                                cursor: 'pointer', fontSize: '1.8rem', color: 'white'
+                            }}></i>
+
+                        </a>
+                    }
+
                 </div>
             </div>
 
 
             <div className="header-mobile">
-                {/*    <a className="header-logo" href="/">*/}
-                {/*        <img className="logo-image" src={logoSvg} width="160" height="37" alt="logo"*/}
-                {/*    loading="lazy"/>*/}
-                {/*</a>*/}
+
                 <InputText style={{width: '100%', height: '50px', marginTop: '5px'}} placeholder="найти на wb.sale"
                            value={productListStore.query}
                            onKeyPress={handleKeyPress} //useGrouping={false}
                            onChange={(e) => productListStore.setQuery(e.target.value)}
                 />
+                {userStore.isLogin ?
+                    <a className="header-control"  style={{textDecoration:'none'}} onClick={()=>navigate('/user')}>
+                        {/*href="/user/"*/}
+                        <i className=" pi pi-user-edit" style={{
+                            cursor: 'pointer', fontSize: '1.5rem', color: 'white'
+                        }}></i>
 
-                <a className="header-control" href="/user/" style={{textDecoration:'none'}}>
-                    <i className=" pi pi-user" style={{
-                        cursor: 'pointer', fontSize: '1.5rem', color: 'white'}}></i>
+                    </a>
+                    :
+                    <a className="header-control" style={{textDecoration:'none'}} onClick={()=>navigate('/login')}>
+                        {/*href="/login/"*/}
+                        <i className=" pi pi-user" style={{
+                            cursor: 'pointer', fontSize: '1.5rem', color: 'white'
+                        }}></i>
 
+                    </a>
+                }
 
-                </a>
 
 
             </div>

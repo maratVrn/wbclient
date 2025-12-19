@@ -45,10 +45,12 @@ export default class ProductListStore {
 
     setProductListResult(productList){
         let productListAdd = productList?.data[0]? productList?.data[0] : []
+        // console.log(productListAdd);
         let itogProductListAdd = []
         for (let i in  productListAdd) {
 
             const discountData = calcDiscount(productListAdd[i].priceHistory)
+
             if (discountData.isDataCalc)
                 if (discountData.discount >0 ) {
                     productListAdd[i].discount = discountData.discount
@@ -140,6 +142,7 @@ export default class ProductListStore {
 
             this.query = searchQuery
             const productList = await ApiService.APIGetSearchResult(searchQuery, param)
+
             this.setProductListResult(productList)
 
 

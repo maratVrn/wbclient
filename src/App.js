@@ -5,6 +5,8 @@ import {BrowserRouter, Routes, Route, useNavigate, Navigate } from 'react-router
 import ProductList from "./components/product_components/ProductList";
 import MainPage from "./components/MainPage";
 import User from "./components/user_components/user";
+import Login from "./components/user_components/login";
+
 import ProductInfo from "./components/product_components/ProductInfo";
 import NoProduct from "./components/product_components/NoProduct";
 import Training from "./components/training_components/Training";
@@ -40,21 +42,15 @@ function App() {
             <Header/>
 
             <Routes>
-
                 <Route path="/"  element={<MainPage />}/>
-
-
                 <Route path="/productInfo/:id" element={<ProductInfo/>}/>
                 <Route path="/productList/:query" element={<ProductList/>}/>
-
                 <Route path="/noProduct/:query" element={<NoProduct/>}/>
-
                 <Route path="/user/" element={<User/>}/>
+                <Route path="/login/" element={<Login/>}/>
                 <Route path="/oferta/" element={<Oferta/>}/>
                 <Route path="/confPolicy/" element={<ConfPolicy/>}/>
-
                 <Route path="/contacts/" element={<Contacts/>}/>
-
                 {/*Админ панели*/}
                 <Route path="/training/" element={<Training/>}/>
                 <Route path="/subjects/" element={<Subjects/>}/>

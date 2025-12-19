@@ -74,8 +74,6 @@ const ProductList = (props) => {
 
     useEffect(()=>{
 
-        console.log('useEffectProductList productList Count '+ productListStore.productList.length);
-        console.log('productListStore.onShowProducts ' + productListStore.onShowProduct);
         // Если был возврат на страницу поиска то отображаем старые данные
         if (productListStore.onShowProduct){
             productListStore.onShowProduct = false

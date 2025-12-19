@@ -38,6 +38,7 @@ const MainPage = observer( () => {
     useEffect(()=>{
 
 
+
         if (!isCatalogLoad) {
 
             catalogStore.getLiteWBCatalog().then(() => {
