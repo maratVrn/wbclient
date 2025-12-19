@@ -68,6 +68,9 @@ export default class ProductListStore {
                     }
 
                 }
+
+
+
         }
         itogProductListAdd.sort((a, b) => b.discount - a.discount)
         this.setStartData()

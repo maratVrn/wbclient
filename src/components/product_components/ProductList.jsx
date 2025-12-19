@@ -73,7 +73,7 @@ const ProductList = (props) => {
 
 
     useEffect(()=>{
-
+        console.log('useEffect product list');
         // Если был возврат на страницу поиска то отображаем старые данные
         if (productListStore.onShowProduct){
             productListStore.onShowProduct = false
@@ -85,6 +85,7 @@ const ProductList = (props) => {
             try {setSelectedXsubjectFilter(productListStore.onShowProductParam.selectedXsubjectFilter) } catch (e) { selectedXsubjectFilter([]);}
         }
             else {
+            console.log(' кц кц');
             setItems([])
             setUsePriceMin(false)
             setUsePriceMax(false)

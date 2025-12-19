@@ -24,6 +24,7 @@ const Header = observer(() => {
                 needSearchQuery = false
             }
             if (needSearchQuery) {
+                productListStore.onShowProduct = false
                 navigate('/productList/'+query)
             }
             productListStore.setQuery('')
