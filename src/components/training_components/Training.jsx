@@ -10,10 +10,13 @@ import { InputNumber } from 'primereact/inputnumber';
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import ApiService from "../../service/ApiService";
+import {useNavigate} from "react-router-dom";
 
 
 const Training = observer(  () => {
     const {serverUpdateStore} = useContext(Context)
+    const {userStore} = useContext(Context)
+    const navigate = useNavigate();
 
     const [showAllTaskVisible, setShowAllTaskVisible] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
@@ -31,13 +34,8 @@ const Training = observer(  () => {
     const [updateAll, setUpdateAll] = useState(false);
 
     useEffect(() => {
-        // console.log('Запросили стартовое состояние')
-        // serverUpdateStore.getCurrServerInfo().then(() => {})
-        // const timer = setInterval(() => {
-        //     // console.log('Запросили промежуточное состояние')
-        //     serverUpdateStore.getCurrServerInfo().then(() => {})
-        // }, 1000);
-        // return () => clearTimeout(timer);
+        if (!userStore.isLogin) navigate('/')
+        else if (userStore.role !== "ADMIN") navigate('/')
     }, []);
 
     async function startLoadNewProducts() {

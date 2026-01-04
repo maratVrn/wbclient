@@ -3,17 +3,20 @@ import {Button} from "primereact/button";
 import {Context} from "../../index";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
-import {Dialog} from "primereact/dialog";
-import {InputTextarea} from "primereact/inputtextarea";
+import {useNavigate} from "react-router-dom";
 
 const StartProducts = () => {
     const {startProductsStore} = useContext(Context)
     const [startProducts, setStartProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState(null);
-
+    const {userStore} = useContext(Context)
+    const navigate = useNavigate();
 
     useEffect(()=>{
-        console.log('useEffect startProducts');
+
+        if (!userStore.isLogin) navigate('/')
+            else if (userStore.role !== "ADMIN") navigate('/')
+
         loadStartProducts()
     },[])
 
@@ -21,11 +24,9 @@ const StartProducts = () => {
         setSelectedProducts(null)
         let deleteIdList = []
         if (needDelete) for (let i in selectedProducts) deleteIdList.push(parseInt(selectedProducts[i].id))
-        console.log(deleteIdList);
         setStartProducts([])
         startProductsStore.loadAllStartProducts( needDelete, deleteIdList).then(() => {
                 setStartProducts(startProductsStore.allStartProducts)
-
             }
         )
     }
@@ -34,17 +35,25 @@ const StartProducts = () => {
     };
 
     const discountAddTemplate = (product) => {
-        let  addDiscount = 0
-        try {addDiscount = Math.round(-1000*(product.crPrice - product.startPrice)/(product.startPrice+0.1))/10} catch (e) {addDiscount = 0}
-        const nowDiscount =  Math.round(product.startDiscount+addDiscount)
+        let addDiscount = 0
+        let nowDiscount = 0
+        // try {addDiscount = Math.round(-1000*(product.crPrice - product.startPrice)/(product.startPrice+0.1))/10} catch (e) {addDiscount = 0}
+        // const nowDiscount =  Math.round(product.startDiscount+addDiscount)
+
+        try {
+            const msp = 100*product.startPrice/(100-product.startDiscount)
+            nowDiscount = Math.round(1000*(msp -product.price)/(msp-1) )/10
+        } catch (e) { nowDiscount = 0}
+        addDiscount = Math.round(10*(nowDiscount - product.startDiscount))/10
+
 
         return <>
-            {-1*addDiscount < 5 ?
+            {-1*addDiscount < 10 ?
 
                 < div style= {{color:'green'}}> {addDiscount} % Now ({nowDiscount})</div>
 
                 :
-                < div style= {{color:'red'}}> {-1*addDiscount} % Now ({nowDiscount})</div>
+                < div style= {{color:'red'}}> {addDiscount} % Now ({nowDiscount})</div>
 
 
             }

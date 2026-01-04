@@ -67,8 +67,12 @@ const Login = observer(() => {
     const handleForgotPassword = (e) => {
         e.preventDefault();
         if (formData.email) {
-            alert(`Инструкции по восстановлению пароля отправлены на: ${formData.email}`);
-            // В реальном приложении здесь был бы вызов API для отправки письма
+            // alert(`Инструкции по восстановлению пароля отправлены на: ${formData.email}`);
+
+            userStore.updatePassword(formData.email).then(() => {
+
+            })
+
         } else {
             alert('Пожалуйста, введите ваш email в поле выше.');
         }

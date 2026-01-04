@@ -207,6 +207,24 @@ export default class ApiService {
         )
 
     }
+    static async APIUserUpdatePassword(email):Promise{
+        return $api_client.post(`/updatePassword`,
+            {
+                email       :   email,
+            }
+        )
+    }
+    static async APIUserNewPassword(password, link):Promise{
+        return $api_client.post(`/newPassword`,
+            {
+                password       :   password,
+                link : link
+            }
+        )
+    }
+
+
+
     static async APIUserTokenTest(token):Promise{
         return $api_client.post(`/tokenTest`,
             {
@@ -218,6 +236,7 @@ export default class ApiService {
 
 
 
+
     static async APIUserLogin(formData):Promise{
         return $api_client.post(`/login`,
             {
@@ -226,6 +245,50 @@ export default class ApiService {
         )
 
     }
+
+    static async APIUserAddProductInfo(newAddProduct, userId):Promise{
+        return $api_client.post(`/addTrackProducts`,
+            {
+                userId  :  userId,
+                addProductInfo : newAddProduct
+            }
+        )
+
+    }
+
+    static async APISaveCurTrackProductData(userId, trackProduct):Promise{
+        return $api_client.post(`/saveTrackProduct`,
+            {
+                userId  :  userId,
+                trackProduct       :   trackProduct,
+
+            }
+        )
+
+    }
+
+    static async APIUpdateAllTrackProducts():Promise{
+        return $api_client.post(`/updateAllTrackProducts`,
+            {
+
+
+            }
+        )
+
+    }
+
+    static async APIGetLoadTrackProducts(userId, needDelete, deleteIdList):Promise{
+        return $api_client.post(`/loadTrackProducts`,
+            {
+                userId  :  userId,
+                needDelete       :   needDelete,
+                deleteIdList : deleteIdList
+            }
+        )
+
+    }
+
+
 
 };
 

@@ -22,6 +22,7 @@ const Footer = () => {
                         <a className="footer-logo" >
                             <img className="logo-image" src={logoSvg} width="160" height="37"
                                  onClick={(e) => {navigate('/')
+                                     productListStore.query = ''
                                      productListStore.onShowProduct = false
                                  }}
                                  alt="logo" loading="lazy"/>

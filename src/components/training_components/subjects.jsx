@@ -5,8 +5,11 @@ import {Context} from "../../index";
 import {Button} from "primereact/button";
 import {Dialog} from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
+import {useNavigate} from "react-router-dom";
 
 const Subjects = () => {
+    const {userStore} = useContext(Context)
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [selectedCatalogID, setSelectedCatalogID] = useState(-1);
@@ -17,6 +20,9 @@ const Subjects = () => {
     const {catalogStore} = useContext(Context)
     const [selectedProduct, setSelectedProduct] = useState(null);
     useEffect(()=>{
+        if (!userStore.isLogin) navigate('/')
+        else if (userStore.role !== "ADMIN") navigate('/')
+
         console.log('useEffect subjects');
         catalogStore.getWBCatalogInfo().then(() => {
             let newProducts = []

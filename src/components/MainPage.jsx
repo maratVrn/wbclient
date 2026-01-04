@@ -56,13 +56,28 @@ const MainPage = observer( () => {
                 for (let i in startProductsStore.allStartProducts)
                     if ((startProductsStore.allStartProducts[i].price > 0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
 
-                setStartProducts(showProducts.sort(() => Math.random() - 0.5))
+                // setStartProducts(showProducts.sort(() => Math.random() - 0.5))
+                //
+                showProducts = showProducts.sort(() => Math.random() - 0.5)
+                const groupedItems = [];
+                for (let i = 0; i < showProducts.length; i += 2) {
+                    groupedItems.push(showProducts.slice(i, i + 2));
+                }
+                setStartProducts(groupedItems)
+
             })
         } else  {
             let showProducts = []
             for (let i in startProductsStore.allStartProducts)
                 if ((startProductsStore.allStartProducts[i].price > 0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
-            setStartProducts(showProducts.sort(() => Math.random() - 0.5))
+            // setStartProducts(showProducts.sort(() => Math.random() - 0.5))
+            //
+            showProducts = showProducts.sort(() => Math.random() - 0.5)
+            const groupedItems = [];
+            for (let i = 0; i < showProducts.length; i += 2) {
+                groupedItems.push(showProducts.slice(i, i + 2));
+            }
+            setStartProducts(groupedItems)
         }
 
         if (productListStore.onShowProduct) {
@@ -118,51 +133,99 @@ const MainPage = observer( () => {
         setIsStartMenu(false)
     }
 
-    const productTemplate = (product) => {
+    const productTemplate = (pair) => {
         return (
-            <div className="">
-                <div className=" itemCarousel "
-                     onClick={() =>  navigate('/productInfo/' + product.id.toString())}
+            <div className="flex flex-column gap-3">
+                {pair.map(product => (
+                    <div className=" itemCarousel " key={product.id}
+                         onClick={() => navigate('/productInfo/' + product.id.toString())}
 
 
-                >
-                    <img src={product.photoUrl} alt="..."/>
-                    <div className="card-body">
-                        <div className="card-price">
-                            <div className="price-low ">
-                                <span>{product.price} ₽</span>
+                    >
+                        <img src={product.photoUrl} alt="..."/>
+                        <div className="card-body">
+                            <div className="card-price">
+                                <div className="price-low ">
+                                    <span>{product.price} ₽</span>
+                                </div>
+                                <span className="product-name">Цена без кошелька </span>
+
                             </div>
-                            <span className="product-name">Цена без кошелька </span>
+
+                            <div className="card-price">
+                                <span className="product-brand">{product.brand} </span>
+
+                            </div>
+                            <div className="card-price">
+                                <span className="product-name">{product.name} </span>
+                            </div>
+                            <div className="card-price">
+                                <span className="product-rate">  </span>
+                                <span className="product-rate2"> {product.reviewRating} </span>
+                                <span className="product-rate3"> {product.feedbacks} оценок </span>
+                            </div>
+
+                            <div className="card-price">
+                                <span className="spanGreen">Реальная скидка {product.discount} % </span>
+                            </div>
+
+
+                            <span
+                                className="product-count"> Осталось {product.totalQuantity > 59 ? ' > ' + product.totalQuantity : product.totalQuantity} шт </span>
+
 
                         </div>
-
-                        <div className="card-price">
-                            <span className="product-brand">{product.brand} </span>
-
-                        </div>
-                        <div className="card-price">
-                            <span className="product-name">{product.name} </span>
-                        </div>
-                        <div className="card-price">
-                            <span className="product-rate">  </span>
-                            <span className="product-rate2"> {product.reviewRating} </span>
-                            <span className="product-rate3"> {product.feedbacks} оценок </span>
-                        </div>
-
-                        <div className="card-price">
-                            <span className="spanGreen">Реальная скидка {product.discount} % </span>
-                        </div>
-
-
-                        <span
-                            className="product-count"> Осталось {product.totalQuantity > 59 ? ' > ' + product.totalQuantity : product.totalQuantity} шт </span>
-
-
                     </div>
-                </div>
+                ))}
             </div>
         );
     };
+
+    // const productTemplate = (product) => {
+    //     return (
+    //         <div className="">
+    //             <div className=" itemCarousel "
+    //                  onClick={() =>  navigate('/productInfo/' + product.id.toString())}
+    //
+    //
+    //             >
+    //                 <img src={product.photoUrl} alt="..."/>
+    //                 <div className="card-body">
+    //                     <div className="card-price">
+    //                         <div className="price-low ">
+    //                             <span>{product.price} ₽</span>
+    //                         </div>
+    //                         <span className="product-name">Цена без кошелька </span>
+    //
+    //                     </div>
+    //
+    //                     <div className="card-price">
+    //                         <span className="product-brand">{product.brand} </span>
+    //
+    //                     </div>
+    //                     <div className="card-price">
+    //                         <span className="product-name">{product.name} </span>
+    //                     </div>
+    //                     <div className="card-price">
+    //                         <span className="product-rate">  </span>
+    //                         <span className="product-rate2"> {product.reviewRating} </span>
+    //                         <span className="product-rate3"> {product.feedbacks} оценок </span>
+    //                     </div>
+    //
+    //                     <div className="card-price">
+    //                         <span className="spanGreen">Реальная скидка {product.discount} % </span>
+    //                     </div>
+    //
+    //
+    //                     <span
+    //                         className="product-count"> Осталось {product.totalQuantity > 59 ? ' > ' + product.totalQuantity : product.totalQuantity} шт </span>
+    //
+    //
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     );
+    // };
 
     const responsiveOptions = [
         {

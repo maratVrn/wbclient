@@ -9,11 +9,12 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Paginator } from 'primereact/paginator';
 import { Checkbox } from 'primereact/checkbox';
 import {ProgressSpinner} from "primereact/progressspinner";
+import {Button} from "primereact/button";
 
 const ProductList = (props) => {
 
     const [loading, setLoading] = useState(false);
-
+    const {userStore} = useContext(Context)
     const {catalogId} = props;
     const {productListStore} = useContext(Context)
     const {startProductsStore} = useContext(Context)
@@ -139,7 +140,7 @@ const ProductList = (props) => {
     }
 
     async function addStartProduct(id, startDiscount, startQty, startPrice) {
-        console.log('startQty ' +startQty);
+
         await startProductsStore.addStartProduct(id, startDiscount, startQty, startPrice).then(() => {
 
             console.log('Добавили id '+id);
@@ -261,31 +262,31 @@ const ProductList = (props) => {
             <div className=" flex" style={{marginTop: '20px', marginBottom: '20px'}}>
 
                 {/*Глубина аналитики*/}
-                <button className="filter_button" onClick={(e) => depth_op.current.toggle(e)}> Глубина аналитики
-                    <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>
-                </button>
-                <OverlayPanel ref={depth_op}>
-                    <div className="flex flex-column gap-3">
-                        {depth_categories.map((category) => {
-                            return (
-                                <div key={category.key} className="flex align-items-center">
-                                <RadioButton inputId={category.key} name="category" value={category}
-                                                 onChange={(e) => {
-                                                     setDepthSelectedCategory(e.value)
-                                                 }}
-                                                 checked={depthSelectedCategory.key === category.key}/>
-                                    <label htmlFor={category.key} className="ml-2">{category.name}</label>
-                                </div>
-                            );
-                        })}
-                        <button className="filter_button_ok" onClick={(e) => {
-                            depth_op.current.toggle(e)
-                            setNewData()
-                        }}> Применить
-                        </button>
-                    </div>
+                {/*<button className="filter_button" onClick={(e) => depth_op.current.toggle(e)}> Глубина аналитики*/}
+                {/*    <img className="down_icon" src={downSvg} width="12" height="12" loading="lazy"/>*/}
+                {/*</button>*/}
+                {/*<OverlayPanel ref={depth_op}>*/}
+                {/*    <div className="flex flex-column gap-3">*/}
+                {/*        {depth_categories.map((category) => {*/}
+                {/*            return (*/}
+                {/*                <div key={category.key} className="flex align-items-center">*/}
+                {/*                <RadioButton inputId={category.key} name="category" value={category}*/}
+                {/*                                 onChange={(e) => {*/}
+                {/*                                     setDepthSelectedCategory(e.value)*/}
+                {/*                                 }}*/}
+                {/*                                 checked={depthSelectedCategory.key === category.key}/>*/}
+                {/*                    <label htmlFor={category.key} className="ml-2">{category.name}</label>*/}
+                {/*                </div>*/}
+                {/*            );*/}
+                {/*        })}*/}
+                {/*        <button className="filter_button_ok" onClick={(e) => {*/}
+                {/*            depth_op.current.toggle(e)*/}
+                {/*            setNewData()*/}
+                {/*        }}> Применить*/}
+                {/*        </button>*/}
+                {/*    </div>*/}
 
-                </OverlayPanel>
+                {/*</OverlayPanel>*/}
 
                 {/*Категории*/}
                 {
@@ -393,53 +394,65 @@ const ProductList = (props) => {
 
 
             {/*Список на выдачу*/}
-            <div className="grid" style={{paddingBottom:'30px'}}>
+            <div className="grid" style={{paddingBottom: '30px'}}>
                 {items.slice(first, first + rows).map((item) =>
 
 
-                        <div key={item.id} className=" item ">
+                    <div key={item.id} className=" item ">
 
-                            <img src={item.photoUrl} onClick={() => showProductInfo(item.id)}  alt="..."/>
-                            <div className="card-body" onClick={() => showProductInfo(item.id)}>
-                                <div className="card-price">
-                                    <div className="price-low ">
-                                        <span>{item.price} ₽</span>
-                                    </div>
-                                    <span className="product-name">Цена без кошелька </span>
-
+                        <img src={item.photoUrl} onClick={() => showProductInfo(item.id)} alt="..."/>
+                        <div className="card-body" onClick={() => showProductInfo(item.id)}>
+                            <div className="card-price">
+                                <div className="price-low ">
+                                    <span>{item.price} ₽</span>
                                 </div>
-
-                                <div className="card-price">
-                                    <span className="product-brand">{item.brand} </span>
-
-                                </div>
-                                <div className="card-price">
-                                    <span className="product-name">{item.name} </span>
-                                </div>
-                                <div className="card-price">
-                                    <span className="product-rate">  </span>
-                                    <span className="product-rate2"> {item.reviewRating} </span>
-                                    <span className="product-rate3"> {item.feedbacks} оценок </span>
-                                </div>
-
-                                <div className="card-price">
-                                    <span className="spanGreen">Реальная скидка {item.discount} % </span>
-                                </div>
-
-
-                                <span
-                                    className="product-count"> Осталось {item.totalQuantity > 59 ? ' > ' + item.totalQuantity : item.totalQuantity} шт </span>
-
+                                <span className="product-name">Цена без кошелька </span>
 
                             </div>
+
+                            <div className="card-price">
+                                <span className="product-brand">{item.brand} </span>
+
+                            </div>
+                            <div className="card-price">
+                                <span className="product-name">{item.name} </span>
+                            </div>
+                            <div className="card-price">
+                                <span className="product-rate">  </span>
+                                <span className="product-rate2"> {item.reviewRating} </span>
+                                <span className="product-rate3"> {item.feedbacks} оценок </span>
+                            </div>
+
+                            <div className="card-price">
+                                <span className="spanGreen">Реальная скидка {item.discount} % </span>
+                            </div>
+
+
+                            <span
+                                className="product-count"> Осталось {item.totalQuantity > 59 ? ' > ' + item.totalQuantity : item.totalQuantity} шт </span>
+
+
                         </div>
-
-
+                        <div>
+                            {userStore.isLogin ?
+                                <div>
+                                    {userStore.role === "ADMIN" ? <>
+                                        <Button severity="secondary" label="+"
+                                                style={{height: '28px', fontSize: '14px', marginBottom: '10px', marginLeft: '10px'}}
+                                                onClick={() => addStartProduct(item.id, item.discount, item.totalQuantity, item.price)}/>
+                                    </> : <></>}
+                                </div>
+                                :
+                                <></>
+                            }
+                        </div>
+                    </div>
                 )
                 }
 
 
             </div>
+
             <div className="card">
                 <Paginator first={first} rows={rows} totalRecords={items.length} rowsPerPageOptions={[50, 100]}
                            onPageChange={onPageChange}/>

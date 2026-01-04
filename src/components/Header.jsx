@@ -60,6 +60,7 @@ const Header = observer(() => {
                     <img className="logo-image" src={logoSvg} width="160" height="37"
                          alt="logo" loading="lazy"
                          onClick={(e) => {navigate('/')
+                             productListStore.query = ''
                              productListStore.onShowProduct = false
                          }}
                     />
@@ -81,7 +82,7 @@ const Header = observer(() => {
 
                     {userStore.isLogin ?
                         <a className="header-control"  onClick={()=>navigate('/user/')}>
-                            <i className=" pi pi-user-edit" style={{
+                            <i className=" pi pi-cog" style={{
                                 cursor: 'pointer', fontSize: '1.8rem', color: 'white'
                             }}></i>
 
@@ -109,7 +110,7 @@ const Header = observer(() => {
                 {userStore.isLogin ?
                     <a className="header-control"  style={{textDecoration:'none'}} onClick={()=>navigate('/user')}>
                         {/*href="/user/"*/}
-                        <i className=" pi pi-user-edit" style={{
+                        <i className=" pi pi-cog" style={{
                             cursor: 'pointer', fontSize: '1.5rem', color: 'white'
                         }}></i>
 

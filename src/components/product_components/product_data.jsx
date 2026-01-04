@@ -6,6 +6,7 @@ import {getPriceFromHistory, formatCurrency, calcDiscount} from "../math";
 import {InputSwitch} from "primereact/inputswitch";
 import {RadioButton} from "primereact/radiobutton";
 import {useNavigate} from "react-router-dom";
+import {Button} from "primereact/button";
 
 
 
@@ -15,6 +16,8 @@ const ProductData = (props) => {
     const {id, isInBase} = props;
     const {productStore} = useContext(Context)
     const [productInfo, setProductInfo] = useState([]);
+    const {startProductsStore} = useContext(Context)
+    const {userStore} = useContext(Context)
     const [chartPriceData, setChartPriceData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
     const [similarProducts, setSimilarProducts] = useState([]);
@@ -43,6 +46,8 @@ const ProductData = (props) => {
 
         }
     }, [id, isInBase]);
+
+
 
     function calcData(daysCount){
         const [dateArray, priceArray,  resultData] = getPriceFromHistory(productStore.idInfo?.productInfo?.priceHistory, daysCount)
@@ -176,16 +181,31 @@ const ProductData = (props) => {
                     </div>
 
                     <div className="item_data">
+                        {selectedDays.daysId > 2 ? <>
+                                {userStore.isLogin ?
+                                    <div className="chart_item">
+                                        <Chart className="all_div" type="line" data={chartPriceData}
+                                               options={chartOptions}/>
+                                    </div> :
+                                    <div className="hero-banner">
+                                        <button className="submit-btn" style={{width:'200px'}} onClick={()=>navigate('/user/')} >Войти в систему</button>
+                                    </div>
+                                }
 
-                        <div className="chart_item">
-                            <Chart className="all_div" type="line" data={chartPriceData} options={chartOptions}/>
-                        </div>
+                            </>
+                            :
+                            <div className="chart_item">
+                                <Chart className="all_div" type="line" data={chartPriceData}
+                                       options={chartOptions}/>
+                            </div>
+                        }
+
                     </div>
 
                     <div style={{marginTop: '130px'}} className="infoLine">Похожие товары со скидками</div>
 
 
-                    <div className="grid" style={{ paddingTop:'30px'}}>
+                    <div className="grid" style={{paddingTop: '30px'}}>
                         {similarProducts.map((item) =>
 
 
@@ -224,6 +244,25 @@ const ProductData = (props) => {
                                     </div>
 
                                 </div>
+                                <div>
+                                    {userStore.isLogin ?
+                                        <div>
+                                            {userStore.role === "ADMIN" ? <>
+                                                <Button severity="secondary" label="+"
+                                                        style={{
+                                                            height: '28px',
+                                                            fontSize: '14px',
+                                                            marginBottom: '10px',
+                                                            marginLeft: '10px'
+                                                        }}
+                                                        onClick={() => startProductsStore.addStartProduct(item.id, item.discount, item.totalQuantity, item.price)}/>
+                                            </> : <></>}
+                                        </div>
+                                        :
+                                        <></>
+                                    }
+                                </div>
+
                             </div>
                         )
                         }

@@ -1,15 +1,16 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
 import {Button} from "primereact/button";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
+import {useNavigate} from "react-router-dom";
 
 const UserStat = () => {
     const {userStore} = useContext(Context)
     const [allUserStat, setAllUserStat] = useState([]);
     const [dayUserStat, setDayUserStat] = useState([]);
     const [selectedDay, setSelectedDay] = useState(null);
-
+    const navigate = useNavigate();
     function loadAllUserStat(){
         userStore.loadAllUserStat().then(() => {
             setAllUserStat(userStore.allUserStat)
@@ -29,6 +30,14 @@ const UserStat = () => {
         setSelectedDay(value)
         try {setDayUserStat(value.statIPInfo)} catch (e) {}
     }
+
+    useEffect(()=>{
+        if (!userStore.isLogin) navigate('/')
+          else if (userStore.role !== "ADMIN") navigate('/')
+
+    }, [])
+
+
     return (
 
         <div style={{padding: '20px'}}>

@@ -18,6 +18,7 @@ import Oferta from "./components/oferta";
 import ConfPolicy from "./components/confPolicy";
 import Subjects from "./components/training_components/subjects";
 import UserStat from "./components/training_components/userStat";
+import UpdatePassword from "./components/user_components/updatePassword";
 
 
 function App() {
@@ -56,6 +57,10 @@ function App() {
                 <Route path="/subjects/" element={<Subjects/>}/>
                 <Route path="/startProducts/" element={<StartProducts/>}/>
                 <Route path="/userStat/" element={<UserStat/>}/>
+                <Route path="/updatePassword/:link" element={<UpdatePassword/>}/>
+
+
+
             </Routes>
             <Footer/>
         </BrowserRouter>
