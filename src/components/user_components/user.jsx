@@ -9,6 +9,7 @@ import {Dialog} from "primereact/dialog";
 import {Checkbox} from "primereact/checkbox";
 import {InputNumber} from "primereact/inputnumber";
 import {Dropdown} from "primereact/dropdown";
+import {Tooltip} from "primereact/tooltip";
 
 const User = observer(() => {
     const {userStore} = useContext(Context)
@@ -50,7 +51,7 @@ const User = observer(() => {
                 src={product.photoUrl}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                    setSelectedPhoto(product.photoUrl);
+                    setSelectedPhoto(product);
                     setPhotoDialog(true);
                 }}
                 alt="thumbnail"
@@ -150,7 +151,7 @@ const User = observer(() => {
             {product.id}
             <div className="flex">
                 <div
-                    onClick={() => window.open(` https://www.wildberries.ru/catalog/${id}/detail.aspx`, '_blank')}
+                    onClick={() => window.open(` https://www.wildberries.ru/catalog/${product.id}/detail.aspx`, '_blank')}
                     className=" border-round-xl px-2 py-2"
                     style={{
                         background: 'linear-gradient(135deg, #cb11ab 0%, #481173 100%)',
@@ -185,11 +186,30 @@ const User = observer(() => {
 
         })
     }
+    const TelegramButton = () => {
+        return (
+            <a
+                href="https://t.me/mp_tracker_wb_bot"
+                className="tg-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <div className="tg-icon-wrapper">
+                    <svg viewBox="0 0 24 24" className="tg-icon">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.91-1.26 4.84-2.1 5.8-2.52 2.76-1.2 3.33-1.41 3.7-.12z"/>
+                    </svg>
+                </div>
+                <span className="tg-text">Открыть бот</span>
+            </a>
+        );
+    };
+
     return (
         <div style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', paddingTop: '30px'}}>
 
             {userStore.isLogin ?
                 <div>
+
                     {userStore.role === "ADMIN" ? <>
                         <Button severity="secondary" label="Статистика пользователей"
                                 style={{height: '28px', fontSize: '14px', marginBottom: '10px', marginLeft: '10px'}}
@@ -210,8 +230,17 @@ const User = observer(() => {
 
                     </> : <></>}
 
-                    <h2> {userStore.userName} </h2>
-                    <span onClick={logout} className="toggle-link">Выйти </span>
+                    <div className="flex justify-content-center">
+                        <p style={{paddingLeft:'20px', fontSize:'18px'}}>Пользователь {userStore.userName} email: {userStore.email} </p>
+                        <Button severity="secondary" label="Выйти"
+                                style={{height: '28px', fontSize: '14px', marginTop: '10px', marginLeft: '10px'}}
+                                onClick={() => logout()}/>
+                    </div>
+                    <div className="flex justify-content-center" style={{height: '50px'}}>
+                        <p style={{ paddingLeft: '20px', fontSize: '18px'}}>
+                            чтобы првязать бот к аккаунту перейдите в бот и введите email: {userStore.email} </p>
+                        <TelegramButton/>
+                    </div>
 
                     <div className="flex-grow-1  border-1  p-1 m-2 border-round">
 
@@ -257,35 +286,63 @@ const User = observer(() => {
 
                                     <div>
                                         <div className="flex align-items-center align-content-center text-center p-2">
-                                            <Checkbox onChange={e => activeRow.needPriceTrack =  e.checked}
+                                            <Checkbox onChange={e => activeRow.needPriceTrack = e.checked}
                                                       checked={activeRow.needPriceTrack}></Checkbox>
                                             <label className="ml-2">Уменьшение цены на</label>
-                                            <InputNumber className="ml-2" style={{width: '100px'}} value={activeRow.priceStep}
+                                            <InputNumber className="ml-2" style={{width: '100px'}}
+                                                         value={activeRow.priceStep}
                                                          onValueChange={(e) => activeRow.priceStep = e.value}/>
                                             <label className="ml-2">рублей </label>
 
                                         </div>
 
 
-                                        <div className="flex align-items-center align-content-center text-center p-2">
-                                            <Checkbox onChange={e => activeRow.needCountTrack =  e.checked}
-                                                      checked={activeRow.needCountTrack}></Checkbox>
-                                            <label className="ml-2">Уменьшение остатка до </label>
-                                            <InputNumber className="ml-2" style={{width: '100px'}} value={activeRow.minCount}
-                                                         onValueChange={(e) => activeRow.minCount = e.value}/>
-                                            <label className="ml-2">штук </label>
-                                        </div>
+
 
                                         {
                                             activeRow.qty.length > 1 ?
-                                                <div className="flex align-items-center align-content-center text-center p-2">
-                                                    <label className="ml-4 mr-2">для размера</label>
-                                                    <Dropdown className="ml-2 "  value={selectedSizeTrack} onChange={(e) => setSelectedSizeTrack(e.value.name)}
-                                                              options={activeRow.qty} optionLabel="name"
-                                                              placeholder={selectedSizeTrack} className="w-full md:w-14rem" />
-                                                </div>
+                                                <>
+                                                    <div
+                                                        className="flex align-items-center align-content-center text-center p-2">
+                                                        <Checkbox onChange={e => activeRow.needCountTrack = e.checked}
+                                                                  checked={activeRow.needCountTrack}></Checkbox>
+                                                        <label className="ml-2">Уменьшение остатка до </label>
+                                                        <InputNumber className="ml-2" style={{width: '100px'}}
+                                                                     value={activeRow.minCount}
+                                                                     onValueChange={(e) => activeRow.minCount = e.value}/>
+                                                        <label className="ml-2">штук </label>
+                                                    </div>
+                                                    <div
+                                                        className="flex align-items-center align-content-center text-center p-2">
+                                                        <label className="ml-4 mr-2">для размера</label>
+                                                        <Dropdown className="ml-2 " value={selectedSizeTrack}
+                                                                  onChange={(e) => setSelectedSizeTrack(e.value.name)}
+                                                                  options={activeRow.qty} optionLabel="name"
+                                                                  placeholder={selectedSizeTrack} itemTemplate={qtyItemTemplate}
+                                                                  className="w-full md:w-14rem"/>
+                                                    </div>
+                                                </>
+
                                                 :
-                                                <></>
+                                                <>
+                                                    {activeRow.qty === 0 ?
+                                                        <></>
+                                                        :
+                                                        <div
+                                                            className="flex align-items-center align-content-center text-center p-2">
+                                                            <Checkbox
+                                                                onChange={e => activeRow.needCountTrack = e.checked}
+                                                                checked={activeRow.needCountTrack}></Checkbox>
+                                                            <label className="ml-2">Уменьшение остатка до </label>
+                                                            <InputNumber className="ml-2" style={{width: '100px'}}
+                                                                         value={activeRow.minCount}
+                                                                         onValueChange={(e) => activeRow.minCount = e.value}/>
+                                                            <label className="ml-2">штук </label>
+                                                        </div>
+
+
+                                                    }
+                                                </>
                                         }
 
 
@@ -298,19 +355,24 @@ const User = observer(() => {
                                             activeRow.qty.length > 1 ?
                                                 <div
                                                     className="flex align-items-center align-content-center text-center p-2">
-                                                    <label className="ml-4 mr-2">для размера</label>
+                                                <label className="ml-4 mr-2">для размера</label>
                                                     <Dropdown className="ml-2 " value={selectedSizeAddTrack}
                                                               onChange={(e) => setSelectedSizeAddTrack(e.value)}
                                                               options={activeRow.qty} optionLabel="name"
-                                                              placeholder={selectedSizeAddTrack} className="w-full md:w-14rem"/>
+                                                              placeholder={selectedSizeAddTrack} itemTemplate={qtyItemTemplate}
+                                                              className="w-full md:w-14rem"/>
                                                 </div>
                                                 :
                                                 <></>
                                         }
 
 
+                                    </div>
+                                    <div className="flex align-items-center align-content-center text-center p-2">
 
-
+                                        <Checkbox onChange={e => activeRow.needTelegramSend = e.checked}
+                                                  checked={activeRow.needTelegramSend}></Checkbox>
+                                        <label className="ml-2">Отправлять информацию в телеграм бот</label>
 
                                     </div>
 
@@ -323,13 +385,17 @@ const User = observer(() => {
 
                         </Dialog>
                         <Dialog
-
+                            header={selectedPhoto?.name ? selectedPhoto?.name : ''}
                             visible={photoDialog}
                             onHide={() => setPhotoDialog(false)}
                             dismissableMask // закрытие при клике по области вне окна
                         >
                             {selectedPhoto && (
-                                <img src={selectedPhoto} alt="Full size" style={{width: '100%'}}/>
+
+
+                                <img src={selectedPhoto.photoUrl} alt="Full size"
+                                     style={{width: '95%', height: '95%'}}/>
+
                             )}
                         </Dialog>
                     </div>

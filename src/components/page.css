@@ -528,3 +528,80 @@
 .toggle-link:hover {
     color: #0056b3;
 }
+
+.card2 {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Гарантирует одинаковую высоту в Flexbox/Grid */
+    width : 100%;
+
+    border: 1px solid #436993; /* Яркая синяя рамка */
+
+    /* Добавляем синюю тень для усиления визуального эффекта */
+    box-shadow: 0 4px 5px rgba(53, 95, 140, 0.3);
+
+    /* Добавляем плавный переход для красивой анимации при наведении/фокусе */
+    transition: all 0.3s ease-in-out;
+}
+
+.card2:hover {
+    box-shadow: 0 4px 5px rgba(53, 95, 140, 0.3);
+    transform: translateY(-2px); /* Слегка приподнимаем блок */
+}
+
+.card2-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+    /* Стилизация иконки как в макете (например, фон и скругление) */
+    background-color: #ecfdf5; /* Пример цвета фона */
+    padding: 10px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card2-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card2-description {
+    font-size: 14px;
+    color: #666;
+    flex-grow: 1; /* Описание занимает все доступное место */
+}
+
+
+
+/*---*/
+.flex-container {
+    display: flex; /* Активируем Flexbox */
+    flex-direction: row; /* Колонки в ряд по умолчанию (десктоп) */
+    width: 100%; /* Растягиваем на всю ширину */
+    flex-wrap: wrap; /* Позволяем элементам переноситься на новую строку при необходимости */
+    gap: 20px; /* Добавляем промежутки между колонками */
+}
+
+.flex-item {
+    flex: 1; /* Каждая колонка занимает равное пространство */
+    min-width: 300px;
+    box-sizing: border-box; /* Учитываем padding и border в расчетах ширины */
+}
+
+/* Медиа-запрос для мобильных устройств (экраны до 600px) */
+@media (max-width: 600px) {
+    .flex-container {
+        flex-direction: column; /* Колонки в столбец на мобильных устройствах */
+    }
+    .flex-item {
+        min-width: 100%; /* Занимают всю ширину экрана */
+    }
+}

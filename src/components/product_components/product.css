@@ -234,6 +234,9 @@ h2{
     border: 2px solid #868695;
 }
 
+.custom-dialog-header .p-dialog-title {
+    font-size: 16px;
+}
 .main_photo_div
 {
     width:75%;
@@ -367,3 +370,35 @@ span.bold {
     background-color: #0056b3;
 }
 
+.tg-btn {
+    display: inline-flex;
+    align-items: center;
+    /* Уменьшили градиентный фон и отступы */
+    background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
+    color: white;
+    padding: 10px; /* Было 12px 24px */
+    border-radius: 25px; /* Уменьшили радиус */
+    text-decoration: none;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(34, 158, 217, 0.2);
+    margin-left:30px;
+    margin-top:15px;
+}
+
+.tg-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(34, 158, 217, 0.3);
+}
+
+.tg-icon {
+    width: 18px; /* Было 24px */
+    height: 18px; /* Было 24px */
+    fill: currentColor;
+    margin-right: 8px; /* Немного ужали отступ до текста */
+}
+
+.tg-text {
+    font-size: 14px; /* Было 16px */
+}

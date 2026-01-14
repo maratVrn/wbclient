@@ -27,6 +27,7 @@ const ProductAbout = (props) => {
     const [minCount, setMinCount] = useState(10);
     const [selectedSizeTrack, setSelectedSizeTrack] = useState(null);
     const [addTrackChecked, setAddTrackChecked] = useState(false);
+    const [needTelegramSend, setNeedTelegramSend] = useState(false);
     const [selectedSizeAddTrack, setSelectedSizeAddTrack] = useState(null);
     const [isTrackProduct, setIsTrackProduct] = useState(false);
     const {startProductsStore} = useContext(Context)
@@ -100,6 +101,11 @@ const ProductAbout = (props) => {
         if ((countTrackChecked) && (selectedSizeTrack === null)) { alert('Необходимо выбрать размер для отслеживания уменьшения остатков'); needAdd = false }
         if ((addTrackChecked) && (selectedSizeAddTrack === null)) {alert('Необходимо выбрать размер для отслеживания поступления товара'); needAdd = false}
         if ((!addTrackChecked) && (!countTrackChecked) && (!priceTrackChecked)) {alert('Необходимо выбрать задание на отслеживание'); needAdd = false}
+        if ((addTrackChecked) && (selectedSizeAddTrack.qty>0 )) {alert('Остлеживать поступления товара можно только для размеров с нулевым остатком'); needAdd = false}
+        // console.log(productStore?.idInfo?.productInfo?.priceHistory?.at(-1)?.sp);
+        let endPrice = info?.price
+        if ((endPrice === 0 ) && (productStore?.idInfo?.productInfo?.priceHistory?.at(-1)?.sp))
+            endPrice = productStore?.idInfo?.productInfo?.priceHistory?.at(-1)?.sp
 
         if (needAdd) {
             let nawDay = new Date()
@@ -112,13 +118,14 @@ const ProductAbout = (props) => {
                 minCount: minCount,
                 needAddTrack: addTrackChecked,
                 selectedSizeAddTrack: selectedSizeAddTrack?.name? selectedSizeAddTrack?.name : '',
-                startPrice: info?.price,
+                startPrice: endPrice,
                 name : productStore.idInfo?.idInfoWB?.name,
                 photoUrl: productStore?.photoUrlArray[0] ? productStore?.photoUrlArray[0] : '',
                 endUpdateDT : nawDay.toLocaleTimeString(),
-                endPrice : info?.price,
+                endPrice : endPrice,
                 endCount : selectedSizeTrack?.qty? selectedSizeTrack?.qty : 0,
                 addCount : selectedSizeAddTrack?.qty? selectedSizeAddTrack?.qty : 0,
+                needTelegramSend : needTelegramSend,
                 qty : qty
             }
 
@@ -134,6 +141,14 @@ const ProductAbout = (props) => {
         }
 
     }
+    const qtyItemTemplate = (option) => {
+        return (
+            <div className="flex justify-content-between">
+                <span>{option.name}</span>
+                <span style={{ marginLeft: '5px', color: '#888' }}>( {option.qty} )</span>
+            </div>
+        );
+    };
 
     return (
 
@@ -262,7 +277,7 @@ const ProductAbout = (props) => {
 
                     </> : <></>}
 
-                    <Dialog header="Добавить Артикул для уведомлений" visible={addTrackDialog}
+                    <Dialog header="Добавить Артикул для отслеживания" visible={addTrackDialog}
                             style={{width: '500px'}} onHide={() => {
                         if (!addTrackDialog) return;
                         setAddTrackDialog(false);
@@ -280,49 +295,99 @@ const ProductAbout = (props) => {
 
 
 
-                            <div className="flex align-items-center align-content-center text-center p-2">
-                                <Checkbox onChange={e => setCountTrackChecked(e.checked)}
-                                          checked={countTrackChecked}></Checkbox>
-                                <label className="ml-2">Уменьшение остатка до </label>
-                                <InputNumber className="ml-2" style={{width: '100px'}} value={minCount}
-                                             onValueChange={(e) => setMinCount(e.value)}/>
-                                <label className="ml-2">штук </label>
-                            </div>
 
                             {
                                 qty.length > 1 ?
-                                            <div className="flex align-items-center align-content-center text-center p-2">
+                                    <>
+                                        <div className="flex align-items-center align-content-center text-center p-2">
+                                            <Checkbox onChange={e => setCountTrackChecked(e.checked)}
+                                                      checked={countTrackChecked}></Checkbox>
+                                            <label className="ml-2">Уменьшение остатка до </label>
+                                            <InputNumber className="ml-2" style={{width: '100px'}} value={minCount}
+                                                         onValueChange={(e) => setMinCount(e.value)}/>
+                                            <label className="ml-2">штук </label>
+                                        </div>
+
+                                        <div className="flex align-items-center align-content-center text-center p-2">
                                             <label className="ml-4 mr-2">для размера</label>
-                                            <Dropdown className="ml-2 "  value={selectedSizeTrack} onChange={(e) => setSelectedSizeTrack(e.value)} options={qty} optionLabel="name"
-                                                      placeholder="Выбрать" className="w-full md:w-14rem" />
-                                            </div>
+                                            <Dropdown className="ml-2 " value={selectedSizeTrack}
+                                                      onChange={(e) => setSelectedSizeTrack(e.value)} options={qty}
+                                                      optionLabel="name"
+                                                      placeholder="Выбрать" className="w-full md:w-14rem"
+                                                      itemTemplate={qtyItemTemplate}/>
+                                        </div>
+                                    </>
                                     :
-                                    <></>
+                                    <>
+                                        {qty === 0 ?
+                                            <></>
+                                            :
+                                            <div
+                                                className="flex align-items-center align-content-center text-center p-2">
+                                                <Checkbox onChange={e => setCountTrackChecked(e.checked)}
+                                                          checked={countTrackChecked}></Checkbox>
+                                                <label className="ml-2">Уменьшение остатка до </label>
+                                                <InputNumber className="ml-2" style={{width: '100px'}} value={minCount}
+                                                             onValueChange={(e) => setMinCount(e.value)}/>
+                                                <label className="ml-2">штук </label>
+                                            </div>
+
+
+                                        }
+                                    </>
                             }
 
 
-                            <div className="flex align-items-center align-content-center text-center p-2">
-                                <Checkbox onChange={e => setAddTrackChecked(e.checked)}
-                                          checked={addTrackChecked}></Checkbox>
-                                <label className="ml-2">Отслеживать поступление товара</label>
-                            </div>
                             {
                                 qty.length > 1 ?
-                                    <div className="flex align-items-center align-content-center text-center p-2">
-                                        <label className="ml-4 mr-2">для размера</label>
-                                        <Dropdown className="ml-2 "  value={selectedSizeAddTrack} onChange={(e) => setSelectedSizeAddTrack(e.value)} options={qty} optionLabel="name"
-                                                  placeholder="Выбрать" className="w-full md:w-14rem" />
-                                    </div>
-                                    :
-                                    <></>
-                            }
+                                    <>
+                                        <div className="flex align-items-center align-content-center text-center p-2">
+                                            <Checkbox onChange={e => setAddTrackChecked(e.checked)}
+                                                      checked={addTrackChecked}></Checkbox>
+                                            <label className="ml-2">Отслеживать поступление товара</label>
+                                        </div>
 
+                                        <div className="flex align-items-center align-content-center text-center p-2">
+                                            <label className="ml-4 mr-2">для размера</label>
+                                            <Dropdown className="ml-2 "
+                                                      value={selectedSizeAddTrack}
+                                                      onChange={(e) => setSelectedSizeAddTrack(e.value)}
+                                                      options={qty} optionLabel="name"
+                                                      itemTemplate={qtyItemTemplate}
+                                                      placeholder="Выбрать" className="w-full md:w-14rem"/>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        {qty === 0 ?
+                                            <div
+                                                className="flex align-items-center align-content-center text-center p-2">
+                                                <Checkbox onChange={e => setAddTrackChecked(e.checked)}
+                                                          checked={addTrackChecked}></Checkbox>
+                                                <label className="ml-2">Отслеживать поступление товара</label>
+                                            </div>
+                                            :
+                                            <></>
+                                        }
+                                    </>
+                            }
+                            <div className="flex align-items-center align-content-center text-center p-2">
+                                <Checkbox onChange={e => setNeedTelegramSend(e.checked)}
+                                          checked={needTelegramSend}></Checkbox>
+                                <label className="ml-2">Отправлять информацию в телеграм бот</label>
+                                <Tooltip target=".custom-target-icon" style={{fontSize: '12px'}}/>
+                                <i className="custom-target-icon pi pi-info-circle "
+                                   data-pr-tooltip="Настроить телеграм бот можно в личном кабинете"
+                                   style={{fontSize: '1.1rem', cursor: 'pointer', marginLeft: '10px', color: 'tan'}}>
+
+                                </i>
+                            </div>
 
                             <p>Обновление всех данных происходит каждые 30 минут. Список всех товаров, которые вы
                                 отслеживаете а также индивидуальные настройки можно посмотреть в личном кабинете</p>
 
                             <div className="flex flex-column align-items-center text-center">
-                                <Button label="Добавить"  onClick={() => addProductToTrack()}
+                                <Button label="Добавить" onClick={() => addProductToTrack()}
                                 />
                             </div>
                         </div>

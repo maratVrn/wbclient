@@ -35,59 +35,34 @@ const MainPage = observer( () => {
         }
     }
 
+    function setActualStartProducts(){
+        let showProducts = []
+        for (let i in startProductsStore.allStartProducts)
+            if ((startProductsStore.allStartProducts[i].price > 0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
+        showProducts = showProducts.sort(() => Math.random() - 0.5)
+        const groupedItems = [];
+        for (let i = 0; i < showProducts.length; i += 2) {
+            groupedItems.push(showProducts.slice(i, i + 2));
+        }
+        setStartProducts(groupedItems)
+    }
     useEffect(()=>{
-
-
-
         if (!isCatalogLoad) {
-
-            catalogStore.getLiteWBCatalog().then(() => {
-
-                }
-            )
+            catalogStore.getLiteWBCatalog().then(() => {})
             setIsCatalogLoad(true)
         }
 
         setStartProducts([])
         if (startProductsStore.allStartProducts.length === 0) {
             startProductsStore.loadAllStartProducts().then(() => {
-
-                let showProducts = []
-                for (let i in startProductsStore.allStartProducts)
-                    if ((startProductsStore.allStartProducts[i].price > 0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
-
-                // setStartProducts(showProducts.sort(() => Math.random() - 0.5))
-                //
-                showProducts = showProducts.sort(() => Math.random() - 0.5)
-                const groupedItems = [];
-                for (let i = 0; i < showProducts.length; i += 2) {
-                    groupedItems.push(showProducts.slice(i, i + 2));
-                }
-                setStartProducts(groupedItems)
-
+                setActualStartProducts()
             })
-        } else  {
-            let showProducts = []
-            for (let i in startProductsStore.allStartProducts)
-                if ((startProductsStore.allStartProducts[i].price > 0) && (startProductsStore.allStartProducts[i].discount > 20)) showProducts.push(startProductsStore.allStartProducts[i])
-            // setStartProducts(showProducts.sort(() => Math.random() - 0.5))
-            //
-            showProducts = showProducts.sort(() => Math.random() - 0.5)
-            const groupedItems = [];
-            for (let i = 0; i < showProducts.length; i += 2) {
-                groupedItems.push(showProducts.slice(i, i + 2));
-            }
-            setStartProducts(groupedItems)
-        }
+        } else setActualStartProducts()
 
         if (productListStore.onShowProduct) {
-            // try { setBreadItems(productListStore.onShowBreadItems) } catch (e) {}
-            // try { setBreadItems(productListStore.onShowBreadItems) } catch (e) {}
             setIsLoadPD(true)
             setIsStartMenu(false)
         }  else setMainMenu()
-
-
         window.scrollTo(0, 0)
     },[])
 
@@ -181,51 +156,6 @@ const MainPage = observer( () => {
         );
     };
 
-    // const productTemplate = (product) => {
-    //     return (
-    //         <div className="">
-    //             <div className=" itemCarousel "
-    //                  onClick={() =>  navigate('/productInfo/' + product.id.toString())}
-    //
-    //
-    //             >
-    //                 <img src={product.photoUrl} alt="..."/>
-    //                 <div className="card-body">
-    //                     <div className="card-price">
-    //                         <div className="price-low ">
-    //                             <span>{product.price} ₽</span>
-    //                         </div>
-    //                         <span className="product-name">Цена без кошелька </span>
-    //
-    //                     </div>
-    //
-    //                     <div className="card-price">
-    //                         <span className="product-brand">{product.brand} </span>
-    //
-    //                     </div>
-    //                     <div className="card-price">
-    //                         <span className="product-name">{product.name} </span>
-    //                     </div>
-    //                     <div className="card-price">
-    //                         <span className="product-rate">  </span>
-    //                         <span className="product-rate2"> {product.reviewRating} </span>
-    //                         <span className="product-rate3"> {product.feedbacks} оценок </span>
-    //                     </div>
-    //
-    //                     <div className="card-price">
-    //                         <span className="spanGreen">Реальная скидка {product.discount} % </span>
-    //                     </div>
-    //
-    //
-    //                     <span
-    //                         className="product-count"> Осталось {product.totalQuantity > 59 ? ' > ' + product.totalQuantity : product.totalQuantity} шт </span>
-    //
-    //
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // };
 
     const responsiveOptions = [
         {
@@ -259,12 +189,41 @@ const MainPage = observer( () => {
             numScroll: 1
         }
     ];
+    const cardData = [
+        {
+            title: 'MP-tracker следит за ценами',
+            description: 'Отмечайте товары которые вам интересны и узнавайте о скидках первыми. Мы проверяем цены на ваши товары каждые 30 минут. Вы также можете подключить нашего telegram бота и получать уведомления сразу при изменении цены',
+            icon: '📊', // Замените на реальную иконку
+        },
+        {
+            title: 'Контролируйте наличие товара',
+            description: 'MP-tracker также отслеживает уменьшение или поступление ваших товаров. Вы можете настроить минимальное колличество товара при котором нужно сделать уведомление или сообщить о появлении товара.',
+            icon: '📈', // Замените на реальную иконку
+        },
+        {
+            title: 'Истрия цены на товар за год',
+            description: 'В нашей базе доступно более 100 млн. товаров с историей цены. Данные обновляются каждый день. Вы можете видеть реальную динамику цены и понимать насколько сейчас выгодная цена. Мы рассчитываем среднюю цену и реальную скидку на товар',
+            icon: '🔑', // Замените на реальную иконку
+        },
+    ];
+
+    const Card = ({ title, description, icon }) => {
+        return (
+            <div className="card2">
+                {/*<div className="card2-icon">{icon}</div>*/}
+                <h2 className="card2-title">{title}</h2>
+                <p className="card2-description">{description}</p>
+            </div>
+        );
+    };
+
 
     return (
         <div className="page ">
 
 
             {isStartMenu ? <>
+
 
                     <div className="container" style={{paddingTop: '30px', paddingBottom: '30px'}}>
                         <div className="startSidebar ">
@@ -289,7 +248,22 @@ const MainPage = observer( () => {
                         </div>
                     </div>
 
-                    <div className="infoLine"> Интересные товары</div>
+
+                    <div className="flex-container">
+                        {cardData.map((card, index) => (
+                            <div className="flex-item">
+                            <Card
+                                key={index}
+                                title={card.title}
+                                description={card.description}
+                                icon={card.icon}
+                            />
+                            </div>
+                        ))}
+
+                    </div>
+
+                    <div className="infoLine" style={{marginTop:'30px'}}> Интересные товары</div>
 
                     <div className="" style={{paddingTop: '30px', paddingBottom: '30px'}}>
                         <Carousel value={startProducts} numVisible={6} numScroll={6} responsiveOptions={responsiveOptions}
@@ -304,10 +278,10 @@ const MainPage = observer( () => {
             }
 
             <section ref={sectionRefCatalog}>
-                    <></>
-                    <div className="line" >
-                        .
-                    </div>
+                <></>
+                <div className="line">
+                    .
+                </div>
             </section>
 
             {isLoadPD ?
@@ -320,48 +294,48 @@ const MainPage = observer( () => {
                 :
                 <>
                     <div className="infoLine">
-                        Каталог
+                    Каталог
                     </div>
 
                     <div className="flex flex-wrap column-gap-4 row-gap-4"
-                    style={{paddingTop: '30px', paddingBottom: '50px'}}>
+                         style={{paddingTop: '30px', paddingBottom: '50px'}}>
 
-                            {isStartMenu ?
+                        {isStartMenu ?
 
 
-                                catalogStore.allWBCatalogLite.map((oneData) =>
-                                    <div key={oneData.id} className={"w-9rem h-12 rem  cursor-pointer"}
-                                         style={{padding: '10px'}}
-                                         onClick={() => setMenuOne(oneData)}>
-                                        <div key={oneData.id} className={"w-8rem h-10rem "}
-                                             style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
-                                            <img style={{maxWidth: '100%', maxHeight: '100%'}}
-                                                 src={oneData.img} alt="logo" loading="lazy"/>
-                                            {oneData.name}
-                                        </div>
-
+                            catalogStore.allWBCatalogLite.map((oneData) =>
+                                <div key={oneData.id} className={"w-9rem h-12 rem  cursor-pointer"}
+                                     style={{padding: '10px'}}
+                                     onClick={() => setMenuOne(oneData)}>
+                                    <div key={oneData.id} className={"w-8rem h-10rem "}
+                                         style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
+                                        <img style={{maxWidth: '100%', maxHeight: '100%'}}
+                                             src={oneData.img} alt="logo" loading="lazy"/>
+                                        {oneData.name}
                                     </div>
-                                )
 
-                                :
-                                addMenu.map((oneData) =>
-                                    <div key={oneData.id} className={" w-9rem h-14rem  cursor-pointer"}
-                                         onClick={() => setMenuOne(oneData)}
-                                         style={{padding: '10px'}}>
+                                </div>
+                            )
 
-                                        <div key={oneData.id} className={"w-8rem h-12rem "}
-                                             style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
-                                            <img style={{maxWidth: '100%', maxHeight: '100%'}}
-                                                 src={oneData.img} alt="logo" loading="lazy"/>
-                                            {oneData.name}
-                                        </div>
+                            :
+                            addMenu.map((oneData) =>
+                                <div key={oneData.id} className={" w-9rem h-14rem  cursor-pointer"}
+                                     onClick={() => setMenuOne(oneData)}
+                                     style={{padding: '10px'}}>
 
-
+                                    <div key={oneData.id} className={"w-8rem h-12rem "}
+                                         style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
+                                        <img style={{maxWidth: '100%', maxHeight: '100%'}}
+                                             src={oneData.img} alt="logo" loading="lazy"/>
+                                        {oneData.name}
                                     </div>
-                                )
 
-                            }
-                        </div>
+
+                                </div>
+                            )
+
+                        }
+                    </div>
                 </>
             }
 
