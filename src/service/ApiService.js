@@ -66,13 +66,14 @@ export default class ApiService {
 
     }
 
-    static async APIAddStartProduct(id, startDiscount, startQty, startPrice):Promise{
+    static async APIAddStartProduct(id, startDiscount, startQty, startPrice, priceHistory):Promise{
         return $api_client.post(`/addStartProduct`,
             {
                 id :   id,
                 startDiscount       :   startDiscount,
                 startQty : startQty,
-                startPrice :  startPrice
+                startPrice :  startPrice,
+                priceHistory : priceHistory
             }
         )
     }
@@ -188,9 +189,11 @@ export default class ApiService {
     }
 
 
-    static async APILoadAllUserStat( needDelete, deleteIdList):Promise{
+    static async APILoadAllUserStat( startDate, endDate, needDelete, deleteIdList):Promise{
         return $api_client.post(`/loadAllUserStat`,
             {
+                startDate : startDate,
+                endDate : endDate,
                 needDelete       :   needDelete,
                 deleteIdList : deleteIdList
             }

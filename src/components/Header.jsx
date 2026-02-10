@@ -69,7 +69,7 @@ const Header = observer(() => {
 
                 <div style={{width: '100%', height: '120px'}}>
 
-                    <InputText style={{width: '100%', height: '50px', marginTop: '35px'}} placeholder="найти на wb.sale"
+                    <InputText style={{width: '100%', height: '50px', marginTop: '35px'}} placeholder="найти (предмет или ID)"
                                value={productListStore.query}
 
                                onKeyPress={handleKeyPress} //useGrouping={false}
@@ -102,7 +102,7 @@ const Header = observer(() => {
 
             <div className="header-mobile">
 
-                <InputText style={{width: '100%', height: '50px', marginTop: '5px'}} placeholder="найти на wb.sale"
+                <InputText style={{width: '100%', height: '50px', marginTop: '5px'}} placeholder="найти (предмет или ID)"
                            value={productListStore.query}
                            onKeyPress={handleKeyPress} //useGrouping={false}
                            onChange={(e) => productListStore.setQuery(e.target.value)}

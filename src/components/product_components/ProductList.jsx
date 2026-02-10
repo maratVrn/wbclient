@@ -139,9 +139,9 @@ const ProductList = (props) => {
         navigate('/productInfo/' + id.toString())
     }
 
-    async function addStartProduct(id, startDiscount, startQty, startPrice) {
+    async function addStartProduct(id, startDiscount, startQty, startPrice, priceHistory = []) {
 
-        await startProductsStore.addStartProduct(id, startDiscount, startQty, startPrice).then(() => {
+        await startProductsStore.addStartProduct(id, startDiscount, startQty, startPrice, priceHistory).then(() => {
 
             console.log('Добавили id '+id);
 
@@ -433,19 +433,19 @@ const ProductList = (props) => {
 
 
                         </div>
-                        <div>
-                            {userStore.isLogin ?
-                                <div>
-                                    {userStore.role === "ADMIN" ? <>
-                                        <Button severity="secondary" label="+"
-                                                style={{height: '28px', fontSize: '14px', marginBottom: '10px', marginLeft: '10px'}}
-                                                onClick={() => addStartProduct(item.id, item.discount, item.totalQuantity, item.price)}/>
-                                    </> : <></>}
-                                </div>
-                                :
-                                <></>
-                            }
-                        </div>
+                        {/*<div>*/}
+                        {/*    {userStore.isLogin ?*/}
+                        {/*        <div>*/}
+                        {/*            {userStore.role === "ADMIN" ? <>*/}
+                        {/*                <Button severity="secondary" label="+"*/}
+                        {/*                        style={{height: '28px', fontSize: '14px', marginBottom: '10px', marginLeft: '10px'}}*/}
+                        {/*                        onClick={() => addStartProduct(item.id, item.discount, item.totalQuantity, item.price, item.priceHistory)}/>*/}
+                        {/*            </> : <></>}*/}
+                        {/*        </div>*/}
+                        {/*        :*/}
+                        {/*        <></>*/}
+                        {/*    }*/}
+                        {/*</div>*/}
                     </div>
                 )
                 }

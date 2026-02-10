@@ -244,24 +244,24 @@ const ProductData = (props) => {
                                     </div>
 
                                 </div>
-                                <div>
-                                    {userStore.isLogin ?
-                                        <div>
-                                            {userStore.role === "ADMIN" ? <>
-                                                <Button severity="secondary" label="+"
-                                                        style={{
-                                                            height: '28px',
-                                                            fontSize: '14px',
-                                                            marginBottom: '10px',
-                                                            marginLeft: '10px'
-                                                        }}
-                                                        onClick={() => startProductsStore.addStartProduct(item.id, item.discount, item.totalQuantity, item.price)}/>
-                                            </> : <></>}
-                                        </div>
-                                        :
-                                        <></>
-                                    }
-                                </div>
+                                {/*<div>*/}
+                                {/*    {userStore.isLogin ?*/}
+                                {/*        <div>*/}
+                                {/*            {userStore.role === "ADMIN" ? <>*/}
+                                {/*                <Button severity="secondary" label="+"*/}
+                                {/*                        style={{*/}
+                                {/*                            height: '28px',*/}
+                                {/*                            fontSize: '14px',*/}
+                                {/*                            marginBottom: '10px',*/}
+                                {/*                            marginLeft: '10px'*/}
+                                {/*                        }}*/}
+                                {/*                        onClick={() => startProductsStore.addStartProduct(item.id, item.discount, item.totalQuantity, item.price)}/>*/}
+                                {/*            </> : <></>}*/}
+                                {/*        </div>*/}
+                                {/*        :*/}
+                                {/*        <></>*/}
+                                {/*    }*/}
+                                {/*</div>*/}
 
                             </div>
                         )

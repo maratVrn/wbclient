@@ -176,7 +176,7 @@ export default class ProductStore {
         try{
             this.idInfo ={isInWB : false, isInBase : false}
             const newIdInfo = await ApiService.APIGetProductStartInfo(productId)
-            console.log(newIdInfo);
+
             if (newIdInfo?.data) {
 
                 if (newIdInfo?.data?.productInfo?.priceHistory.length>0) if (newIdInfo?.data?.productInfo?.priceHistory[0]?.d) this.startDateInBase = newIdInfo?.data?.productInfo?.priceHistory[0]?.d

@@ -2,7 +2,7 @@ import ApiService from "../service/ApiService";
 import {makeAutoObservable} from "mobx";
 
 export default class StartProductsStore {
-    allStartProducts = []        // Каталог ВБ
+    allStartProducts = []
 
 
     constructor() {
@@ -23,11 +23,9 @@ export default class StartProductsStore {
         }
     }
 
-        async  addStartProduct(id, startDiscount, startQty, startPrice){
+        async  addStartProduct(id, startDiscount, startQty, startPrice, priceHistory){
         try{
-            const response = await ApiService.APIAddStartProduct(id, startDiscount, startQty, startPrice)
-            console.log(response.data);
-
+            const response = await ApiService.APIAddStartProduct(id, startDiscount, startQty, startPrice, priceHistory)
         } catch (e) {
             // this.setErrorMessage(e.response?.data?.message)
             console.log(e)

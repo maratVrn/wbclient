@@ -5,6 +5,7 @@ import { BreadCrumb } from 'primereact/breadcrumb';
 import {observer} from "mobx-react-lite";
 import ProductList from "./product_components/ProductList";
 import mainImg from "./images/mainimg1200.jpg";
+import mainAll from "./images/all1.jpg";
 import leftImg from "./images/leftimg.jpg";
 import rightImg from "./images/rightimg.jpg";
 import { Carousel } from 'primereact/carousel';
@@ -192,7 +193,7 @@ const MainPage = observer( () => {
     const cardData = [
         {
             title: 'MP-tracker следит за ценами',
-            description: 'Отмечайте товары которые вам интересны и узнавайте о скидках первыми. Мы проверяем цены на ваши товары каждые 30 минут. Вы также можете подключить нашего telegram бота и получать уведомления сразу при изменении цены',
+            description: 'Отмечайте товары которые вам интересны и узнавайте о скидках первыми. Мы проверяем цены на ваши товары 1 раз в час. Вы также можете подключить нашего telegram бота и получать уведомления сразу при изменении цены',
             icon: '📊', // Замените на реальную иконку
         },
         {
@@ -201,7 +202,7 @@ const MainPage = observer( () => {
             icon: '📈', // Замените на реальную иконку
         },
         {
-            title: 'Истрия цены на товар за год',
+            title: 'История цены на товар за год',
             description: 'В нашей базе доступно более 100 млн. товаров с историей цены. Данные обновляются каждый день. Вы можете видеть реальную динамику цены и понимать насколько сейчас выгодная цена. Мы рассчитываем среднюю цену и реальную скидку на товар',
             icon: '🔑', // Замените на реальную иконку
         },
@@ -223,47 +224,40 @@ const MainPage = observer( () => {
 
 
             {isStartMenu ? <>
-
-
-                    <div className="container" style={{paddingTop: '30px', paddingBottom: '30px'}}>
-                        <div className="startSidebar ">
-                            <img className="mainLeftImg"
-                                 src={leftImg} style={{borderRadius: '20px'}}
-                                 width="100px"
-                                 loading="lazy"/>
-                        </div>
-
-                        <div className="main-content">
+                <div  style={{paddingTop: '30px', paddingBottom: '30px'}}>
+                        <picture >
+                            {/* Если экран меньше 800px — покажется эта картинка */}
+                            <source
+                                srcSet={mainImg} style={{ borderRadius: '20px'}}
+                                media="(max-width: 800px)"
+                            />
+                            {/* По умолчанию (больше 800px) — эта */}
                             <img
-                                src={mainImg} style={{borderRadius: '20px'}}
-                                width="100%"
-                                loading="lazy"/>
-                        </div>
-                        <div className="startSidebar ">
-                            <img
-                                className="mainRightImg"
-                                src={rightImg} style={{borderRadius: '20px'}}
-                                width="100px"
-                                loading="lazy"/>
-                        </div>
-                    </div>
+                                src={mainAll} style={{ borderRadius: '20px'}}
+                                alt="Background"
+                                style={{width: '100%', display: 'block' }}
+                            />
+                        </picture>
+                </div>
+
+
 
 
                     <div className="flex-container">
                         {cardData.map((card, index) => (
                             <div className="flex-item">
-                            <Card
-                                key={index}
-                                title={card.title}
-                                description={card.description}
-                                icon={card.icon}
-                            />
+                                <Card
+                                    key={index}
+                                    title={card.title}
+                                    description={card.description}
+                                    icon={card.icon}
+                                />
                             </div>
                         ))}
 
                     </div>
 
-                    <div className="infoLine" style={{marginTop:'30px'}}> Интересные товары</div>
+                    <div className="infoLine" style={{marginTop: '30px'}}> Интересные товары</div>
 
                     <div className="" style={{paddingTop: '30px', paddingBottom: '30px'}}>
                         <Carousel value={startProducts} numVisible={6} numScroll={6} responsiveOptions={responsiveOptions}

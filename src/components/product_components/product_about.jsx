@@ -52,7 +52,10 @@ const ProductAbout = (props) => {
             setDiscountInfo(result);
             try {
                 // console.log(productStore);
+                // console.log(productStore.idInfo?.productInfo?.priceHistory);
                 setInfo(productStore.idInfo.idInfoWB);
+
+                setPriceStep(Math.round(productStore.idInfo.idInfoWB?.price*0.8))
                 // Расчитаем остатки
                 let allQty = []
                 let allQtySum = 0
@@ -271,7 +274,9 @@ const ProductAbout = (props) => {
 
                     }
                     {userStore.role === "ADMIN" ? <>
-                        <div className="product-order" onClick={() => startProductsStore.addStartProduct(id, discountInfo.discount, allQty, info.price)}>
+                        <div className="product-order" onClick={() => startProductsStore.addStartProduct(id, discountInfo.discount, allQty, info.price,
+                            productStore?.idInfo?.productInfo?.priceHistory? productStore?.idInfo?.productInfo?.priceHistory : [])}>
+
                             Добавить в стартовый товар
                         </div>
 
@@ -286,7 +291,7 @@ const ProductAbout = (props) => {
                             <div className="flex align-items-center align-content-center text-center p-2">
                                 <Checkbox onChange={e => setPriceTrackChecked(e.checked)}
                                           checked={priceTrackChecked}></Checkbox>
-                                <label className="ml-2">Уменьшение цены на</label>
+                                <label className="ml-2">Уменьшение цены до</label>
                                 <InputNumber className="ml-2" style={{width: '100px'}} value={priceStep}
                                              onValueChange={(e) => setPriceStep(e.value)}/>
                                 <label className="ml-2">рублей </label>
@@ -383,8 +388,12 @@ const ProductAbout = (props) => {
                                 </i>
                             </div>
 
-                            <p>Обновление всех данных происходит каждые 30 минут. Список всех товаров, которые вы
-                                отслеживаете а также индивидуальные настройки можно посмотреть в личном кабинете</p>
+                            <p>Обновление всех данных происходит 1 раз в час. Список всех товаров, которые вы
+                                отслеживаете, а также индивидуальные настройки можно посмотреть в личном кабинете
+                            </p>
+                            <p>При достижении цели отслеживания
+                                соответствующая "галочка" автоматически убирается чтобы не повторять сообщения в Telegram бот
+                            </p>
 
                             <div className="flex flex-column align-items-center text-center">
                                 <Button label="Добавить" onClick={() => addProductToTrack()}

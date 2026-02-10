@@ -29,28 +29,63 @@ export default class UserStore {
         this.token = data.token? data.token : 'ошибка получения токена'
         localStorage.setItem('wbSaleUserToken', this.token);
     }
-    async  loadAllUserStat(needDelete = false, deleteIdList = []){
+
+    chartData = {labels:['-'],entry : [],viewProduct : [], search : [], productList  : [],wbTransit : [], addTrack : []}
+    setChartData(data){
+        let labels = []
+        let entry = []
+        let viewProduct = []
+        let search = []
+        let productList = []
+        let wbTransit = []
+        let addTrack = []
+
+        for (let i in data){
+            let crEntry = 0
+            let crViewProduct = 0
+            let crSearch = 0
+            let crProductList = 0
+            let crWBTransit = 0
+            let crAddTrack = 0
+            const crStatIPInfo = data[i].statIPInfo
+            for (let k in crStatIPInfo){
+                if ((crStatIPInfo[k]?.viewProductCount>0) || (crStatIPInfo[k]?.searchCount>0) || (crStatIPInfo[k]?.productListCount>0) ||
+                    (crStatIPInfo[k]?.wbTransitCount>0) || (crStatIPInfo[k]?.addTrackCount>0)) {
+                    crEntry++
+                    crViewProduct += crStatIPInfo[k]?.viewProductCount ? crStatIPInfo[k]?.viewProductCount : 0
+                    crSearch += crStatIPInfo[k]?.searchCount ? crStatIPInfo[k]?.searchCount : 0
+                    crProductList += crStatIPInfo[k]?.productListCount ? crStatIPInfo[k]?.productListCount : 0
+                    crWBTransit += crStatIPInfo[k]?.wbTransitCount ? crStatIPInfo[k]?.wbTransitCount : 0
+                    crAddTrack += crStatIPInfo[k]?.addTrackCount ? crStatIPInfo[k]?.addTrackCount : 0
+                }
+            }
+
+            try {
+                labels.push(data[i].crDate)
+                entry.push(crEntry)
+                viewProduct.push(crViewProduct)
+                search.push(crSearch)
+                productList.push(crProductList)
+                wbTransit.push(crWBTransit)
+                addTrack.push(crAddTrack)
+
+            } catch (e) {}
+        }
+
+        this.chartData = {labels:labels,entry : entry,viewProduct : viewProduct, search : search, productList  : productList,wbTransit : wbTransit, addTrack : addTrack}
+    }
+    async  loadAllUserStat(startDate, endDate, needDelete = false, deleteIdList = []){
         try{
-            const response = await ApiService.APILoadAllUserStat( needDelete, deleteIdList)
+            const response = await ApiService.APILoadAllUserStat( startDate, endDate, needDelete, deleteIdList)
             if (response.data) {
                 this.allUserStat = response.data
+                this.setChartData(response.data)
             }
         } catch (e) {
             // this.setErrorMessage(e.response?.data?.message)
             console.log(e)
         }
     }
-
-    // async  addStartProduct(id, startDiscount, startQty, startPrice){
-    //     try{
-    //         const response = await ApiService.APIAddStartProduct(id, startDiscount, startQty, startPrice)
-    //         console.log(response.data);
-    //
-    //     } catch (e) {
-    //         // this.setErrorMessage(e.response?.data?.message)
-    //         console.log(e)
-    //     }
-    // }
 
     async userLogin(formData){
 

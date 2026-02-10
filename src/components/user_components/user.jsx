@@ -76,7 +76,7 @@ const User = observer(() => {
         activeRow.selectedSizeAddTrack = selectedSizeAddTrack
 
         userStore.saveCurTrackProductData(activeRow).then(() => {
-            alert(`Данные успешно сохранены!`);
+            // alert(`Данные успешно сохранены!`);
             setTrackProducts(userStore.allTrackProducts)
             setShowDialog(false)
         })
@@ -258,6 +258,7 @@ const User = observer(() => {
                             rowHover>
                             <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
                             <Column header="Фото" body={imageBodyTemplate}></Column>
+                            <Column field="name" header="Название"></Column>
                             <Column body={idShowTemplate} header="id"></Column>
                             <Column field="endUpdateDT" header="Время обновления"></Column>
                             <Column field="startPrice" header="Стартовая цена"></Column>
@@ -269,7 +270,7 @@ const User = observer(() => {
 
                         </DataTable>
 
-                        <Dialog visible={showDialog} onHide={() => setShowDialog(false)} header="Настройки">
+                        <Dialog visible={showDialog}  style={{width: '500px'}} onHide={() => setShowDialog(false)} header="Настройки">
                             {activeRow?
                                 <>
                                     <div className="flex">
@@ -288,15 +289,13 @@ const User = observer(() => {
                                         <div className="flex align-items-center align-content-center text-center p-2">
                                             <Checkbox onChange={e => activeRow.needPriceTrack = e.checked}
                                                       checked={activeRow.needPriceTrack}></Checkbox>
-                                            <label className="ml-2">Уменьшение цены на</label>
+                                            <label className="ml-2">Уменьшение цены до</label>
                                             <InputNumber className="ml-2" style={{width: '100px'}}
                                                          value={activeRow.priceStep}
                                                          onValueChange={(e) => activeRow.priceStep = e.value}/>
                                             <label className="ml-2">рублей </label>
 
                                         </div>
-
-
 
 
                                         {
@@ -318,7 +317,8 @@ const User = observer(() => {
                                                         <Dropdown className="ml-2 " value={selectedSizeTrack}
                                                                   onChange={(e) => setSelectedSizeTrack(e.value.name)}
                                                                   options={activeRow.qty} optionLabel="name"
-                                                                  placeholder={selectedSizeTrack} itemTemplate={qtyItemTemplate}
+                                                                  placeholder={selectedSizeTrack}
+                                                                  itemTemplate={qtyItemTemplate}
                                                                   className="w-full md:w-14rem"/>
                                                     </div>
                                                 </>
@@ -355,11 +355,12 @@ const User = observer(() => {
                                             activeRow.qty.length > 1 ?
                                                 <div
                                                     className="flex align-items-center align-content-center text-center p-2">
-                                                <label className="ml-4 mr-2">для размера</label>
+                                                    <label className="ml-4 mr-2">для размера</label>
                                                     <Dropdown className="ml-2 " value={selectedSizeAddTrack}
                                                               onChange={(e) => setSelectedSizeAddTrack(e.value)}
                                                               options={activeRow.qty} optionLabel="name"
-                                                              placeholder={selectedSizeAddTrack} itemTemplate={qtyItemTemplate}
+                                                              placeholder={selectedSizeAddTrack}
+                                                              itemTemplate={qtyItemTemplate}
                                                               className="w-full md:w-14rem"/>
                                                 </div>
                                                 :
@@ -375,7 +376,10 @@ const User = observer(() => {
                                         <label className="ml-2">Отправлять информацию в телеграм бот</label>
 
                                     </div>
-
+                                    <p>При достижении цели отслеживания
+                                        соответствующая "галочка" автоматически убирается чтобы не повторять
+                                        сообщения в Telegram бот
+                                    </p>
                                     <div className="flex flex-column align-items-center text-center">
                                         <Button label="Сохранить изменения" onClick={() => saveCurTrackProductData()}/>
                                     </div>
