@@ -8,6 +8,7 @@ import axios from "axios"; // Библиотека для запросов на 
 // На локальном сервере
 // export const API_URL='http://localhost:5000/api'
 // export const API_URL='http://localhost:5003/api'
+// На ресльном сервере
 export const API_URL='https://clientapi.ru.tuna.am/api'
 
 

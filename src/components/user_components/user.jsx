@@ -22,11 +22,22 @@ const User = observer(() => {
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [selectedSizeTrack, setSelectedSizeTrack] = useState(null);
     const [selectedSizeAddTrack, setSelectedSizeAddTrack] = useState(null);
+    const [copied, setCopied] = useState(false);
     useEffect(()=>{
         if (!userStore.isLogin) navigate('/login')
         console.log('useEffect loadTrackProducts');
         loadTrackProducts()
     }, [])
+
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(userStore.tg_token);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000); // Сброс статуса через 2 сек
+        } catch (err) {
+            console.error('Ошибка при копировании: ', err);
+        }
+    };
 
     function loadTrackProducts (needDelete = false) {
         setSelectedProducts(null)
@@ -171,8 +182,8 @@ const User = observer(() => {
                         width: 'fit-content', cursor: 'pointer', marginTop: '3px' , marginLeft: '5px'
                     }}
                 >
-                <span className="text-white text-1xl font-bold border-none" style={{letterSpacing: '-2px'}}>
-                    wb.sale
+                <span className="text-white text-1xl  border-none" style={{letterSpacing: '-2px'}}>
+                    mp-tracker
                 </span>
                 </div>
 
@@ -205,7 +216,7 @@ const User = observer(() => {
     };
 
     return (
-        <div style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', paddingTop: '30px'}}>
+        <div style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', paddingTop: '50px'}}>
 
             {userStore.isLogin ?
                 <div>
@@ -230,17 +241,31 @@ const User = observer(() => {
 
                     </> : <></>}
 
-                    <div className="flex justify-content-center">
+                    <div className="flex flex-wrap justify-content-center">
                         <p style={{paddingLeft:'20px', fontSize:'18px'}}>Пользователь {userStore.userName} email: {userStore.email} </p>
                         <Button severity="secondary" label="Выйти"
                                 style={{height: '28px', fontSize: '14px', marginTop: '10px', marginLeft: '10px'}}
                                 onClick={() => logout()}/>
-                    </div>
-                    <div className="flex justify-content-center" style={{height: '50px'}}>
-                        <p style={{ paddingLeft: '20px', fontSize: '18px'}}>
-                            чтобы првязать бот к аккаунту перейдите в бот и введите email: {userStore.email} </p>
                         <TelegramButton/>
                     </div>
+                    <div className="flex flex-wrap justify-content-center" style={{height: '50px'}}>
+                        <p style={{paddingLeft: '20px', paddingTop: '8px', fontSize: '18px'}}>
+                            чтобы првязать бот к аккаунту перейдите в бот и введите токен: </p>
+                        <p style={{paddingLeft: '20px', fontSize: '22px'}}>
+                            {userStore.tg_token} </p>
+
+                        <Button
+                            style={{marginTop:'15px', marginLeft:'20px'}}
+                            icon="pi pi-copy"
+                            // className="p-button-rounded p-button-text text-2xl p-button-sm text-blue-500"
+                            className="p-button-rounded p-button-text text-2xl "
+                            onClick={handleCopy}
+                            tooltip="Копировать"
+                            // tooltipOptions={{ position: 'top' }}
+                        />
+                    </div>
+
+
 
                     <div className="flex-grow-1  border-1  p-1 m-2 border-round">
 
@@ -256,22 +281,22 @@ const User = observer(() => {
                             dataKey="id"
                             onRowDoubleClick={onRowDoubleClick}
                             rowHover>
-                            <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
+                            <Column selectionMode="multiple" headerStyle={{width: '3rem'}}/>
                             <Column header="Фото" body={imageBodyTemplate}></Column>
                             <Column field="name" header="Название"></Column>
                             <Column body={idShowTemplate} header="id"></Column>
                             <Column field="endUpdateDT" header="Время обновления"></Column>
                             <Column field="startPrice" header="Стартовая цена"></Column>
                             <Column field="endPrice" header="Текущая цена"></Column>
-                            <Column body={priceAddTemplate}  header="Изменение цены"></Column>
+                            <Column body={priceAddTemplate} header="Изменение цены"></Column>
                             <Column body={qtyTemplate} header="Остатки"></Column>
-
 
 
                         </DataTable>
 
-                        <Dialog visible={showDialog}  style={{width: '500px'}} onHide={() => setShowDialog(false)} header="Настройки">
-                            {activeRow?
+                        <Dialog visible={showDialog} style={{width: '500px'}} onHide={() => setShowDialog(false)}
+                                header="Настройки">
+                            {activeRow ?
                                 <>
                                     <div className="flex">
                                         <img

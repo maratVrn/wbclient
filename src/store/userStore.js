@@ -8,6 +8,7 @@ export default class UserStore {
     email : ''
     userName : ''
     token : ''
+    tg_token : ''
     role : ''
     userId : 0
     commandOk = false
@@ -27,6 +28,7 @@ export default class UserStore {
         this.role = data.role ? data.role : "USER"
         this.userId = data.id ? data.id : 0
         this.token = data.token? data.token : 'ошибка получения токена'
+        this.tg_token = data.tg_token? data.tg_token : 'ошибка получения токена'
         localStorage.setItem('wbSaleUserToken', this.token);
     }
 
@@ -155,15 +157,16 @@ export default class UserStore {
 
 
     async userTokenTest(){
-        console.log('userStore.startIn');
+
         this.startIn = true
         this.isLogin = false
         try {
             const savedToken = localStorage.getItem('wbSaleUserToken');
             const response = await ApiService.APIUserTokenTest(savedToken)
             if (response?.data) {
+                console.log(response.data);
                 if (response?.data.isError) console.log(response?.data.errorMessage);
-                else this.setUser(response.data)
+            else this.setUser(response.data)
                 await this.loadAllTrackProducts()
 
             }

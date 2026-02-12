@@ -27,7 +27,7 @@ const ProductAbout = (props) => {
     const [minCount, setMinCount] = useState(10);
     const [selectedSizeTrack, setSelectedSizeTrack] = useState(null);
     const [addTrackChecked, setAddTrackChecked] = useState(false);
-    const [needTelegramSend, setNeedTelegramSend] = useState(false);
+    const [needTelegramSend, setNeedTelegramSend] = useState(true);
     const [selectedSizeAddTrack, setSelectedSizeAddTrack] = useState(null);
     const [isTrackProduct, setIsTrackProduct] = useState(false);
     const {startProductsStore} = useContext(Context)
@@ -55,7 +55,7 @@ const ProductAbout = (props) => {
                 // console.log(productStore.idInfo?.productInfo?.priceHistory);
                 setInfo(productStore.idInfo.idInfoWB);
 
-                setPriceStep(Math.round(productStore.idInfo.idInfoWB?.price*0.8))
+                setPriceStep(Math.round(productStore.idInfo.idInfoWB?.price*0.9))
                 // Расчитаем остатки
                 let allQty = []
                 let allQtySum = 0
