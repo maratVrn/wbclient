@@ -372,19 +372,24 @@ span.bold {
 
 .tg-btn {
     display: inline-flex;
-    align-items: center;
+    /*align-items: center;*/
     /* Уменьшили градиентный фон и отступы */
     background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
     color: white;
-    padding: 10px; /* Было 12px 24px */
-    border-radius: 25px; /* Уменьшили радиус */
+
+    padding: 5px;
+    /*padding-right : 10px;*/
+    border-radius: 15px; /* Уменьшили радиус */
     text-decoration: none;
     font-family: 'Segoe UI', Roboto, sans-serif;
     font-weight: 500;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(34, 158, 217, 0.2);
-    margin-left:30px;
-    margin-top:15px;
+    heigth : 40px;
+    margin-left:20px;
+
+    margin-top:8px;
+
 }
 
 .tg-btn:hover {

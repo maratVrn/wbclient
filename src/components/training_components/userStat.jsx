@@ -220,6 +220,8 @@ const UserStat = () => {
                     <Column field="searchCount" header="search"></Column>
                     <Column field="productListCount" header="productList"></Column>
                     <Column field="wbTransitCount" header="wbTransit"></Column>
+                    <Column field="addTrackCount" header="addTrack"></Column>
+
                     <Column field="allActionCount" header="allAction"></Column>
 
                 </DataTable>

@@ -92,7 +92,8 @@ const ProductAbout = (props) => {
 
     function addTrack(){
 
-        if (userStore.isLogin) { setAddTrackDialog(true);
+        if (userStore.isLogin) {
+            setAddTrackDialog(true);
         } else navigate('/login/')
 
 

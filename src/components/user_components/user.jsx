@@ -216,9 +216,10 @@ const User = observer(() => {
     };
 
     return (
-        <div style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', paddingTop: '50px'}}>
+        <div className="page" style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center'}}>
 
             {userStore.isLogin ?
+
                 <div>
 
                     {userStore.role === "ADMIN" ? <>
@@ -244,11 +245,11 @@ const User = observer(() => {
                     <div className="flex flex-wrap justify-content-center">
                         <p style={{paddingLeft:'20px', fontSize:'18px'}}>Пользователь {userStore.userName} email: {userStore.email} </p>
                         <Button severity="secondary" label="Выйти"
-                                style={{height: '28px', fontSize: '14px', marginTop: '10px', marginLeft: '10px'}}
+                                style={{height: '30px', fontSize: '14px', marginTop: '10px', marginLeft: '10px'}}
                                 onClick={() => logout()}/>
-                        <TelegramButton/>
+                        <div style={{height:'50px'}}> <TelegramButton/> </div>
                     </div>
-                    <div className="flex flex-wrap justify-content-center" style={{height: '50px'}}>
+                    <div className="flex flex-wrap justify-content-center">
                         <p style={{paddingLeft: '20px', paddingTop: '8px', fontSize: '18px'}}>
                             чтобы првязать бот к аккаунту перейдите в бот и введите токен: </p>
                         <p style={{paddingLeft: '20px', fontSize: '22px'}}>
@@ -264,7 +265,6 @@ const User = observer(() => {
                             // tooltipOptions={{ position: 'top' }}
                         />
                     </div>
-
 
 
                     <div className="flex-grow-1  border-1  p-1 m-2 border-round">
