@@ -305,7 +305,7 @@ const MainPage = observer( () => {
                                          style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
                                         <img style={{maxWidth: '100%', maxHeight: '100%'}}
                                              src={oneData.img} alt="logo" loading="lazy"/>
-                                        {oneData.name}
+                                        {oneData.name} {oneData.id}
                                     </div>
 
                                 </div>
