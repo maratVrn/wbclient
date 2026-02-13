@@ -473,6 +473,15 @@
     transform: translateY(-2px); /* Слегка приподнимаем блок */
 }
 
+.catItem{
+transition: all 0.3s ease-in-out;
+}
+
+.catItem:hover {
+    box-shadow: 0 4px 5px rgba(53, 95, 140, 0.3);
+    transform: translateY(-2px); /* Слегка приподнимаем блок */
+}
+
 .card2-icon {
     font-size: 32px;
     margin-bottom: 15px;

@@ -298,14 +298,15 @@ const MainPage = observer( () => {
 
 
                             catalogStore.allWBCatalogLite.map((oneData) =>
-                                <div key={oneData.id} className={"w-9rem h-12 rem  cursor-pointer"}
+                                <div key={oneData.id} className={"w-9rem h-12 rem  cursor-pointer catItem"}
                                      style={{padding: '10px'}}
                                      onClick={() => setMenuOne(oneData)}>
                                     <div key={oneData.id} className={"w-8rem h-10rem "}
-                                         style={{textAlign: 'center', alignItems: 'center', width: '100%'}}>
+                                         style={{textAlign: 'center', alignItems: 'center', width: '100%', fontSize:'18px', color:'#062950'}}
+                                    >
                                         <img style={{maxWidth: '100%', maxHeight: '100%'}}
                                              src={oneData.img} alt="logo" loading="lazy"/>
-                                        {oneData.name} {oneData.id}
+                                        {oneData.name}
                                     </div>
 
                                 </div>
