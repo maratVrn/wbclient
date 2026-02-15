@@ -38,16 +38,19 @@ export default class WbService {
         else if (shortId <= 4349)  basket = '24'
         else if (shortId <= 4565)  basket = '25'
         else if (shortId <= 4877)  basket = '26'
-        else if (shortId <= 5189)  basket = '27'
+        else if (shortId <= 5189)  basket = '27' // есть шаг 312
+        else if (shortId <= 5501)  basket = '28'
+        else if (shortId <= 5813)  basket = '29'
+        else if (shortId <= 6125)  basket = '30'
+        else if (shortId <= 6437)  basket = '31'
+        else if (shortId <= 6749)  basket = '32'
+        else if (shortId <= 7061)  basket = '33'
+        else if (shortId <= 7373)  basket = '34'
+        else if (shortId <= 7685)  basket = '35'
+        else  basket = '36'
+        /// Вроде как 312 шаг стабильный полс время
 
-        else if (shortId <= 5566)  basket = '28'
-            // else if (shortId <= 5239)  basket = '29'
-            // else if (shortId <= 5445)  basket = '30'
-            // else if (shortId <= 5671)  basket = '31'
-            // else if (shortId <= 5887)  basket = '32'
-        // else if (shortId <= 6103)  basket = '33'
-        else  basket = '29'
-/// Вроде как 216 шаг стабильный полс время
+
         return basket
 
     }
