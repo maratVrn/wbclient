@@ -6,11 +6,14 @@ import {observer} from "mobx-react-lite";
 import ProductList from "./product_components/ProductList";
 import mainImg from "./images/mainimg1200.jpg";
 import mainAll from "./images/all1.jpg";
-import leftImg from "./images/leftimg.jpg";
-import rightImg from "./images/rightimg.jpg";
+import info1_jpg from "./images/info1.png";
+import info2_jpg from "./images/info2.png";
+import info3_jpg from "./images/info3.jpg";
+
+
 import { Carousel } from 'primereact/carousel';
 import {useNavigate} from "react-router-dom";
-import productList from "./product_components/ProductList";
+
 
 const MainPage = observer( () => {
 
@@ -224,23 +227,21 @@ const MainPage = observer( () => {
 
 
             {isStartMenu ? <>
-                <div  style={{paddingTop: '30px', paddingBottom: '30px'}}>
-                        <picture >
+                    <div style={{paddingTop: '30px', paddingBottom: '30px'}}>
+                        <picture>
                             {/* Если экран меньше 800px — покажется эта картинка */}
                             <source
-                                srcSet={mainImg} style={{ borderRadius: '20px'}}
+                                srcSet={mainImg} style={{borderRadius: '20px'}}
                                 media="(max-width: 800px)"
                             />
                             {/* По умолчанию (больше 800px) — эта */}
                             <img
-                                src={mainAll} style={{ borderRadius: '20px'}}
+                                src={mainAll} style={{borderRadius: '20px'}}
                                 alt="Background"
-                                style={{width: '100%', display: 'block' }}
+                                style={{width: '100%', display: 'block'}}
                             />
                         </picture>
-                </div>
-
-
+                    </div>
 
 
                     <div className="flex-container">
@@ -256,6 +257,83 @@ const MainPage = observer( () => {
                         ))}
 
                     </div>
+
+                    <div className="step-container-main">
+                        <div className="step-header">
+
+                            <h2 className="step-title">Как использовать сервис?</h2>
+                        </div>
+                        <p className="step-description">
+                            Экономьте тысячи рублей при покупке товаров на Wildberries.
+                        </p>
+                    </div>
+
+                    <div className="flex-container">
+                        <div className="step-wrapper">
+
+                            <div className="step-image-container">
+                                <img
+                                    src={info1_jpg}
+                                    alt="Иллюстрация добавления товаров"
+                                    className="step-image"
+                                />
+                            </div>
+
+                            <div className="step-content">
+                                <div className="step-header">
+                                    <span className="step-number">1</span>
+                                    <h2 className="step-title">Найдите товары</h2>
+                                </div>
+                                <p className="step-description">
+                                    Найдите интересующие вас товары на нашем сайта. Для этого можно вставить ID товара Wildberries в строку поиска выбрать товары на нашем сайте.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="step-wrapper">
+
+                            <div className="step-image-container">
+                                <img
+                                    src={info2_jpg}
+                                    alt="Иллюстрация добавления товаров"
+                                    className="step-image"
+                                />
+                            </div>
+
+                            <div className="step-content">
+                                <div className="step-header">
+                                    <span className="step-number">2</span>
+                                    <h2 className="step-title">Добавьте их в отслеживаемые</h2>
+                                </div>
+                                <p className="step-description">
+                                    Перейдите в карточку товара и нажмите «Отслеживать цену и остатки». После регистрации на сайта настройке telegram бота для уведомлений
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="step-wrapper">
+
+                            <div className="step-image-container">
+                                <img
+                                    src={info3_jpg}
+                                    alt="Иллюстрация добавления товаров"
+                                    className="step-image"
+                                />
+                            </div>
+
+                            <div className="step-content">
+                                <div className="step-header">
+                                    <span className="step-number">3</span>
+                                    <h2 className="step-title">Получайте уведомления</h2>
+                                </div>
+                                <p className="step-description">
+                                    Узнавайте об изменении цены на нужный вам товар первыми! Покупайте со скидками пока он не подорожал.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
 
                     <div className="infoLine" style={{marginTop: '30px'}}> Интересные товары</div>
 
@@ -288,7 +366,7 @@ const MainPage = observer( () => {
                 :
                 <>
                     <div className="infoLine">
-                    Каталог
+                        Каталог
                     </div>
 
                     <div className="flex flex-wrap column-gap-4 row-gap-4"
