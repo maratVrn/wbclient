@@ -51,15 +51,15 @@ export default class UserStore {
             let crAddTrack = 0
             const crStatIPInfo = data[i].statIPInfo
             for (let k in crStatIPInfo){
-                if ((crStatIPInfo[k]?.viewProductCount>0) || (crStatIPInfo[k]?.searchCount>0) || (crStatIPInfo[k]?.productListCount>0) ||
-                    (crStatIPInfo[k]?.wbTransitCount>0) || (crStatIPInfo[k]?.addTrackCount>0)) {
+                // if ((crStatIPInfo[k]?.viewProductCount>0) || (crStatIPInfo[k]?.searchCount>0) || (crStatIPInfo[k]?.productListCount>0) ||
+                //     (crStatIPInfo[k]?.wbTransitCount>0) || (crStatIPInfo[k]?.addTrackCount>0)) {
                     crEntry++
                     crViewProduct += crStatIPInfo[k]?.viewProductCount ? crStatIPInfo[k]?.viewProductCount : 0
                     crSearch += crStatIPInfo[k]?.searchCount ? crStatIPInfo[k]?.searchCount : 0
                     crProductList += crStatIPInfo[k]?.productListCount ? crStatIPInfo[k]?.productListCount : 0
                     crWBTransit += crStatIPInfo[k]?.wbTransitCount ? crStatIPInfo[k]?.wbTransitCount : 0
                     crAddTrack += crStatIPInfo[k]?.addTrackCount ? crStatIPInfo[k]?.addTrackCount : 0
-                }
+                // }
             }
 
             try {
@@ -73,9 +73,10 @@ export default class UserStore {
 
             } catch (e) {}
         }
-
         this.chartData = {labels:labels,entry : entry,viewProduct : viewProduct, search : search, productList  : productList,wbTransit : wbTransit, addTrack : addTrack}
     }
+
+
     async  loadAllUserStat(startDate, endDate, needDelete = false, deleteIdList = []){
         try{
             const response = await ApiService.APILoadAllUserStat( startDate, endDate, needDelete, deleteIdList)
@@ -84,7 +85,6 @@ export default class UserStore {
                 this.setChartData(response.data)
             }
         } catch (e) {
-            // this.setErrorMessage(e.response?.data?.message)
             console.log(e)
         }
     }
@@ -164,7 +164,6 @@ export default class UserStore {
             const savedToken = localStorage.getItem('wbSaleUserToken');
             const response = await ApiService.APIUserTokenTest(savedToken)
             if (response?.data) {
-                console.log(response.data);
                 if (response?.data.isError) console.log(response?.data.errorMessage);
             else this.setUser(response.data)
                 await this.loadAllTrackProducts()

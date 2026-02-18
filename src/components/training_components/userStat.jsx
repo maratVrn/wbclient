@@ -104,6 +104,7 @@ const UserStat = () => {
 
     function loadAllUserStat(startDate, endDate){
         userStore.loadAllUserStat(startDate, endDate ).then(() => {
+            console.log(userStore.allUserStat);
             setAllUserStat(userStore.allUserStat)
             setDataFromBackend(userStore.chartData)
             }
@@ -118,6 +119,8 @@ const UserStat = () => {
 
     function setSelectedData(value){
         setSelectedDay(value)
+        setDayUserStat([])
+        console.log(value.statIPInfo);
         try {setDayUserStat(value.statIPInfo)} catch (e) {}
     }
 
@@ -212,9 +215,10 @@ const UserStat = () => {
                 <DataTable
                     paginator rows={30} rowsPerPageOptions={[30, 50, 100]}
                     value={dayUserStat} selectionMode="single"
-                    dataKey="ip"
+                    // dataKey="ip"
                     tableStyle={{minWidth: '20rem'}}>
                     <Column field="ip" header="ip"></Column>
+                    <Column field="city" header="city"></Column>
                     <Column field="entryCount" header="entry"></Column>
                     <Column field="viewProductCount" header="viewProduct"></Column>
                     <Column field="searchCount" header="search"></Column>
