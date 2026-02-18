@@ -605,3 +605,41 @@ transition: all 0.3s ease-in-out;
     color: #2e2f35; /* Более мягкий серый цвет */
     padding: 0 20px;
 }
+
+/* Общий контейнер аккордеона */
+.p-accordion {
+    display: flex;
+    flex-direction: column;
+    /*gap: 10px; !* Расстояние между вкладками *!*/
+}
+
+/* Стилизация заголовка каждой вкладки */
+.p-accordion .p-accordion-header .p-accordion-header-link {
+    background: #ffffff;
+    border: 1px solid #9bb9f1; /* Светло-серая рамка */
+    border-radius: 20px; /* Скругление как на макете */
+    color: #4b5563; /* Цвет текста */
+
+    transition: all 0.2s;
+    padding: 0.7rem 1rem;
+    margin-bottom: 5px;
+}
+
+/* Убираем стандартное скругление PrimeReact при раскрытии,
+   чтобы рамка оставалась цельной */
+.p-accordion .p-accordion-tab-active .p-accordion-header-link {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border: 1px solid #9bb9f1; /* Светло-серая рамка */
+    border-bottom: none;
+    padding: 0.75rem 1rem;
+}
+.p-accordion-content{
+    border: 1px solid #8fafea; /* Светло-серая рамка */
+}
+
+/* Стилизация иконки (стрелочки) */
+.p-accordion .p-accordion-header .p-accordion-toggle-icon {
+    color: #8fafea;
+    margin-right: 0.75rem;
+}

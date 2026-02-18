@@ -69,7 +69,7 @@ const UserStat = () => {
     ];
 
     // Состояние: какие метрики выбраны (по умолчанию все)
-    const [selectedMetrics, setSelectedMetrics] = useState(metrics.map(m => m.id));
+    const [selectedMetrics, setSelectedMetrics] =  useState(metrics[0].id) //useState(metrics.map(m => m.id));
     const [dataFromBackend, setDataFromBackend] = useState({labels:['-'],entry : [],viewProduct : [], search : [], productList  : [],wbTransit : [], addTrack : []})
 
 
